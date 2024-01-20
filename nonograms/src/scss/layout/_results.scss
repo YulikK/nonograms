@@ -1,0 +1,33 @@
+.results {
+  @include block-box();
+  flex-direction: column;
+  padding: 20px 10px;
+
+  &__title-wrapper{
+    @include block-bottom-wrapper();
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+  }
+
+  &__img{
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+  }
+
+  &__title {
+    @include font-tittle();
+    margin: 0px;
+  }
+
+  &__information {
+    @include font-base();
+  }
+
+  &__information-wrapper {
+    width: 100%;
+    padding: 0px 10px;
+  }
+}

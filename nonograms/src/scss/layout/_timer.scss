@@ -1,0 +1,28 @@
+.timer {
+  @include timer-box();
+  display: flex;
+
+  &__img-wrapper {
+    @include timer-box-wrapper();
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__img {
+    width: 40px;
+    height: 40px;
+    margin: 10px 5px;
+  }
+
+  &__time-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__time {
+    @include font-timer();
+    margin: 0px 15px;
+  }
+}

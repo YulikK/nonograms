@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
+  <title>Nanograms</title>
+</head>
+<body class="game">
+  <header class="game__control control">
+    <h1 class="visually-hidden">Nanograms game</h1>
+    <div class="control__options options">
+      <div class="options__timer timer">
+        <div class="timer__img-wrapper">
+          <img class="timer__img" src="./img/icons/timer.png" alt="timer" width="40" height="40">
+        </div>
+        <div class="timer__time-wrapper">
+          <p class="timer__time">14:35</p>
+        </div>
+      </div>
+      <a class="options__refresh" href="">
+        <img class="options__refresh-img" src="./img/icons/refresh.png" alt="refresh"  width="40" height="40">
+      </a>
+      <a class="options__show-answer" href="">
+        <img class="options__show-answer-img" src="./img/icons/show-answers.png" alt="show-answer"  width="40" height="40">
+      </a>
+    </div>
+    <div class="control__settings settings">
+      <a class="settings__sound" href="">
+        <img class="settings__sound-img" src="./img/icons/sounds.png" alt="sounds on/off" width="40" height="40">
+      </a>
+      <label id="switch-theme" class="settings__theme theme">
+        <input class="theme__input" type="checkbox" id="slider">
+        <span class="theme__slider round"></span>
+      </label>
+    </div>
+  </header>
+  <main class="game__wrapper">
+    <section class="game__table table">
+      <h2 class="visually-hidden">Game table</h2>
+      <div class="table__bookmark bookmark">
+        <img class="bookmark__img" src="./img/icons/book-mark.png" alt="bookmark" width="40" height="40">
+        <p class="bookmark__text">You didn't finish the last game, do you want to continue?</p>
+      </div>
+      <div class="game__crossword-wrapper">
+        <table class="game__crossword crossword">
+          <tr>
+            <td class="empty"></td>
+            <td class="empty"></td>
+            <td class="cell hint">0</td>
+            <td class="cell hint">0</td>
+            <td class="cell hint">1</td>
+            <td class="cell hint">0</td>
+            <td class="cell hint">0</td>
+          </tr>
+          <tr>
+            <td class="empty"></td>
+            <td class="empty"></td>
+            <td class="hint cell">1</td>
+            <td class="cell hint">2</td>
+            <td class="cell hint">1</td>
+            <td class="cell hint">2</td>
+            <td class="cell hint">1</td>
+          </tr>
+          <tr>
+            <td class="cell hint">0</td>
+            <td class="cell hint">0</td>
+            <td class="cell"></td>
+            <td class="cell"></td>
+            <td class="cell"></td>
+            <td class="cell"></td>
+            <td class="cell"></td>
+          </tr>
+          <tr>
+            <td class="cell hint">0</td>
+            <td class="cell hint">1</td>
+            <td class="cell"></td>
+            <td class="cell"></td>
+            <td class="cell fill"></td>
+            <td class="cell"></td>
+            <td class="cell"></td>
+          </tr>
+          <tr>
+            <td class="cell hint">1</td>
+            <td class="cell hint">1</td>
+            <td class="cell"></td>
+            <td class="cell fill"></td>
+            <td class="cell"></td>
+            <td class="cell fill"></td>
+            <td class="cell"></td>
+          </tr>
+          <tr>
+            <td class="cell hint">0</td>
+            <td class="cell hint">5</td>
+            <td class="cell fill"></td>
+            <td class="cell fill"></td>
+            <td class="cell fill"></td>
+            <td class="cell fill"></td>
+            <td class="cell fill"></td>
+          </tr>
+          <tr>
+            <td class="cell hint">0</td>
+            <td class="cell hint">0</td>
+            <td class="cell"></td>
+            <td class="cell"></td>
+            <td class="cell"></td>
+            <td class="cell"></td>
+            <td class="cell"></td>
+          </tr>
+        </table>
+      </div>
+    </section>
+    <section class="game__additional">
+      <h2 class="visually-hidden">Additional information</h2>
+      <div class="game__chose-wrapper">
+        <div class="game__chose chose">
+          <div class="chose__img-wrapper">
+            <img class="chose__img" src="./img/icons/open.png" alt="Chose the game" width="40" height="40">
+          </div>
+          <div class="chose__title-wrapper">
+            <p class="chose__title">Example1</p>
+          </div>
+          <div class="chose__level-wrapper">
+            <img class="chose__level-img" src="./img/icons/level.png" alt="star level" width="40" height="40">
+            <img class="chose__level-img" src="./img/icons/level.png" alt="star level" width="40" height="40">
+            <img class="chose__level-img" src="./img/icons/level.png" alt="star level" width="40" height="40">
+          </div>
+        </div>
+        <a class="game__random" href="">
+          <img class="game__random-img" src="./img/icons/random.png" alt="random game" width="40" height="40">
+        </a>
+      </div>
+      
+      <div class="game__results results">
+        <div class="results__title-wrapper">
+          <img class="results__img" src="./img/icons/results.png" alt="Results table" width="40" height="40">
+          <p class="results__title">Results</p>
+        </div>
+        <div class="results__information-wrapper">
+          <p class="results__information">13:05 - Example1</p>
+        </div>
+        <div class="results__information-wrapper">
+          <p class="results__information">10:25 - Example2</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

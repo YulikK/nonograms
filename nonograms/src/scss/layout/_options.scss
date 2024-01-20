@@ -1,0 +1,22 @@
+.options{
+  display: flex;
+  gap: 15px;
+
+  &__refresh {
+    @include  block-button();
+  }
+  &__show-answer {
+    @include  block-button();
+  }
+
+  &__refresh-img {
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+  }
+  &__show-answer-img{
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+  }
+}

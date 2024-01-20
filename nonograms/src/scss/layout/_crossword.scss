@@ -1,0 +1,33 @@
+
+
+.empty {
+  background-color: #F6EBD5;
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  background-color: #F6EBD5;
+  border-radius: 3px;
+  border: 1px solid #d0ba8e;
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.40);
+}
+
+.hint{
+  background-color: #f3dcc0;
+  @include font-hint();
+  text-align: center;
+  vertical-align: center;
+}
+
+.fill {
+  @include fill
+}
+
+.crossword {
+  border-collapse: collapse;
+  border-color: #d0ba8e;
+  background-color: #CCB589;
+}
+
+

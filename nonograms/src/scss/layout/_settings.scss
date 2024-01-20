@@ -1,0 +1,16 @@
+.settings {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 15px;
+
+  &__sound {
+    @include block-button()
+  }
+
+  &__sound-img {
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+  }
+}

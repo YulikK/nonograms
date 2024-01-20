@@ -1,0 +1,45 @@
+.game {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  @include body-background();
+
+  &__wrapper {
+    margin: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  &__additional {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: space-between;
+    flex-grow: 1;
+  }
+
+  &__chose-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap
+  }
+
+  &__random {
+    @include block-button();
+
+    &-img {
+      width: 60px;
+      height: 60px;
+      padding: 10px;
+    }
+  }
+
+  &__crossword-wrapper{
+    align-self: center;
+    margin: 20px;
+  }
+}

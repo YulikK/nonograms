@@ -1,0 +1,18 @@
+.bookmark {
+  @include block-bottom-wrapper();
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 24px 21px;
+
+  &__img {
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+  }
+
+  &__text {
+    @include font-base();
+    margin: 0px;
+  }
+}
