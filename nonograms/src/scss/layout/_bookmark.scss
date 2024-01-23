@@ -6,13 +6,14 @@
   margin: 24px 21px;
 
   &__img {
-    width: 60px;
-    height: 60px;
+    width: adaptive-size(60, 40);
+    height: adaptive-size(60, 40);
     padding: 10px;
   }
 
   &__text {
     @include font-base();
+    @include adaptive-font-base();
     margin: 0px;
   }
 }

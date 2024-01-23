@@ -4,19 +4,30 @@
 
   &__refresh {
     @include  block-button();
+
+    &:hover {
+      @include block-hover();
+      transform: translateY(-0.25em);
+    }
   }
   &__show-answer {
     @include  block-button();
+    &:hover {
+      @include block-hover();
+      transform: translateY(-0.10em);
+    }
   }
 
   &__refresh-img {
-    width: 60px;
-    height: 60px;
+    width: adaptive-size(60, 40);
+    height: adaptive-size(60, 40);
     padding: 10px;
+
   }
   &__show-answer-img{
-    width: 60px;
-    height: 60px;
+    width: adaptive-size(60, 40);
+    height: adaptive-size(60, 40);
     padding: 10px;
+
   }
 }

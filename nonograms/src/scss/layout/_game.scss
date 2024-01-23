@@ -25,15 +25,21 @@
     display: flex;
     justify-content: space-between;
     gap: 15px;
-    flex-wrap: wrap
+    flex-wrap: wrap;
+
   }
 
   &__random {
     @include block-button();
 
+    &:hover {
+      @include block-hover();
+      transform: translateY(-0.25em);
+    }
+
     &-img {
-      width: 60px;
-      height: 60px;
+      width: adaptive-size(60, 40);
+      height: adaptive-size(60, 40);
       padding: 10px;
     }
   }

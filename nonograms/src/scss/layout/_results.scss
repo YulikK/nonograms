@@ -12,22 +12,34 @@
   }
 
   &__img{
-    width: 60px;
-    height: 60px;
+    width: adaptive-size(60, 40);
+    height: adaptive-size(60, 40);
     padding: 10px;
   }
 
   &__title {
     @include font-tittle();
+    @include adaptive-font-title();
     margin: 0px;
   }
 
   &__information {
     @include font-base();
+    @include adaptive-font-base();
   }
 
   &__information-wrapper {
     width: 100%;
     padding: 0px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
+
+  &__level-img {
+    width: adaptive-size(40, 20);
+    height: adaptive-size(40, 20);
+  }
+
+
 }

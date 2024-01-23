@@ -5,12 +5,16 @@
   gap: 15px;
 
   &__sound {
-    @include block-button()
+    @include block-button();
+    &:hover {
+      @include block-hover();
+      transform: translateY(-0.10em);
+    }
   }
 
   &__sound-img {
-    width: 60px;
-    height: 60px;
+    width: adaptive-size(60, 40);
+    height: adaptive-size(60, 40);
     padding: 10px;
   }
 }

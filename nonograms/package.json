@@ -1,5 +1,5 @@
 {
-  "name": "nonograms",
+  "name": "nanograms",
   "version": "1.0.0",
   "description": "simple game",
   "main": "index.js",

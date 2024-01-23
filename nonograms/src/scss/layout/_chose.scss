@@ -3,25 +3,32 @@
   justify-content: start;
   flex-grow: 1;
   padding: 0 10px;
+  cursor: pointer;
+
+  &:hover {
+    @include block-hover();
+    transform: translateY(-0.25em);
+  }
 
   &__img-wrapper {
     @include block-right-wrapper();
   }
 
   &__img {
-    width: 60px;
-    height: 60px;
+    width: adaptive-size(60, 40);
+    height: adaptive-size(60, 40);
     padding: 10px;
   }
 
   &__title {
     @include font-tittle();
+    @include adaptive-font-title();
     margin: 0 10px;
   }
 
   &__level-img {
-    width: 40px;
-    height: 40px;
+    width: adaptive-size(40, 20);
+    height: adaptive-size(40, 20);
   }
 
   &__level-wrapper{

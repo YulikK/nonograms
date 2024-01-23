@@ -11,6 +11,8 @@
   border-radius: 3px;
   border: 1px solid #d0ba8e;
   box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.40);
+  cursor: pointer;
+  position: relative;
 }
 
 .hint{
@@ -18,7 +20,15 @@
   @include font-hint();
   text-align: center;
   vertical-align: center;
+
+  &--off{
+  text-decoration: line-through;
+  color: $text-hint-off-color;
+  }
 }
+
+
+
 
 .fill {
   @include fill
@@ -28,6 +38,29 @@
   border-collapse: collapse;
   border-color: #d0ba8e;
   background-color: #CCB589;
+}
+
+.cross::before,
+.cross::after {
+  content: '';
+  position: absolute;
+  background-color: $text-hint-color;
+}
+
+.cross::before {
+  height: 2px;
+  width: 50%;
+  top: 50%;
+  left: 25%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.cross::after {
+  width: 2px;
+  height: 50%;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
 }
 
 
