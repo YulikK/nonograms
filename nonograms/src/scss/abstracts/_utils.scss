@@ -9,6 +9,7 @@
   margin: -1px;
 }
 
+
 @function adaptive-size($max-size, $min-size) {
   $add-size: $max-size - $min-size;
   $max-free-width: $desktop-width-count - $mobile-width-count;

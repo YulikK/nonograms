@@ -1,6 +1,7 @@
 export const COMMAND = {
   FILL: 'fill',
-  EMPTY: 'empty'
+  EMPTY: 'empty',
+  CROSS: 'cross'
 };
 const STORE_PREFIX = `hangman`;
 const STORE_VER = `v1`;

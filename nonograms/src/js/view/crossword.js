@@ -164,7 +164,7 @@ export default class Crossword extends AbstractView {
       if (evt.target.classList.contains("cross")) evt.target.classList.remove("cross");
       if (evt.target.classList.contains("fill")) {
         evt.target.classList.remove("fill");
-        command = COMMAND.EMPTY
+        command = COMMAND.EMPTY;
       }
       else {
         evt.target.classList.add("fill");
@@ -189,11 +189,18 @@ export default class Crossword extends AbstractView {
     }
     if (!evt.target.classList.contains("hint")) {
       if (evt.target.classList.contains("fill")) evt.target.classList.remove("fill");
-      if (evt.target.classList.contains("cross")) evt.target.classList.remove("cross");
-      else evt.target.classList.add("cross");
+
+      let command = '';
+      if (evt.target.classList.contains("cross")) {
+        evt.target.classList.remove("cross");
+        command = COMMAND.EMPTY
+      } else {
+        evt.target.classList.add("cross");
+        command = COMMAND.CROSS;
+      }
 
       const indexEl = this._getIndex(evt.target.data);
-      this._callback.cellClick(indexEl, COMMAND.EMPTY);
+      this._callback.cellClick(indexEl, command);
     }
   }
 
@@ -212,6 +219,12 @@ export default class Crossword extends AbstractView {
   startGame() {
     this._isGameStop = false;
   }
+
+  loadGame(crossword, answers){
+    this._crossword = crossword.playTable;
+    this.setAnswersCrossword(answers);
+
+  }
   setClearCrossword() {
     this._elements.rows.forEach((row) => {
       row.cells.forEach((cell) => {
@@ -220,13 +233,21 @@ export default class Crossword extends AbstractView {
     })
   }
 
-  setAnswersCrossword() {
+  setAnswersCrossword(answer) {
     this._elements.rows.forEach((row) => {
       row.cells.forEach((cell) => {
         cell.td.classList.remove('fill', 'cross', 'hint--off')
         if(!(cell.td.classList.contains('empty') || cell.td.classList.contains('hint'))) {
           const index = this._getIndex(cell.td.data);
-          if (this._crossword[index.i][index.j] === '1') cell.td.classList.add("fill");
+          switch (answer[index.i][index.j]){
+            case '1':
+              cell.td.classList.add("fill");
+              break;
+            case '0':
+              cell.td.classList.add("cross");
+              break;
+          }
+          // if (answer[index.i][index.j] === '1') cell.td.classList.add("fill");
         }
       })
     })

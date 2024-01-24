@@ -23,6 +23,18 @@ export default class Crossword {
     return currentEl;
   }
 
+  getRandomCrossword(current) {
+    let newCrossword = this._getNextCrossword();
+    while (current === newCrossword) {
+      newCrossword = this._getNextCrossword();
+    }
+    return newCrossword;
+  }
+
+  _getNextCrossword() {
+    return this._crosswords[Math.floor(Math.random() * this._crosswords.length)];
+  }
+
   adaptToClient(crosswords) {
     const adaptedQuestion = Object.assign({}, crosswords, {
       id: crosswords.id,
