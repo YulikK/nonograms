@@ -135,7 +135,20 @@ export default class Nanograms {
   _setNextGameStep(index, command) {
     
       this._setNewAnswer(index, command);
-      
+      let fileName = '';
+      switch(command) {
+        case COMMAND.FILL:
+          fileName = 'click';
+          break;
+        case COMMAND.EMPTY:
+          fileName = 'click';
+          break;
+        case COMMAND.CROSS:
+          fileName = 'click-context';
+          break;
+      }
+      const audio = new Audio(`./muz/${fileName}.mp3`);
+      audio.play();
   }
 
   _setNewAnswer(index, command) {

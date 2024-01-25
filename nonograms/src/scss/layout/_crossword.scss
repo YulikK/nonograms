@@ -13,7 +13,35 @@
   box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.40);
   cursor: pointer;
   position: relative;
+  transition: 0.4s;
+  &:hover{
+    box-shadow: inset 0px 0px 4px 2px rgba(255, 253, 250, 9.4);
+  }
+
 }
+
+.cell:not(.hint):nth-child(5n) {
+  border-right: 2px solid black; /* Добавляем правую границу к каждой пятой ячейке */
+}
+
+/* Расскраска каждой пятой строки, исключая ячейки с классом hint */
+.cell:not(.hint):nth-child(5n) td:not(.hint) {
+  border-bottom: 2px solid black; /* Добавляем нижнюю границу для каждой пятой строки */
+}
+// tr {
+//   &:nth-child(5n) td:not(.hint) {
+//     border-bottom: 2px solid #6a562e;
+//   }
+// }
+
+
+.cell.hint {
+  border: 1px solid #d0ba8e;
+}
+
+// .cell:not(.hint) + .cell:not(.hint) {
+//   background-color: lightgray; 
+// }
 
 .hint{
   background-color: #f3dcc0;

@@ -59,5 +59,10 @@ module.exports = {
         { from: "./src/mock", to: "mock" }
       ],
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "./src/muz", to: "muz" }
+      ],
+    }),
   ]
 };
