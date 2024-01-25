@@ -9,6 +9,7 @@ export default class Chose extends AbstractView {
     this._elements = this.generateNode();
     this._structure = this.getStructure();
     this._randomClickHandler = this._randomClickHandler.bind(this);
+    this._showGalleryClickHandler = this._showGalleryClickHandler.bind(this);
   }
   getStructure() {
     return {
@@ -37,7 +38,7 @@ export default class Chose extends AbstractView {
       chose: {
         wrap: {tag: 'div', className: 'game__chose chose'},
         imgWrap: {tag: 'div', className: 'chose__img-wrapper'},
-        img: {tag: 'img', className: 'chose__img', src: './img/icons/open.png', alt: 'Chose the game', width: '40', height: '40'},
+        img: {tag: 'img', className: 'chose__img', src: `./img/example/${this._crossword.img}.png`, alt: 'Chose the game', width: '40', height: '40'},
         titleWrap: {tag: 'div', className: 'chose__title-wrapper'},
         title: {tag: 'p', className: 'chose__title', textContent: `${this._crossword.name}`},
         level: {
@@ -81,8 +82,19 @@ export default class Chose extends AbstractView {
     evt.preventDefault();
     this._callback.randomClick();
   }
+
+  _showGalleryClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.showGallery();
+  }
+
   setRandomClickHandler(callback) {
     this._callback.randomClick = callback;
     this._elements.random.a.addEventListener(`click`, this._randomClickHandler);
+  }
+
+  setShowGalleryClickHandler(callback) {
+    this._callback.showGallery = callback;
+    this._elements.chose.wrap.addEventListener(`click`, this._showGalleryClickHandler);
   }
 }

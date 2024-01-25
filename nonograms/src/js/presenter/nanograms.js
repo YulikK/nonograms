@@ -6,6 +6,7 @@ import ChoseView from "../view/chose.js";
 import ResultsView from "../view/results.js";
 import CrosswordView from "../view/crossword.js";
 import EndGameView from "../view/end-game.js";
+import GalleryView from "../view/gallery.js";
 import CrosswordModel from "../model/crossword.js";
 
 export default class Nanograms {
@@ -113,11 +114,16 @@ export default class Nanograms {
       this._restartGame();
     };
 
+    const onShowGalleryClick = () => {
+      this._showGallery();
+    }
+
     render(this._mainComponent._elements.additional.section, this._choseComponent);
     render(this._mainComponent._elements.additional.section, this._resultsComponent);
     render(this._mainComponent._elements.table.crosswordWrap, this._crosswordComponent);
     this._crosswordComponent.setCellClickHandler(onCellClick);
     this._choseComponent.setRandomClickHandler(onRandomClick);
+    this._choseComponent.setShowGalleryClickHandler(onShowGalleryClick);
   }
 
   _setGameStartSettings() {
@@ -202,6 +208,26 @@ export default class Nanograms {
     return`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   }
 
+  _showGallery() {
+    const onCloseClick = () => {
+      this._destroyGalleryModal();
+      // this._restartGame();
+    };
+    const onGameClick = (data) => {
+      this._destroyGalleryModal();
+      if (data) {
+        this._destroyGameResult();
+        this._currentCrossword = this._crossModel.getElementById(data);
+        this._setAnswers();
+        this._startNewGame();
+      }
+    };
+    this._galleryComponent = new GalleryView(this._crossModel.getCrosswords());
+    render(this._gameContainer, this._galleryComponent);
+    this._galleryComponent.setCloseClickHandler(onCloseClick);
+    this._galleryComponent.setGameClickHandler(onGameClick);
+  }
+
   _showEndGameInformation() {
     const finishTime = this._getTime(this._seconds);
     this._isGameStarted = false;
@@ -233,6 +259,10 @@ export default class Nanograms {
     this._getRandomCrossword();
     this._setAnswers();
     this._startNewGame();
+  }
+
+  _destroyGalleryModal() {
+    remove(this._galleryComponent);
   }
 
   _destroyResultModal() {
