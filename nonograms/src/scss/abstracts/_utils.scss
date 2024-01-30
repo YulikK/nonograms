@@ -17,3 +17,9 @@
     #{$min-size + px} + #{$add-size} * ((100vw - 360px) / #{$max-free-width})
   );
 }
+
+// @function darker($color, $tone) {
+//   $adjust: -16*$tone;
+//   @return adjust-color($color, $red: $adjust, $green: $adjust, $blue: $adjust);
+// }
+  

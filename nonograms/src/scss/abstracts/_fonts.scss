@@ -7,9 +7,23 @@
   );
 }
 
+.light-theme {
+  --color-text-base: #{$color-text-base-light};
+  --color-text-timer: #{$color-text-timer-light};
+  --color-text-hint: #{$color-text-hint-light};
+  --color-text-hint-off: #{lighten($color-text-hint-light, 30%)};
+}
+
+.dark-theme {
+  --color-text-base: #{$color-text-base-dark};
+  --color-text-timer: #{$color-text-timer-dark};
+  --color-text-hint: #{$color-text-hint-dark};
+  --color-text-hint-off: #{lighten($color-text-hint-dark, 30%)};
+}
+
 @mixin font-timer() {
   font-family: $font-stack;
-  color: $text-timer-color;
+  color: var(--color-text-timer);
   font-weight: 400;
   font-size: 35px;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -21,7 +35,7 @@
 
 @mixin font-base() {
   font-family: $font-stack;
-  color: $text-title-color;
+  color: var(--color-text-base);
   font-weight: 400;
   font-size: 20px;
 }
@@ -30,17 +44,21 @@
   font-size: adaptive-font(20, 14);
 }
 
-
 @mixin font-hint() {
   font-family: $font-stack;
-  color: $text-hint-color;
+  color: var(--color-text-hint);
   font-weight: 400;
   font-size: 16px;
 }
 
+@mixin font-hint-off() {
+  text-decoration: line-through;
+  color: var(--color-text-hint-off);
+}
+
 @mixin font-tittle() {
   font-family: $font-stack;
-  color: $text-title-color;
+  color: var(--color-text-base);
   font-weight: 400;
   font-size: 28px;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

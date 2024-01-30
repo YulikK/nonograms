@@ -1,62 +1,34 @@
 
 
 .empty {
-  background-color: #F6EBD5;
+  @include empty();
 }
 
 .cell {
   width: 40px;
   height: 40px;
-  background-color: #F6EBD5;
-  border-radius: 3px;
-  border: 1px solid #d0ba8e;
-  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.40);
+  @include cell();
+  
   cursor: pointer;
   position: relative;
   transition: 0.4s;
+
   &:hover{
-    box-shadow: inset 0px 0px 4px 2px rgba(255, 253, 250, 9.4);
+    @include cell-hover();
   }
 
 }
 
-.cell:not(.hint):nth-child(5n) {
-  border-right: 2px solid black; /* Добавляем правую границу к каждой пятой ячейке */
-}
-
-/* Расскраска каждой пятой строки, исключая ячейки с классом hint */
-.cell:not(.hint):nth-child(5n) td:not(.hint) {
-  border-bottom: 2px solid black; /* Добавляем нижнюю границу для каждой пятой строки */
-}
-// tr {
-//   &:nth-child(5n) td:not(.hint) {
-//     border-bottom: 2px solid #6a562e;
-//   }
-// }
-
-
-.cell.hint {
-  border: 1px solid #d0ba8e;
-}
-
-// .cell:not(.hint) + .cell:not(.hint) {
-//   background-color: lightgray; 
-// }
-
 .hint{
-  background-color: #f3dcc0;
+  @include hint();
   @include font-hint();
   text-align: center;
   vertical-align: center;
 
   &--off{
-  text-decoration: line-through;
-  color: $text-hint-off-color;
+    @include font-hint-off();
   }
 }
-
-
-
 
 .fill {
   @include fill
@@ -64,15 +36,14 @@
 
 .crossword {
   border-collapse: collapse;
-  border-color: #d0ba8e;
-  background-color: #CCB589;
+  @include crossword();
 }
 
 .cross::before,
 .cross::after {
   content: '';
   position: absolute;
-  background-color: $text-hint-color;
+  @include cross();
 }
 
 .cross::before {

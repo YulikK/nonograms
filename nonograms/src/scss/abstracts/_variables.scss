@@ -1,9 +1,26 @@
 
-$mobile-width: 360px;
 $font-stack: 'Josefin Sans', sans-serif;
-$text-title-color: #54351F;
-$text-timer-color: #FFFFFD;
-$text-hint-color: #737755;
-$text-hint-off-color: #b1b595;
+
+$mobile-width: 360px;
 $mobile-width-count: 360;
 $desktop-width-count: 1440;
+
+$color-bg-light: #839371;
+$color-bg-dark: #30424C;
+
+$color-btn-light: #F6EBD5;
+$color-btn-dark: #2F3034;
+
+// $color-game-dark: #D7A651;
+
+$color-timer-light: #B5BF92;
+$color-timer-dark: #6B5140;
+
+$color-text-base-light: #54351F;
+$color-text-base-dark: #EFE3AF;
+
+$color-text-timer-light: #FFFFFD;
+$color-text-timer-dark: #F5E9CF;
+
+$color-text-hint-light: #737755;
+$color-text-hint-dark: #597787;

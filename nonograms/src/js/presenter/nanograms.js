@@ -86,6 +86,10 @@ export default class Nanograms {
     const onLoadClick = () => {
       this._loadGame();
     };
+    const onThemeClick = () => {
+      this._gameContainer.classList.toggle('light-theme');
+      this._gameContainer.classList.toggle('dark-theme');
+    };
 
     render(this._gameContainer, this._controlsComponent);
     render(this._gameContainer, this._mainComponent);
@@ -94,6 +98,7 @@ export default class Nanograms {
     this._controlsComponent.setShowAnswersClickHandler(onShowAnswersClick);
     this._controlsComponent.setSaveClickHandler(onSaveClick);
     this._controlsComponent.setLoadClickHandler(onLoadClick);
+    this._controlsComponent.setThemeClickHandler(onThemeClick);
 
     this._getSaveFromStorage();
   }
@@ -109,6 +114,8 @@ export default class Nanograms {
     };
 
     const onRandomClick = () => {
+      const audio = new Audio(`./muz/random.mp3`);
+      audio.play();
       this._resetTimer();
       this._seInitSettings();
       this._restartGame();

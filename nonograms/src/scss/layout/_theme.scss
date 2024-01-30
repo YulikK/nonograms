@@ -17,10 +17,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #B5BF92;
-    box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.40);
     transition: 0.4s;
-    border-radius: 34px;
+    @include slider-slider();
 
     &:before {
       position: absolute;
@@ -33,45 +31,30 @@
       bottom: 0;
       margin: auto 0;
       transition: 0.4s;
-      box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.40);
-      background-color: #F6EBD5;
-      background-image: url('../img/icons/light-theme.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: adaptive-size(40, 20);
-      border-radius: 50%;
+      @include slider-button-light();
 
     }
     &:hover {
       &:before {
-        box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.40);
-        background-color: #fffdfa;
+        @include slider-button-hover();
         transform: translateY(-0.25em);
       }
     }
   }
 
   &__input:checked + &__slider {
-    background-color: #B5BF92;
+    @include slider-slider();
     &:hover {
       &:before {
-        box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.40);
-        background-color: #fffdfa;
+        @include slider-button-hover();
         transform: translate(32px, -0.25em) ;
       }
     }
   }
 
-  &__input:focus + &__slider {
-    box-shadow: 0 0 1px #B5BF92;
-  }
-
   &__input:checked + &__slider:before {
     transform: translateX(32px);
-    background-color: #F6EBD5;
-    background-image: url('../img/icons/dark-theme.png');
-    background-repeat: no-repeat;
-    background-position: center;
     background-size: adaptive-size(40, 20);
+    @include slider-button-dark();
   }
 }

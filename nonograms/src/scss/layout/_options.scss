@@ -34,6 +34,7 @@
 
   &__save-load {
     @include  block-button();
+    border: none;
     background: none;
   }
 
@@ -44,7 +45,7 @@
     box-shadow: none;
     @include block-right-wrapper();
 
-    &:hover {
+    &:not(.disable):hover {
       @include block-hover();
       
       transform: translateY(-0.10em);

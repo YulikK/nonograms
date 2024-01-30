@@ -11,6 +11,7 @@ export default class Controls extends AbstractView {
     this._showAnswersClickHandler = this._showAnswersClickHandler.bind(this);
     this._saveClickHandler = this._saveClickHandler.bind(this);
     this._loadClickHandler = this._loadClickHandler.bind(this);
+    this._themeClickHandler = this._themeClickHandler.bind(this);
   }
   getStructure() {
     return {
@@ -179,6 +180,9 @@ export default class Controls extends AbstractView {
     evt.preventDefault();
     this._callback.loveClick();
   }
+  _themeClickHandler(evt) {
+    this._callback.themeClick();
+  }
 
   setRefreshClickHandler(callback) {
     this._callback.refreshClick = callback;
@@ -198,5 +202,9 @@ export default class Controls extends AbstractView {
   setLoadClickHandler(callback) {
     this._callback.loveClick = callback;
     this._elements.options.saveLoad.load.addEventListener(`click`, this._loadClickHandler);
+  }
+  setThemeClickHandler(callback) {
+    this._callback.themeClick = callback;
+    this._elements.settings.theme.input.addEventListener(`click`, this._themeClickHandler);
   }
 }
