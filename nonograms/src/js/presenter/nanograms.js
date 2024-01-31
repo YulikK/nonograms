@@ -17,15 +17,19 @@ export default class Nanograms {
       controls: new ControlsView(),
       main: new MainView(),
     }
+    
     this._crossModel = new CrosswordModel();
     this._crossModel.setCrosswords(crosswords);
+
     this._results = [];
     this._saveGame = {};
+
     this._settings = {
       isHaveSaveGame: false,
       isGameStarted: false,
       isShowAnswers: false,
     }
+
     this._getResultFromStorage();
   }
 
@@ -44,7 +48,6 @@ export default class Nanograms {
     this._resetTimer();
     this._settings.isGameStarted = false;
     this._settings.isShowAnswers = false;
-    
   }
 
   _getRandomCrossword() {
@@ -57,27 +60,25 @@ export default class Nanograms {
   }
 
   _updateGameComponents() {
-    
-    this._components['chose'] = new ChoseView(this._currentCrossword);
-    this._components['crossword'] = new CrosswordView(this._currentCrossword);
-    this._components['results'] = new ResultsView(this._results, this._crossModel.getCrosswords());
-
+    this._components["chose"] = new ChoseView(this._currentCrossword);
+    this._components["crossword"] = new CrosswordView(this._currentCrossword);
+    this._components["results"] = new ResultsView(this._results, this._crossModel.getCrosswords());
   }
 
   _renderBase() {
     const onRefreshClick = () => {
       this._setAnswers();
-      this._components['crossword'].setClearCrossword();
-      this._components['crossword'].startGame();
       this._resetSettings();
+      this._components["crossword"].setClearCrossword();
+      this._components["crossword"].startGame();
     };
 
     const onShowAnswersClick = () => {
-      this._setAnswers();
-      this._components['crossword'].setAnswersCrossword(this._currentCrossword.playTable);
+      this._setAnswers(this._currentCrossword.playTable);
+      this._components["crossword"].setAnswersCrossword(this._currentCrossword.playTable);
+      this._components["crossword"].stopGame();
       this._resetSettings();
       this._settings.isShowAnswers = true;
-      this._components['crossword'].stopGame();
 
     };
 
@@ -108,7 +109,9 @@ export default class Nanograms {
     const onCellClick = (index, command) => {
       if(!this._settings.isShowAnswers) {
         if(!this._settings.isGameStarted) {
-          this._setGameStartSettings();
+          this._settings.isGameStarted = true;
+          this._components["controls"].setSaveEnabled();
+          this._startTimer();
         }
         this._setNextGameStep(index, command);
       }
@@ -131,12 +134,6 @@ export default class Nanograms {
     this._components['crossword'].setCellClickHandler(onCellClick);
     this._components['chose'].setRandomClickHandler(onRandomClick);
     this._components['chose'].setShowGalleryClickHandler(onShowGalleryClick);
-  }
-
-  _setGameStartSettings() {
-    this._settings.isGameStarted = true;
-    this._components['controls'].setSaveEnabled();
-    this._startTimer();
   }
 
   _setNextGameStep(index, command) {
@@ -223,7 +220,6 @@ export default class Nanograms {
   _showGallery() {
     const onCloseClick = () => {
       this._destroyGalleryModal();
-      // this._restartGame();
     };
     const onGameClick = (data) => {
       this._destroyGalleryModal();
