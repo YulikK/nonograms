@@ -161,9 +161,8 @@
   background: rgba(64, 63, 61, 0.8);
 }
 
-@mixin slider-button-light() {
+@mixin slider-button-on() {
   background-color: var(--color-btn);
-  background-image: url('../img/icons/light-theme.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: adaptive-size(40, 20);
@@ -171,9 +170,8 @@
   box-shadow: 0px 10px 20px 0px shadow();
 }
 
-@mixin slider-button-dark() {
+@mixin slider-button-off() {
   background-color: var(--color-btn);
-  background-image: url('../img/icons/dark-theme.png');
   background-repeat: no-repeat;
   background-position: center;
     

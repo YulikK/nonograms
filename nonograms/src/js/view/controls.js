@@ -12,6 +12,7 @@ export default class Controls extends AbstractView {
     this._saveClickHandler = this._saveClickHandler.bind(this);
     this._loadClickHandler = this._loadClickHandler.bind(this);
     this._themeClickHandler = this._themeClickHandler.bind(this);
+    this._soundClickHandler = this._soundClickHandler.bind(this);
   }
   getStructure() {
     return {
@@ -49,9 +50,10 @@ export default class Controls extends AbstractView {
         ]},
         {element: this._elements.settings.wrap,
         child: [
-          {element: this._elements.settings.sound.a,
-          child: [
-            {element: this._elements.settings.sound.img}
+          {element: this._elements.settings.sound.label,
+            child: [
+              {element: this._elements.settings.sound.input},
+              {element: this._elements.settings.sound.span},
           ]},
           {element: this._elements.settings.theme.label,
           child: [
@@ -94,12 +96,13 @@ export default class Controls extends AbstractView {
       settings: {
         wrap: { tag: 'div', className: 'control__settings settings' },
         sound: {
-          a: { tag: 'a', className: 'settings__sound', href: '' },
-          img: { tag: 'img', className: 'settings__sound-img', src: './img/icons/sounds.png', alt: 'sounds on/off', width: '40', height: '40' }
+          label: { tag: 'label', id: 'switch-sound', className: 'settings__sound sound' },
+          input: { tag: 'input', className: 'sound__input', type: 'checkbox', id: 'slider-sound' },
+          span: { tag: 'span', className: 'sound__slider round' }
         },
         theme: {
           label: { tag: 'label', id: 'switch-theme', className: 'settings__theme theme' },
-          input: { tag: 'input', className: 'theme__input', type: 'checkbox', id: 'slider' },
+          input: { tag: 'input', className: 'theme__input', type: 'checkbox', id: 'slider-theme' },
           span: { tag: 'span', className: 'theme__slider round' }
         }
       }
@@ -137,8 +140,9 @@ export default class Controls extends AbstractView {
       settings: {
         wrap: createElement(this._tagsProperties.settings.wrap),
         sound: {
-          a: createElement(this._tagsProperties.settings.sound.a),
-          img: createElement(this._tagsProperties.settings.sound.img),
+          label: createElement(this._tagsProperties.settings.sound.label),
+          input: createElement(this._tagsProperties.settings.sound.input),
+          span: createElement(this._tagsProperties.settings.sound.span)
         },
         theme: {
           label: createElement(this._tagsProperties.settings.theme.label),
@@ -183,6 +187,9 @@ export default class Controls extends AbstractView {
   _themeClickHandler(evt) {
     this._callback.themeClick();
   }
+  _soundClickHandler(evt) {
+    this._callback.soundClick();
+  }
 
   setRefreshClickHandler(callback) {
     this._callback.refreshClick = callback;
@@ -206,5 +213,9 @@ export default class Controls extends AbstractView {
   setThemeClickHandler(callback) {
     this._callback.themeClick = callback;
     this._elements.settings.theme.input.addEventListener(`click`, this._themeClickHandler);
+  }
+  setSoundClickHandler(callback) {
+    this._callback.soundClick = callback;
+    this._elements.settings.sound.input.addEventListener(`click`, this._soundClickHandler);
   }
 }

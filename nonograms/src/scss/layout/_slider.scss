@@ -1,4 +1,5 @@
-.theme {
+.theme,
+.sound {
   position: relative;
   display: inline-block;
   width: adaptive-size(90, 70);
@@ -31,7 +32,7 @@
       bottom: 0;
       margin: auto 0;
       transition: 0.4s;
-      @include slider-button-light();
+      @include slider-button-on();
 
     }
     &:hover {
@@ -51,10 +52,25 @@
       }
     }
   }
+  
 
   &__input:checked + &__slider:before {
     transform: translateX(32px);
     background-size: adaptive-size(40, 20);
-    @include slider-button-dark();
+    @include slider-button-off();
   }
+}
+
+.theme .theme__slider:before{
+  background-image: url('../img/icons/light-theme.png');
+}
+.theme .theme__input:checked + .theme__slider:before {
+  background-image: url('../img/icons/dark-theme.png');
+}
+
+.sound .sound__slider:before{
+  background-image: url('../img/icons/sounds-on.png');
+}
+.sound .sound__input:checked + .sound__slider:before {
+  background-image: url('../img/icons/sounds-off.png');
 }

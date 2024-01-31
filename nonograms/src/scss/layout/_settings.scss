@@ -3,18 +3,4 @@
   justify-content: end;
   align-items: center;
   gap: 15px;
-
-  &__sound {
-    @include block-button();
-    &:hover {
-      @include block-hover();
-      transform: translateY(-0.10em);
-    }
-  }
-
-  &__sound-img {
-    width: adaptive-size(60, 40);
-    height: adaptive-size(60, 40);
-    padding: 10px;
-  }
 }

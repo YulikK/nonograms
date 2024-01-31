@@ -61,7 +61,7 @@ module.exports = {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: "./src/muz", to: "muz" }
+        { from: "./src/sound", to: "sound" }
       ],
     }),
   ]

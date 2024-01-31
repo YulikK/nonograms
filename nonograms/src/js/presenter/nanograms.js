@@ -1,7 +1,8 @@
 import { render, remove } from "../utils/render.js";
-import { COMMAND, STORE_NAME } from "../utils/const.js";
+import { COMMAND, STORE_NAME, SOUNDS } from "../utils/const.js";
 import { deepCopy, getClearMatrix, compareMatrix } from "../utils/utils.js";
 import Store from "../api/store.js";
+import Sound from "../api/sound.js";
 import ControlsView from "../view/controls.js";
 import MainView from "../view/main.js";
 import ChoseView from "../view/chose.js";
@@ -23,6 +24,7 @@ export default class Nanograms {
     this._crossModel.setCrosswords(crosswords);
 
     this._store = new Store(STORE_NAME, window.localStorage);
+    this._sound = new Sound();
 
     this._results = [];
     this._saveGameInf = {};
@@ -71,6 +73,7 @@ export default class Nanograms {
 
   _renderBase() {
     const onRefreshClick = () => {
+      this._sound.playSound(SOUNDS.REFRESH);
       this._setAnswers();
       this._resetSettings();
       this._components["crossword"].setClearCrossword();
@@ -78,6 +81,7 @@ export default class Nanograms {
     };
 
     const onShowAnswersClick = () => {
+      this._sound.playSound(SOUNDS.ANSWERS);
       this._setAnswers(this._currentCrossword.playTable);
       this._components["crossword"].setAnswersCrossword(this._currentCrossword.playTable);
       this._components["crossword"].stopGame();
@@ -92,7 +96,12 @@ export default class Nanograms {
     const onLoadClick = () => {
       this._loadGame();
     };
+    const onSoundOnOff = () => {
+      this._sound.soundsToggle();
+      this._sound.playSound(SOUNDS.SWITCH);
+    };
     const onThemeClick = () => {
+      this._sound.playSound(SOUNDS.SWITCH);
       this._gameContainer.classList.toggle('light-theme');
       this._gameContainer.classList.toggle('dark-theme');
     };
@@ -105,6 +114,7 @@ export default class Nanograms {
     this._components['controls'].setSaveClickHandler(onSaveClick);
     this._components['controls'].setLoadClickHandler(onLoadClick);
     this._components['controls'].setThemeClickHandler(onThemeClick);
+    this._components['controls'].setSoundClickHandler(onSoundOnOff);
 
     
   }
@@ -122,8 +132,7 @@ export default class Nanograms {
     };
 
     const onRandomClick = () => {
-      const audio = new Audio(`./muz/random.mp3`);
-      audio.play();
+      this._sound.playSound(SOUNDS.RENDER);
       this._resetSettings();
       this._restartGame();
     };
@@ -133,7 +142,7 @@ export default class Nanograms {
     }
 
     render(this._components['main']._elements.additional.section, this._components['chose']);
-    render(this._components['main']._elements.additional.section, this._components['results']);
+    if(this._results.length > 0) render(this._components['main']._elements.additional.section, this._components['results']);
     render(this._components['main']._elements.table.crosswordWrap, this._components['crossword']);
     this._components['crossword'].setCellClickHandler(onCellClick);
     this._components['chose'].setRandomClickHandler(onRandomClick);
@@ -142,20 +151,6 @@ export default class Nanograms {
 
   _setNextGameStep(index, command) {
     this._setNewAnswer(index, command);
-    let fileName = '';
-    switch(command) {
-      case COMMAND.FILL:
-        fileName = 'click';
-        break;
-      case COMMAND.EMPTY:
-        fileName = 'click';
-        break;
-      case COMMAND.CROSS:
-        fileName = 'click-context';
-        break;
-    }
-    const audio = new Audio(`./muz/${fileName}.mp3`);
-    audio.play();
   }
 
   _setNewAnswer(index, command) {
@@ -171,11 +166,15 @@ export default class Nanograms {
         break;
     }
 
-    if (this._isFinish()) this._showEndGameInformation();
+    if (this._isFinish()) {
+      this._sound.playSound(SOUNDS.WIN);
+      this._showEndGameInformation();
+    } else this._sound.playSound(command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL);
   }
   
   _loadGame(){
     if (this._settings.isHaveSaveGame) {
+      this._sound.playSound(SOUNDS.RENDER);
       this._getSaveFromStorage();
       this._destroyGameComponents();
       this._resetSettings();
@@ -224,6 +223,7 @@ export default class Nanograms {
     const onGameClick = (data) => {
       this._destroyGalleryModal();
       if (data) {
+        this._sound.playSound(SOUNDS.RENDER);
         this._destroyGameComponents();
         this._currentCrossword = this._crossModel.getElementById(data);
         this._setAnswers();
