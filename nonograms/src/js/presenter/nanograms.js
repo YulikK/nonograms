@@ -1,5 +1,6 @@
 import { render, remove } from "../utils/render.js";
 import { COMMAND, STORE_NAME } from "../utils/const.js";
+import { deepCopy, getClearMatrix, compareMatrix } from "../utils/utils.js";
 import ControlsView from "../view/controls.js";
 import MainView from "../view/main.js";
 import ChoseView from "../view/chose.js";
@@ -23,7 +24,7 @@ export default class Nanograms {
     this._saveGame = {};
   }
 
-  startGame(crosswords) {
+  startGame() {
     
     this._getResultFromStorage();
     this._seInitSettings();
@@ -46,13 +47,9 @@ export default class Nanograms {
     this._currentCrossword = this._crossModel.getRandomCrossword();
   }
 
-  _deepCopy(matrix) {
-    return matrix.map(row => row.map(cell => typeof cell === 'object' ? deepCopy(cell) : cell));
-  }
-  
   _setAnswers(answers = undefined) {
-    if (answers)  this._answers = this._deepCopy(answers);
-    else this._answers = this._clearAnswers();
+    if (answers)  this._answers = deepCopy(answers);
+    else this._answers = getClearMatrix(this._currentCrossword.playTable.length);
   }
 
   _startNewGame() {
@@ -65,7 +62,7 @@ export default class Nanograms {
 
   _renderBase() {
     const onRefreshClick = () => {
-      this._answers = this._clearAnswers();
+      this._setAnswers();
       this._components['crossword'].setClearCrossword();
       this._isGameStarted = false;
       this._isShowAnswers = false;
@@ -74,7 +71,7 @@ export default class Nanograms {
     };
 
     const onShowAnswersClick = () => {
-      this._answers = this._clearAnswers();
+      this._setAnswers();
       this._components['crossword'].setAnswersCrossword(this._currentCrossword.playTable);
       this._isGameStarted = false;
       this._isShowAnswers = true;
@@ -176,11 +173,6 @@ export default class Nanograms {
 
     if (this._isFinish()) this._showEndGameInformation();
   }
-
-
-  _clearAnswers() {
-    return Array.from({ length: this._currentCrossword.playTable.length }, () => Array(this._currentCrossword.playTable.length).fill(''));
-  }
   
   _loadGame(){
     if (this._isHaveSaveGame) {
@@ -219,9 +211,7 @@ export default class Nanograms {
   }
 
   _isFinish() {
-    const answers = this._answers.map(row => row.map(cell => cell === '0' ? '' : cell));
-    const playTable = this._currentCrossword.playTable.map(row => row.map(cell => cell === '0' ? '' : cell));
-    return JSON.stringify(answers) === JSON.stringify(playTable);
+    return compareMatrix(this._answers, this._currentCrossword.playTable);
   }
 
   _getTime(seconds) {
