@@ -35,7 +35,8 @@ export default class Nanograms {
     this._renderBase();
     this._getRandomCrossword();
     this._setAnswers();
-    this._startNewGame();
+    this._updateGameComponents();
+    this._renderGame();
     
   }
 
@@ -55,12 +56,12 @@ export default class Nanograms {
     else this._answers = getClearMatrix(this._currentCrossword.playTable.length);
   }
 
-  _startNewGame() {
+  _updateGameComponents() {
     
     this._components['chose'] = new ChoseView(this._currentCrossword);
     this._components['crossword'] = new CrosswordView(this._currentCrossword);
     this._components['results'] = new ResultsView(this._results, this._crossModel.getCrosswords());
-    this._renderGame();
+
   }
 
   _renderBase() {
@@ -182,7 +183,8 @@ export default class Nanograms {
       this._seconds = Number(this._saveGame['seconds']);
       this._components['controls'].updateTimerDisplay(this._seconds);
       this._setAnswers(this._saveGame['answers']);
-      this._startNewGame();
+      this._updateGameComponents();
+      this._renderGame();
       this._components['crossword'].setAnswersCrossword(this._answers);
     }
   }
@@ -229,7 +231,8 @@ export default class Nanograms {
         this._destroyGameResult();
         this._currentCrossword = this._crossModel.getElementById(data);
         this._setAnswers();
-        this._startNewGame();
+        this._updateGameComponents();
+        this._renderGame();
       }
     };
     this._components['gallery'] = new GalleryView(this._crossModel.getCrosswords());
@@ -238,18 +241,20 @@ export default class Nanograms {
     this._components['gallery'].setGameClickHandler(onGameClick);
   }
 
-  _showEndGameInformation() {
-    const finishTime = this._getTime(this._seconds);
-    this._resetSettings();
-
-    
+  _updateResultInformation(finishTime) {
     this._results.reverse();
     this._results.push({time: finishTime,
     id: this._currentCrossword.id});
     this._results.reverse();
     this._results = this._results.slice(0, 5);
     this._setResultToStorage();
-    
+  }
+
+
+  _showEndGameInformation() {
+    const finishTime = this._getTime(this._seconds);
+    this._resetSettings();
+    this._updateResultInformation(finishTime);
 
     this._components['endGame'] = new EndGameView(finishTime);
 
@@ -267,7 +272,8 @@ export default class Nanograms {
     this._destroyGameResult();
     this._getRandomCrossword();
     this._setAnswers();
-    this._startNewGame();
+    this._updateGameComponents();
+    this._renderGame();
   }
 
   _destroyGalleryModal() {
