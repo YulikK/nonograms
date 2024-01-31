@@ -2,7 +2,7 @@ import { render, remove } from "../utils/render.js";
 import GalleryView from "../view/gallery.js";
 import CrosswordModel from "../model/crossword.js";
 
-export default class Nanograms {
+export default class Gallery {
   #gameContainer;
   #components;
   #crossModel;

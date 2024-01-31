@@ -1,7 +1,7 @@
 import AbstractView from "./abstract.js";
 import { createElement } from "../utils/render.js";
 
-export default class EndGame extends AbstractView {
+export default class EndWin extends AbstractView {
   #time;
   #tagsProperties;
 

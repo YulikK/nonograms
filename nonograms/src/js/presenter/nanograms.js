@@ -1,6 +1,6 @@
 import { render, remove } from "../utils/render.js";
 import { COMMAND, STORE_NAME, SOUNDS } from "../utils/const.js";
-import { deepCopy, getClearMatrix, compareMatrix } from "../utils/utils.js";
+import { deepCopy, getClearMatrix, compareMatrix, getTime } from "../utils/utils.js";
 import Store from "../api/store.js";
 import Sound from "../api/sound.js";
 import ControlsView from "../view/controls.js";
@@ -8,12 +8,12 @@ import MainView from "../view/main.js";
 import ChoseView from "../view/chose.js";
 import ResultsView from "../view/results.js";
 import CrosswordView from "../view/crossword.js";
-import EndGameView from "../view/end-game.js";
 import CrosswordModel from "../model/crossword.js";
 
 export default class Nanograms {
   #gameContainer;
   #gallery;
+  #win;
   #components;
   #crossModel;
   #currentCrossword;
@@ -26,9 +26,10 @@ export default class Nanograms {
   #settings;
   #timer;
 
-  constructor(gameContainer, crosswords, gallery) {
+  constructor(gameContainer, crosswords, gallery, win) {
     this.#gameContainer = gameContainer;
     this.#gallery = gallery;
+    this.#win = win;
     this.#components = {
       controls: new ControlsView(),
       main: new MainView(),
@@ -180,9 +181,9 @@ export default class Nanograms {
         break;
     }
 
-    if (this.#isFinish()) {
+    if (this.#isWin()) {
       this.#sound.playSound(SOUNDS.WIN);
-      this.#showEndGameInformation();
+      this.#showWinModal();
     } else this.#sound.playSound(command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL);
   }
   
@@ -220,15 +221,11 @@ export default class Nanograms {
     this.#components["controls"].updateTimerDisplay(this.#seconds);
   }
 
-  #isFinish() {
+  #isWin() {
     return compareMatrix(this.#answers, this.#currentCrossword.playTable);
   }
 
-  #getTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-  }
+  
 
   #showGallery() {
     const callback = (data) => {
@@ -255,20 +252,17 @@ export default class Nanograms {
   }
 
 
-  #showEndGameInformation() {
-    const finishTime = this.#getTime(this.#seconds);
+  #showWinModal() {
+    const finishTime = getTime(this.#seconds);
     this.#resetSettings();
     this.#updateResultInformation(finishTime);
-    
-    this.#components["endGame"] = new EndGameView(finishTime);
-    render(this.#gameContainer, this.#components["endGame"]);
 
     const onPlayAgainClick = () => {
-      this.#destroyResultModal();
       this.#restartGame();
     };
 
-    this.#components['endGame'].setPlayAgainClickHandler(onPlayAgainClick);
+    this.#win.show(finishTime, onPlayAgainClick);
+    
   }
 
   #restartGame() {
@@ -277,10 +271,6 @@ export default class Nanograms {
     this.#setAnswers();
     this.#updateGameComponents();
     this.#renderGame();
-  }
-
-  #destroyResultModal() {
-    remove(this.#components['endGame']);
   }
 
   #destroyGameComponents() {
