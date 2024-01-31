@@ -10,19 +10,21 @@ import GalleryView from "../view/gallery.js";
 import CrosswordModel from "../model/crossword.js";
 
 export default class Nanograms {
-  constructor(gameContainer) {
+  constructor(gameContainer, crosswords) {
     this._gameContainer = gameContainer;
-    this._controlsComponent = new ControlsView();
-    this._mainComponent = new MainView();
-    
-  }
-
-  init(crosswords) {
+    this._components = {
+      controls: new ControlsView(),
+      main: new MainView(),
+    }
     this._crossModel = new CrosswordModel();
     this._crossModel.setCrosswords(crosswords);
     this._results = [];
     this._isHaveSaveGame = false;
     this._saveGame = {};
+  }
+
+  startGame(crosswords) {
+    
     this._getResultFromStorage();
     this._seInitSettings();
     this._renderBase();
@@ -55,28 +57,28 @@ export default class Nanograms {
 
   _startNewGame() {
     
-    this._choseComponent = new ChoseView(this._currentCrossword);
-    this._crosswordComponent = new CrosswordView(this._currentCrossword);
-    this._resultsComponent = new ResultsView(this._results, this._crossModel.getCrosswords());
+    this._components['chose'] = new ChoseView(this._currentCrossword);
+    this._components['crossword'] = new CrosswordView(this._currentCrossword);
+    this._components['results'] = new ResultsView(this._results, this._crossModel.getCrosswords());
     this._renderGame();
   }
 
   _renderBase() {
     const onRefreshClick = () => {
       this._answers = this._clearAnswers();
-      this._crosswordComponent.setClearCrossword();
+      this._components['crossword'].setClearCrossword();
       this._isGameStarted = false;
       this._isShowAnswers = false;
-      this._crosswordComponent.startGame();
+      this._components['crossword'].startGame();
       this._resetTimer();
     };
 
     const onShowAnswersClick = () => {
       this._answers = this._clearAnswers();
-      this._crosswordComponent.setAnswersCrossword(this._currentCrossword.playTable);
+      this._components['crossword'].setAnswersCrossword(this._currentCrossword.playTable);
       this._isGameStarted = false;
       this._isShowAnswers = true;
-      this._crosswordComponent.stopGame();
+      this._components['crossword'].stopGame();
       this._resetTimer();
     };
 
@@ -91,14 +93,14 @@ export default class Nanograms {
       this._gameContainer.classList.toggle('dark-theme');
     };
 
-    render(this._gameContainer, this._controlsComponent);
-    render(this._gameContainer, this._mainComponent);
+    render(this._gameContainer, this._components['controls']);
+    render(this._gameContainer, this._components['main']);
 
-    this._controlsComponent.setRefreshClickHandler(onRefreshClick);
-    this._controlsComponent.setShowAnswersClickHandler(onShowAnswersClick);
-    this._controlsComponent.setSaveClickHandler(onSaveClick);
-    this._controlsComponent.setLoadClickHandler(onLoadClick);
-    this._controlsComponent.setThemeClickHandler(onThemeClick);
+    this._components['controls'].setRefreshClickHandler(onRefreshClick);
+    this._components['controls'].setShowAnswersClickHandler(onShowAnswersClick);
+    this._components['controls'].setSaveClickHandler(onSaveClick);
+    this._components['controls'].setLoadClickHandler(onLoadClick);
+    this._components['controls'].setThemeClickHandler(onThemeClick);
 
     this._getSaveFromStorage();
   }
@@ -125,17 +127,17 @@ export default class Nanograms {
       this._showGallery();
     }
 
-    render(this._mainComponent._elements.additional.section, this._choseComponent);
-    render(this._mainComponent._elements.additional.section, this._resultsComponent);
-    render(this._mainComponent._elements.table.crosswordWrap, this._crosswordComponent);
-    this._crosswordComponent.setCellClickHandler(onCellClick);
-    this._choseComponent.setRandomClickHandler(onRandomClick);
-    this._choseComponent.setShowGalleryClickHandler(onShowGalleryClick);
+    render(this._components['main']._elements.additional.section, this._components['chose']);
+    render(this._components['main']._elements.additional.section, this._components['results']);
+    render(this._components['main']._elements.table.crosswordWrap, this._components['crossword']);
+    this._components['crossword'].setCellClickHandler(onCellClick);
+    this._components['chose'].setRandomClickHandler(onRandomClick);
+    this._components['chose'].setShowGalleryClickHandler(onShowGalleryClick);
   }
 
   _setGameStartSettings() {
     this._isGameStarted = true;
-    this._controlsComponent.setSaveEnabled();
+    this._components['controls'].setSaveEnabled();
     this._startTimer();
   }
 
@@ -188,10 +190,10 @@ export default class Nanograms {
       this._isGameStarted = false;
       this._isShowAnswers = false;
       this._seconds = Number(this._saveGame['seconds']);
-      this._controlsComponent.updateTimerDisplay(this._seconds);
+      this._components['controls'].updateTimerDisplay(this._seconds);
       this._setAnswers(this._saveGame['answers']);
       this._startNewGame();
-      this._crosswordComponent.setAnswersCrossword(this._answers);
+      this._components['crossword'].setAnswersCrossword(this._answers);
     }
   }
 
@@ -201,7 +203,7 @@ export default class Nanograms {
       this._timer = setInterval(() => {
         if(!this._isGameStarted) this._resetTimer();
         this._seconds += 1;
-        this._controlsComponent.updateTimerDisplay(this._seconds);
+        this._components['controls'].updateTimerDisplay(this._seconds);
       }, 1000);
     }
   }
@@ -211,7 +213,7 @@ export default class Nanograms {
       clearInterval(this._timer);
       this._timer = null;
       this._seconds = 0;
-      this._controlsComponent.updateTimerDisplay(this._seconds);
+      this._components['controls'].updateTimerDisplay(this._seconds);
 
     
   }
@@ -242,10 +244,10 @@ export default class Nanograms {
         this._startNewGame();
       }
     };
-    this._galleryComponent = new GalleryView(this._crossModel.getCrosswords());
-    render(this._gameContainer, this._galleryComponent);
-    this._galleryComponent.setCloseClickHandler(onCloseClick);
-    this._galleryComponent.setGameClickHandler(onGameClick);
+    this._components['gallery'] = new GalleryView(this._crossModel.getCrosswords());
+    render(this._gameContainer, this._components['gallery']);
+    this._components['gallery'].setCloseClickHandler(onCloseClick);
+    this._components['gallery'].setGameClickHandler(onGameClick);
   }
 
   _showEndGameInformation() {
@@ -262,16 +264,16 @@ export default class Nanograms {
     this._setResultToStorage();
     
 
-    this._endGameComponent = new EndGameView(finishTime);
+    this._components['endGame'] = new EndGameView(finishTime);
 
-    render(this._gameContainer, this._endGameComponent);
+    render(this._gameContainer, this._components['endGame']);
 
     const onPlayAgainClick = () => {
       this._destroyResultModal();
       this._restartGame();
     };
 
-    this._endGameComponent.setPlayAgainClickHandler(onPlayAgainClick);
+    this._components['endGame'].setPlayAgainClickHandler(onPlayAgainClick);
   }
 
   _restartGame() {
@@ -282,17 +284,17 @@ export default class Nanograms {
   }
 
   _destroyGalleryModal() {
-    remove(this._galleryComponent);
+    remove(this._components['gallery']);
   }
 
   _destroyResultModal() {
-    remove(this._endGameComponent);
+    remove(this._components['endGame']);
   }
 
   _destroyGameResult() {
-    remove(this._crosswordComponent);
-    remove(this._choseComponent);
-    remove(this._resultsComponent);
+    remove(this._components['crossword']);
+    remove(this._components['chose']);
+    remove(this._components['results']);
   }
 
   _setResultToStorage() {
@@ -307,7 +309,7 @@ export default class Nanograms {
     const answers = this._answers.join('-');
 
     this._isHaveSaveGame = true;
-    this._controlsComponent.setLoadEnable();
+    this._components['controls'].setLoadEnable();
     this._saveGame['crossword'] = this._currentCrossword;
     this._saveGame['seconds'] = this._seconds;
     this._saveGame['answers'] = this._answers;
@@ -344,7 +346,7 @@ export default class Nanograms {
           this._saveGame['seconds'] = saveGame[1];
           const answers = saveGame[2].split('-');
           this._saveGame['answers'] = answers.map(row => row.split(','));
-          this._controlsComponent.setLoadEnable();
+          this._components['controls'].setLoadEnable();
         } catch (e) {
           console.log("We have some problems with your save game");
         }
