@@ -2,32 +2,34 @@ import AbstractView from "./abstract.js";
 import { createElement } from "../utils/render.js";
 
 export default class EndGame extends AbstractView {
+  #time;
+  #tagsProperties;
+
   constructor(time) {
     super();
-    this._time = time;
-    this._tagsProperties = this.getElementProperties();
-    this._elements = this.generateNode();
-    this._structure = this.getStructure();
-    this._playAgainClickHandler = this._playAgainClickHandler.bind(this);
+    this.#time = time;
+    this.#tagsProperties = this.#getElementProperties();
+    this.elements = this.#generateNode();
+    this.structure = this.#getStructure();
   }
 
-  getStructure() {
+  #getStructure() {
     return {
-      element: this._elements.aside,
+      element: this.elements.aside,
       child: [
         {
-          element: this._elements.window,
+          element: this.elements.window,
           child: [
             {
-              element: this._elements.div,
+              element: this.elements.div,
               child: 
-                [{element: this._elements.titleWrap,
+                [{element: this.elements.titleWrap,
                     child: 
-                      [{element: this._elements.img},
-                      {element: this._elements.title}]},
-                {element: this._elements.information},
-                {element: this._elements.closeBtn,
-                child: [{element: this._elements.closeImg}]},
+                      [{element: this.elements.img},
+                      {element: this.elements.title}]},
+                {element: this.elements.information},
+                {element: this.elements.closeBtn,
+                child: [{element: this.elements.closeImg}]},
               ],
             },
           ]
@@ -35,7 +37,7 @@ export default class EndGame extends AbstractView {
       ],
     };
   }
-  getElementProperties() {
+  #getElementProperties() {
     return {
       aside: {tag: "aside", className: "modal-results"},
       window: {tag: "div", className: "modal-results__window"},
@@ -43,35 +45,35 @@ export default class EndGame extends AbstractView {
       titleWrap: {tag: "div", className: "modal-results__title-wrap"},
       title: {tag: "h2", className: "modal-results__title", textContent: `Great! `},
       img: {tag: 'img', className: 'modal-results__img', src: './img/icons/results.png', alt: `Winner's medal`, width: '40', height: '40'},
-      information: {tag: "p", className: "modal-results__information",textContent: `You have solved the nanograms in ${this._time} seconds!`},
+      information: {tag: "p", className: "modal-results__information",textContent: `You have solved the nanograms in ${this.#time} seconds!`},
       closeBtn: {tag: "a", className: "modal-results__button"},
       closeImg: {tag: 'img', className: 'modal-results__button-img', src: './img/icons/win.png', alt: 'Close window', width: '40', height: '40'}
     }
   }
-  generateNode() {
+  #generateNode() {
     return {
-      aside: createElement(this._tagsProperties.aside),
-      window: createElement(this._tagsProperties.window),
-      div: createElement(this._tagsProperties.div),
-      titleWrap:  createElement(this._tagsProperties.titleWrap),
-      title: createElement(this._tagsProperties.title),
-      img: createElement(this._tagsProperties.img),
-      information: createElement(this._tagsProperties.information),
-      closeBtn: createElement(this._tagsProperties.closeBtn),
-      closeImg:  createElement(this._tagsProperties.closeImg),
+      aside: createElement(this.#tagsProperties.aside),
+      window: createElement(this.#tagsProperties.window),
+      div: createElement(this.#tagsProperties.div),
+      titleWrap:  createElement(this.#tagsProperties.titleWrap),
+      title: createElement(this.#tagsProperties.title),
+      img: createElement(this.#tagsProperties.img),
+      information: createElement(this.#tagsProperties.information),
+      closeBtn: createElement(this.#tagsProperties.closeBtn),
+      closeImg:  createElement(this.#tagsProperties.closeImg),
     };
   }
 
-  _playAgainClickHandler(evt) {
+  #playAgainClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.playAgainClick();
+    this.callback.playAgainClick();
   }
 
   setPlayAgainClickHandler(callback) {
-    this._callback.playAgainClick = callback;
-    this._elements.closeBtn.addEventListener(
+    this.callback.playAgainClick = callback;
+    this.elements.closeBtn.addEventListener(
       `click`,
-      this._playAgainClickHandler,
+      this.#playAgainClickHandler,
     );
   }
 }

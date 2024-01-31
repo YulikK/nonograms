@@ -3,21 +3,22 @@ import { createElement } from '../utils/render.js';
 import { COMMAND } from '../utils/const.js';
 
 export default class Crossword extends AbstractView {
+  #crossword;
+  #isGameStop;
+
   constructor(crossword) {
     super();
-    this._crossword = crossword.playTable;
-    this._isGameStop = false;
-    this._elements = this.generateNode();
-    this._structure = this.getStructure();
-    this._cellClickHandler = this._cellClickHandler.bind(this);
-    this._cellClickContextHandler = this._cellClickContextHandler.bind(this);
+    this.#crossword = crossword.playTable;
+    this.#isGameStop = false;
+    this.elements = this.#generateNode();
+    this.structure = this.#getStructure();
   }
-  getStructure() {
+  #getStructure() {
     const node = {
-      element: this._elements.table,
+      element: this.elements.table,
       child: []};
     
-    this._elements.rows.forEach(rowEl => {
+    this.elements.rows.forEach(rowEl => {
       const tdCells = [];
       rowEl.cells.forEach(cellEl => {
         tdCells.push({element: cellEl.td});
@@ -33,8 +34,8 @@ export default class Crossword extends AbstractView {
     return node;
   }
 
-  generateNode() {
-    const hint = this.generateHint(this._crossword);
+  #generateNode() {
+    const hint = this.#generateHint(this.#crossword);
 
     const node = {
       table: createElement({tag: 'table', className: 'game__crossword crossword'}),
@@ -66,7 +67,7 @@ export default class Crossword extends AbstractView {
     }
 
     let borderCounterRow = 1;
-    for(let i = 0; i < this._crossword.length; i += 1) {
+    for(let i = 0; i < this.#crossword.length; i += 1) {
       node.rows.push({
         tr: createElement({tag: 'tr', className: 'row'}),
         cells: []
@@ -78,9 +79,9 @@ export default class Crossword extends AbstractView {
         })
       }
       let borderCounterCell = 1;
-      for (let j = 0; j < this._crossword.length; j += 1) {
-        const borderClassCell = borderCounterCell === 5 || j === this._crossword.length - 1 ? 'border-right' : '';
-        const borderClassRow = borderCounterRow === 5 || i === this._crossword.length - 1 ? 'border-bottom' : '';
+      for (let j = 0; j < this.#crossword.length; j += 1) {
+        const borderClassCell = borderCounterCell === 5 || j === this.#crossword.length - 1 ? 'border-right' : '';
+        const borderClassRow = borderCounterRow === 5 || i === this.#crossword.length - 1 ? 'border-bottom' : '';
         node.rows[i + hint.maxV].cells.push({
           td: createElement({tag: 'td', className: `cell ${borderClassCell} ${borderClassRow}`, data: `el-${i}-${j}`})
         })
@@ -95,7 +96,7 @@ export default class Crossword extends AbstractView {
 
   }
   
-  generateHint(crossword) {
+  #generateHint(crossword) {
     const rows = crossword.length;
     const cols = crossword[0].length;
 
@@ -163,8 +164,8 @@ export default class Crossword extends AbstractView {
     }
   }
 
-  _cellClickHandler(evt) {
-    if (this._isGameStop) {
+  #cellClickHandler = (evt) => {
+    if (this.#isGameStop) {
       return;
     }
     if (!evt.target.classList.contains("cell")) {
@@ -185,16 +186,16 @@ export default class Crossword extends AbstractView {
         command = COMMAND.FILL;
       }
 
-      const indexEl = this._getIndex(evt.target.data);
-      this._callback.cellClick(indexEl, command);
+      const indexEl = this.#getIndex(evt.target.data);
+      this.callback.cellClick(indexEl, command);
     }
 
     evt.preventDefault();
     
   }
 
-  _cellClickContextHandler(evt) {
-    if (this._isGameStop) {
+  #cellClickContextHandler = (evt) => {
+    if (this.#isGameStop) {
       return;
     }
     evt.preventDefault();
@@ -213,12 +214,12 @@ export default class Crossword extends AbstractView {
         command = COMMAND.CROSS;
       }
 
-      const indexEl = this._getIndex(evt.target.data);
-      this._callback.cellClick(indexEl, command);
+      const indexEl = this.#getIndex(evt.target.data);
+      this.callback.cellClick(indexEl, command);
     }
   }
 
-  _getIndex(data) {
+  #getIndex(data) {
     const indexArr = data.split('-');
     const index = {
       i: indexArr[1],
@@ -228,19 +229,19 @@ export default class Crossword extends AbstractView {
   }
 
   stopGame() {
-    this._isGameStop = true;
+    this.#isGameStop = true;
   }
   startGame() {
-    this._isGameStop = false;
+    this.#isGameStop = false;
   }
 
   loadGame(crossword, answers){
-    this._crossword = crossword.playTable;
+    this.#crossword = crossword.playTable;
     this.setAnswersCrossword(answers);
 
   }
   setClearCrossword() {
-    this._elements.rows.forEach((row) => {
+    this.elements.rows.forEach((row) => {
       row.cells.forEach((cell) => {
         cell.td.classList.remove('fill', 'cross', 'hint--off')
       })
@@ -248,11 +249,11 @@ export default class Crossword extends AbstractView {
   }
 
   setAnswersCrossword(answer) {
-    this._elements.rows.forEach((row) => {
+    this.elements.rows.forEach((row) => {
       row.cells.forEach((cell) => {
         cell.td.classList.remove('fill', 'cross', 'hint--off')
         if(!(cell.td.classList.contains('empty') || cell.td.classList.contains('hint'))) {
-          const index = this._getIndex(cell.td.data);
+          const index = this.#getIndex(cell.td.data);
           switch (answer[index.i][index.j]){
             case '1':
               cell.td.classList.add("fill");
@@ -268,12 +269,12 @@ export default class Crossword extends AbstractView {
   }
 
   setCellClickHandler(callback) {
-    this._callback.cellClick = callback;
-    this.getElement().addEventListener(`click`, this._cellClickHandler);
-    this.getElement().addEventListener(`contextmenu`, this._cellClickContextHandler);
+    this.callback.cellClick = callback;
+    this.getElement().addEventListener(`click`, this.#cellClickHandler);
+    this.getElement().addEventListener(`contextmenu`, this.#cellClickContextHandler);
   }
 
   deleteCellClickHandler() {
-    this.getElement().removeEventListener(`click`, this._cellClickHandler);
+    this.getElement().removeEventListener(`click`, this.#cellClickHandler);
   }
 }

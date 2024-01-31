@@ -2,69 +2,61 @@ import AbstractView from './abstract.js';
 import { createElement } from '../utils/render.js';
 
 export default class Controls extends AbstractView {
-  constructor() {
-    super();
-    this._tagsProperties = this.getElementProperties();
-    this._elements = this.generateNode();
-    this._structure = this.getStructure();
-    this._refreshClickHandler = this._refreshClickHandler.bind(this);
-    this._showAnswersClickHandler = this._showAnswersClickHandler.bind(this);
-    this._saveClickHandler = this._saveClickHandler.bind(this);
-    this._loadClickHandler = this._loadClickHandler.bind(this);
-    this._themeClickHandler = this._themeClickHandler.bind(this);
-    this._soundClickHandler = this._soundClickHandler.bind(this);
-  }
-  getStructure() {
+  #tagsProperties = this.#getElementProperties();
+  elements = this.#generateNode();
+  structure = this.#getStructure();
+
+  #getStructure() {
     return {
-      element: this._elements.header,
+      element: this.elements.header,
       child: [
-        {element: this._elements.h1},
-        {element: this._elements.options.wrap,
+        {element: this.elements.h1},
+        {element: this.elements.options.wrap,
         child:[
-          {element: this._elements.options.timer.wrap,
+          {element: this.elements.options.timer.wrap,
           child: [
-            {element: this._elements.options.timer.imgWrap,
+            {element: this.elements.options.timer.imgWrap,
             child: [
-              {element: this._elements.options.timer.img}
+              {element: this.elements.options.timer.img}
             ]},
-            {element: this._elements.options.timer.timeWrap,
+            {element: this.elements.options.timer.timeWrap,
             child: [
-              {element: this._elements.options.timer.time}
+              {element: this.elements.options.timer.time}
             ]}
           ]},
-          {element: this._elements.options.refresh.a,
+          {element: this.elements.options.refresh.a,
           child: [
-            {element: this._elements.options.refresh.img}
+            {element: this.elements.options.refresh.img}
           ]},
-          {element: this._elements.options.showAnswer.a,
+          {element: this.elements.options.showAnswer.a,
           child: [
-            {element: this._elements.options.showAnswer.img}
+            {element: this.elements.options.showAnswer.img}
           ]},
-          {element: this._elements.options.saveLoad.wrap,
+          {element: this.elements.options.saveLoad.wrap,
             child: [
-              {element: this._elements.options.saveLoad.save,
-                child: [{ element:this._elements.options.saveLoad.saveImg}]},
-              {element: this._elements.options.saveLoad.load,
-                child: [{element: this._elements.options.saveLoad.loadImg}]}
+              {element: this.elements.options.saveLoad.save,
+                child: [{ element:this.elements.options.saveLoad.saveImg}]},
+              {element: this.elements.options.saveLoad.load,
+                child: [{element: this.elements.options.saveLoad.loadImg}]}
               ]}
         ]},
-        {element: this._elements.settings.wrap,
+        {element: this.elements.settings.wrap,
         child: [
-          {element: this._elements.settings.sound.label,
+          {element: this.elements.settings.sound.label,
             child: [
-              {element: this._elements.settings.sound.input},
-              {element: this._elements.settings.sound.span},
+              {element: this.elements.settings.sound.input},
+              {element: this.elements.settings.sound.span},
           ]},
-          {element: this._elements.settings.theme.label,
+          {element: this.elements.settings.theme.label,
           child: [
-            {element: this._elements.settings.theme.input},
-            {element: this._elements.settings.theme.span},
+            {element: this.elements.settings.theme.input},
+            {element: this.elements.settings.theme.span},
           ]}
         ]},
       ],
     };
   }
-  getElementProperties() {
+  #getElementProperties() {
     return {
       header: { tag: 'header', className: 'game__control control' },
       h1: { tag: 'h1', textContent: 'Nanograms game', className: 'visually-hidden' },
@@ -108,46 +100,46 @@ export default class Controls extends AbstractView {
       }
     }
   }
-  generateNode() {
+  #generateNode() {
     return {
-      header: createElement(this._tagsProperties.header),
-      h1: createElement(this._tagsProperties.h1),
+      header: createElement(this.#tagsProperties.header),
+      h1: createElement(this.#tagsProperties.h1),
       options: {
-        wrap: createElement(this._tagsProperties.options.wrap),
+        wrap: createElement(this.#tagsProperties.options.wrap),
         timer: {
-          wrap: createElement(this._tagsProperties.options.timer.wrap),
-          imgWrap: createElement(this._tagsProperties.options.timer.imgWrap),
-          img: createElement(this._tagsProperties.options.timer.img),
-          timeWrap: createElement(this._tagsProperties.options.timer.timeWrap),
-          time: createElement(this._tagsProperties.options.timer.time),
+          wrap: createElement(this.#tagsProperties.options.timer.wrap),
+          imgWrap: createElement(this.#tagsProperties.options.timer.imgWrap),
+          img: createElement(this.#tagsProperties.options.timer.img),
+          timeWrap: createElement(this.#tagsProperties.options.timer.timeWrap),
+          time: createElement(this.#tagsProperties.options.timer.time),
         },
         refresh: {
-          a: createElement(this._tagsProperties.options.refresh.a),
-          img: createElement(this._tagsProperties.options.refresh.img),
+          a: createElement(this.#tagsProperties.options.refresh.a),
+          img: createElement(this.#tagsProperties.options.refresh.img),
         },
         showAnswer: {
-          a: createElement(this._tagsProperties.options.showAnswer.a),
-          img: createElement(this._tagsProperties.options.showAnswer.img),
+          a: createElement(this.#tagsProperties.options.showAnswer.a),
+          img: createElement(this.#tagsProperties.options.showAnswer.img),
         },
         saveLoad: {
-          wrap: createElement(this._tagsProperties.options.saveLoad.wrap),
-          save: createElement(this._tagsProperties.options.saveLoad.save),
-          saveImg: createElement(this._tagsProperties.options.saveLoad.saveImg),
-          load: createElement(this._tagsProperties.options.saveLoad.load),
-          loadImg: createElement(this._tagsProperties.options.saveLoad.loadImg),
+          wrap: createElement(this.#tagsProperties.options.saveLoad.wrap),
+          save: createElement(this.#tagsProperties.options.saveLoad.save),
+          saveImg: createElement(this.#tagsProperties.options.saveLoad.saveImg),
+          load: createElement(this.#tagsProperties.options.saveLoad.load),
+          loadImg: createElement(this.#tagsProperties.options.saveLoad.loadImg),
         },
       },
       settings: {
-        wrap: createElement(this._tagsProperties.settings.wrap),
+        wrap: createElement(this.#tagsProperties.settings.wrap),
         sound: {
-          label: createElement(this._tagsProperties.settings.sound.label),
-          input: createElement(this._tagsProperties.settings.sound.input),
-          span: createElement(this._tagsProperties.settings.sound.span)
+          label: createElement(this.#tagsProperties.settings.sound.label),
+          input: createElement(this.#tagsProperties.settings.sound.input),
+          span: createElement(this.#tagsProperties.settings.sound.span)
         },
         theme: {
-          label: createElement(this._tagsProperties.settings.theme.label),
-          input: createElement(this._tagsProperties.settings.theme.input),
-          span: createElement(this._tagsProperties.settings.theme.span)
+          label: createElement(this.#tagsProperties.settings.theme.label),
+          input: createElement(this.#tagsProperties.settings.theme.input),
+          span: createElement(this.#tagsProperties.settings.theme.span)
         }
       }
     };
@@ -156,66 +148,72 @@ export default class Controls extends AbstractView {
   updateTimerDisplay(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    this._elements.options.timer.time.textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    this.elements.options.timer.time.textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   }
 
   setSaveEnabled(){
-    this._elements.options.saveLoad.save.classList.remove('disable');
+    this.elements.options.saveLoad.save.classList.remove('disable');
   }
   setLoadEnable() {
-    this._elements.options.saveLoad.load.classList.remove('disable');
+    this.elements.options.saveLoad.load.classList.remove('disable');
   }
 
-  _refreshClickHandler(evt) {
+  
+  #refreshClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.refreshClick();
+    this.callback.refreshClick();
   }
 
-  _showAnswersClickHandler(evt) {
+  
+  #showAnswersClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.showAnswers();
+    this.callback.showAnswers();
   }
-
-  _saveClickHandler(evt) {
+  
+  #saveClickHandler = (evt) =>{
     evt.preventDefault();
-    this._callback.saveClick();
+    this.callback.saveClick();
   }
-  _loadClickHandler(evt) {
+  
+  #loadClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.loveClick();
+    this.callback.loveClick();
   }
-  _themeClickHandler(evt) {
-    this._callback.themeClick();
+  
+  #themeClickHandler = () => {
+    this.callback.themeClick();
   }
-  _soundClickHandler(evt) {
-    this._callback.soundClick();
+  
+  #soundClickHandler = () => {
+    this.callback.soundClick();
   }
 
   setRefreshClickHandler(callback) {
-    this._callback.refreshClick = callback;
-    this._elements.options.refresh.a.addEventListener(`click`, this._refreshClickHandler);
+    this.callback.refreshClick = callback;
+    this.elements.options.refresh.a.addEventListener(`click`, this.#refreshClickHandler);
+    
   }
 
   setShowAnswersClickHandler(callback) {
-    this._callback.showAnswers = callback;
-    this._elements.options.showAnswer.a.addEventListener(`click`, this._showAnswersClickHandler);
+    this.callback.showAnswers = callback;
+    this.elements.options.showAnswer.a.addEventListener(`click`, this.#showAnswersClickHandler);
   }
 
   setSaveClickHandler(callback) {
-    this._callback.saveClick = callback;
-    this._elements.options.saveLoad.save.addEventListener(`click`, this._saveClickHandler);
+    this.callback.saveClick = callback;
+    this.elements.options.saveLoad.save.addEventListener(`click`, this.#saveClickHandler);
   }
 
   setLoadClickHandler(callback) {
-    this._callback.loveClick = callback;
-    this._elements.options.saveLoad.load.addEventListener(`click`, this._loadClickHandler);
+    this.callback.loveClick = callback;
+    this.elements.options.saveLoad.load.addEventListener(`click`, this.#loadClickHandler);
   }
   setThemeClickHandler(callback) {
-    this._callback.themeClick = callback;
-    this._elements.settings.theme.input.addEventListener(`click`, this._themeClickHandler);
+    this.callback.themeClick = callback;
+    this.elements.settings.theme.input.addEventListener(`click`, this.#themeClickHandler);
   }
   setSoundClickHandler(callback) {
-    this._callback.soundClick = callback;
-    this._elements.settings.sound.input.addEventListener(`click`, this._soundClickHandler);
+    this.callback.soundClick = callback;
+    this.elements.settings.sound.input.addEventListener(`click`, this.#soundClickHandler);
   }
 }

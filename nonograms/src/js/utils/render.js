@@ -21,7 +21,7 @@ const renderChild = (container, childList) => {
 
 const getElement = (container) => {
   let element = container;
-  if (element._structure) element = element._structure;
+  if (element.structure) element = element.structure;
   while (element.element) {
     element = element.element;
   }
@@ -29,7 +29,7 @@ const getElement = (container) => {
 };
 
 const getChild = (node, element) => {
-  let currentNode = node._structure ? node._structure : node.element;
+  let currentNode = node.structure ? node.structure : node.element;
   let child = node.child ? node.child : undefined;
   if (!child && currentNode) {
     while (currentNode.child) {

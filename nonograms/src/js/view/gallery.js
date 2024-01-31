@@ -2,20 +2,20 @@ import AbstractView from "./abstract.js";
 import { createElement } from "../utils/render.js";
 
 export default class Gallery extends AbstractView {
+  #crosswords;
+  #tagsProperties;
+
   constructor(crosswords) {
     super();
-    this._crosswords = crosswords;
-    // this._crossword = crossword;
-    this._tagsProperties = this.getElementProperties();
-    this._elements = this.generateNode();
-    this._structure = this.getStructure();
-    this._closeClickHandler = this._closeClickHandler.bind(this);
-    this._gameClickHandler = this._gameClickHandler.bind(this);
+    this.#crosswords = crosswords;
+    this.#tagsProperties = this.#getElementProperties();
+    this.elements = this.#generateNode();
+    this.structure = this.#getStructure();
   }
 
-  getStructure() {
+  #getStructure() {
     const nodeList = [];
-    this._elements.gallery.forEach(elNode => {
+    this.elements.gallery.forEach(elNode => {
       const newNode = {
         element: elNode.exWrap,
           child: [
@@ -31,20 +31,20 @@ export default class Gallery extends AbstractView {
     })
 
     const node = {
-      element: this._elements.aside,
+      element: this.elements.aside,
       child: [
         {
-          element: this._elements.window,
+          element: this.elements.window,
           child: [
             {
-              element: this._elements.windowWrap,
+              element: this.elements.windowWrap,
               child: 
-                [{element: this._elements.titleWrap,
+                [{element: this.elements.titleWrap,
                     child: 
-                      [{element: this._elements.title},
-                      {element: this._elements.closeBtn,
-                        child: [{element: this._elements.closeImg}]}]},
-                {element: this._elements.galleryWrap,
+                      [{element: this.elements.title},
+                      {element: this.elements.closeBtn,
+                        child: [{element: this.elements.closeImg}]}]},
+                {element: this.elements.galleryWrap,
                   child: nodeList},
               ],
             },
@@ -56,7 +56,7 @@ export default class Gallery extends AbstractView {
     
     return node;
   }
-  getElementProperties() {
+  #getElementProperties() {
     return {
       aside: {tag: "aside", className: "modal-gallery"},
       window: {tag: "div", className: "modal-gallery__window"},
@@ -70,32 +70,32 @@ export default class Gallery extends AbstractView {
       star: {tag: 'img', className: 'modal-gallery__level-img', src: './img/icons/level.png', alt: 'star level', width: '40', height: '40'}
     }
   }
-  generateNode() {
+  #generateNode() {
     const node = {
-      aside: createElement(this._tagsProperties.aside),
-      window: createElement(this._tagsProperties.window),
-      windowWrap: createElement(this._tagsProperties.windowWrap),
-      titleWrap:  createElement(this._tagsProperties.titleWrap),
-      title: createElement(this._tagsProperties.title),
-      closeBtn: createElement(this._tagsProperties.closeBtn),
-      closeImg:  createElement(this._tagsProperties.closeImg),
-      galleryWrap: createElement(this._tagsProperties.galleryWrap),
+      aside: createElement(this.#tagsProperties.aside),
+      window: createElement(this.#tagsProperties.window),
+      windowWrap: createElement(this.#tagsProperties.windowWrap),
+      titleWrap:  createElement(this.#tagsProperties.titleWrap),
+      title: createElement(this.#tagsProperties.title),
+      closeBtn: createElement(this.#tagsProperties.closeBtn),
+      closeImg:  createElement(this.#tagsProperties.closeImg),
+      galleryWrap: createElement(this.#tagsProperties.galleryWrap),
       gallery: [],
       };
 
-    this._crosswords.forEach(element => {
+    this.#crosswords.forEach(element => {
       const newNode = {
         exWrap: createElement({tag: "div", className: "modal-gallery__example-wrap", data: `${element.id}`}),
         exImg: createElement({tag: 'img', className: 'modal-gallery__example-img', src: `./img/example/${element.img}.png`, alt: `${element.name}`, width: '40', height: '40'}),
         exName: createElement({tag: "p", className: "modal-gallery__example-name",textContent: `${element.name}`}),
         level: {
-          wrap: createElement(this._tagsProperties.levelWrap),
+          wrap: createElement(this.#tagsProperties.levelWrap),
           levelNumber: element.level
         }
       }
 
       for(let i = 1; i <= element.level; i+=1) {
-        newNode.level[`star${i}`] = createElement(this._tagsProperties.star);
+        newNode.level[`star${i}`] = createElement(this.#tagsProperties.star);
       }
 
       node.gallery.push(newNode);
@@ -104,29 +104,30 @@ export default class Gallery extends AbstractView {
     return node;
   }
 
-  _closeClickHandler(evt) {
+  #closeClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.closeClick();
+    this.callback.closeClick();
   }
 
-  _gameClickHandler(evt) {
+  #gameClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.gameClick(evt.currentTarget.data);
+    this.callback.gameClick(evt.currentTarget.data);
   }
 
   setCloseClickHandler(callback) {
-    this._callback.closeClick = callback;
-    this._elements.closeBtn.addEventListener(
+    this.callback.closeClick = callback;
+    this.elements.closeBtn.addEventListener(
       `click`,
-      this._closeClickHandler,
+      this.#closeClickHandler,
     );
   }
+  
   setGameClickHandler(callback) {
-    this._callback.gameClick = callback;
-    this._elements.gallery.forEach(game => {
+    this.callback.gameClick = callback;
+    this.elements.gallery.forEach(game => {
       game.exWrap.addEventListener(
         `click`,
-        this._gameClickHandler,
+        this.#gameClickHandler,
       )
     })
   };

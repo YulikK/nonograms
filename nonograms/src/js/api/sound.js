@@ -1,35 +1,26 @@
-import { COMMAND, FOLDER_SOUND } from "../utils/const.js";
+import { FOLDER_SOUND } from "../utils/const.js";
 export default class Sound {
-  constructor() {
-    this._pathFolder = FOLDER_SOUND;
-    this._audio = new Audio();
-    this._soundsOnOff = true;
+  #pathFolder = FOLDER_SOUND;
+  #audio = new Audio();
+  #soundsOnOff = true;
+
+  #soundsOn() {
+    this.#soundsOnOff = true;
   }
 
-  _soundsOn() {
-    this._soundsOnOff = true;
-  }
-
-  _soundsOff() {
-    this._soundsOnOff = false;
+  #soundsOff() {
+    this.#soundsOnOff = false;
   }
 
   soundsToggle() {
-    if (this._soundsOnOff) this._soundsOff();
-    else this._soundsOn();
+    if (this.#soundsOnOff) this.#soundsOff();
+    else this.#soundsOn();
   }
 
   async playSound(event) {
-    if(this._soundsOnOff) {
-      
-      this._audio.src = `${this._pathFolder}${event}`;
-      // this._audio.play();
-
-      return this._audio.play();
-      // if (playPromise !== undefined) {
-      //   playPromise.then(() => {
-          
-      //   })
+    if(this.#soundsOnOff) {
+      this.#audio.src = `${this.#pathFolder}${event}`;
+      return this.#audio.play();
     }
   }
 }

@@ -13,314 +13,327 @@ import GalleryView from "../view/gallery.js";
 import CrosswordModel from "../model/crossword.js";
 
 export default class Nanograms {
+  #gameContainer;
+  #components;
+  #crossModel;
+  #currentCrossword;
+  #answers;
+  #store;
+  #sound;
+  #results;
+  #seconds;
+  #saveGameInf;
+  #settings;
+  #timer;
+
   constructor(gameContainer, crosswords) {
-    this._gameContainer = gameContainer;
-    this._components = {
+    this.#gameContainer = gameContainer;
+    this.#components = {
       controls: new ControlsView(),
       main: new MainView(),
     }
     
-    this._crossModel = new CrosswordModel();
-    this._crossModel.setCrosswords(crosswords);
+    this.#crossModel = new CrosswordModel();
+    this.#crossModel.setCrosswords(crosswords);
 
-    this._store = new Store(STORE_NAME, window.localStorage);
-    this._sound = new Sound();
+    this.#store = new Store(STORE_NAME, window.localStorage);
+    this.#sound = new Sound();
 
-    this._results = [];
-    this._saveGameInf = {};
+    this.#results = [];
+    this.#saveGameInf = {};
 
-    this._settings = {
+    this.#settings = {
       isHaveSaveGame: false,
       isGameStarted: false,
       isShowAnswers: false,
     }
 
-    this._getResultFromStorage();
-    this._getSaveFromStorage();
+    this.#getResultFromStorage();
+    this.#getSaveFromStorage();
   }
 
   startGame() {
 
-    this._resetSettings();
-    this._renderBase();
-    this._getRandomCrossword();
-    this._setAnswers();
-    this._updateGameComponents();
-    this._renderGame();
+    this.#resetSettings();
+    this.#renderBase();
+    this.#getRandomCrossword();
+    this.#setAnswers();
+    this.#updateGameComponents();
+    this.#renderGame();
     
   }
 
-  _resetSettings(){
-    this._resetTimer();
-    this._settings.isGameStarted = false;
-    this._settings.isShowAnswers = false;
+  #resetSettings(){
+    this.#resetTimer();
+    this.#settings.isGameStarted = false;
+    this.#settings.isShowAnswers = false;
   }
 
-  _getRandomCrossword() {
-    this._currentCrossword = this._crossModel.getRandomCrossword();
+  #getRandomCrossword() {
+    this.#currentCrossword = this.#crossModel.getRandomCrossword(this.#currentCrossword);
   }
 
-  _setAnswers(answers = undefined) {
-    if (answers)  this._answers = deepCopy(answers);
-    else this._answers = getClearMatrix(this._currentCrossword.playTable.length);
+  #setAnswers(answers = undefined) {
+    if (answers)  this.#answers = deepCopy(answers);
+    else this.#answers = getClearMatrix(this.#currentCrossword.playTable.length);
   }
 
-  _updateGameComponents() {
-    this._components["chose"] = new ChoseView(this._currentCrossword);
-    this._components["crossword"] = new CrosswordView(this._currentCrossword);
-    this._components["results"] = new ResultsView(this._results, this._crossModel.getCrosswords());
+  #updateGameComponents() {
+    this.#components["chose"] = new ChoseView(this.#currentCrossword);
+    this.#components["crossword"] = new CrosswordView(this.#currentCrossword);
+    this.#components["results"] = new ResultsView(this.#results, this.#crossModel.getCrosswords());
   }
 
-  _renderBase() {
+  #renderBase() {
     const onRefreshClick = () => {
-      this._sound.playSound(SOUNDS.REFRESH);
-      this._setAnswers();
-      this._resetSettings();
-      this._components["crossword"].setClearCrossword();
-      this._components["crossword"].startGame();
+      this.#sound.playSound(SOUNDS.REFRESH);
+      this.#setAnswers();
+      this.#resetSettings();
+      this.#components["crossword"].setClearCrossword();
+      this.#components["crossword"].startGame();
     };
 
     const onShowAnswersClick = () => {
-      this._sound.playSound(SOUNDS.ANSWERS);
-      this._setAnswers(this._currentCrossword.playTable);
-      this._components["crossword"].setAnswersCrossword(this._currentCrossword.playTable);
-      this._components["crossword"].stopGame();
-      this._resetSettings();
-      this._settings.isShowAnswers = true;
+      this.#sound.playSound(SOUNDS.ANSWERS);
+      this.#setAnswers(this.#currentCrossword.playTable);
+      this.#components["crossword"].setAnswersCrossword(this.#currentCrossword.playTable);
+      this.#components["crossword"].stopGame();
+      this.#resetSettings();
+      this.#settings.isShowAnswers = true;
 
     };
 
     const onSaveClick = () => {
-      this._saveGame();
+      this.#saveGame();
     };
     const onLoadClick = () => {
-      this._loadGame();
+      this.#loadGame();
     };
     const onSoundOnOff = () => {
-      this._sound.soundsToggle();
-      this._sound.playSound(SOUNDS.SWITCH);
+      this.#sound.soundsToggle();
+      this.#sound.playSound(SOUNDS.SWITCH);
     };
     const onThemeClick = () => {
-      this._sound.playSound(SOUNDS.SWITCH);
-      this._gameContainer.classList.toggle('light-theme');
-      this._gameContainer.classList.toggle('dark-theme');
+      this.#sound.playSound(SOUNDS.SWITCH);
+      this.#gameContainer.classList.toggle('light-theme');
+      this.#gameContainer.classList.toggle('dark-theme');
     };
 
-    render(this._gameContainer, this._components['controls']);
-    render(this._gameContainer, this._components['main']);
+    render(this.#gameContainer, this.#components['controls']);
+    render(this.#gameContainer, this.#components['main']);
 
-    this._components['controls'].setRefreshClickHandler(onRefreshClick);
-    this._components['controls'].setShowAnswersClickHandler(onShowAnswersClick);
-    this._components['controls'].setSaveClickHandler(onSaveClick);
-    this._components['controls'].setLoadClickHandler(onLoadClick);
-    this._components['controls'].setThemeClickHandler(onThemeClick);
-    this._components['controls'].setSoundClickHandler(onSoundOnOff);
+    this.#components['controls'].setRefreshClickHandler(onRefreshClick);
+    this.#components['controls'].setShowAnswersClickHandler(onShowAnswersClick);
+    this.#components['controls'].setSaveClickHandler(onSaveClick);
+    this.#components['controls'].setLoadClickHandler(onLoadClick);
+    this.#components['controls'].setThemeClickHandler(onThemeClick);
+    this.#components['controls'].setSoundClickHandler(onSoundOnOff);
 
     
   }
 
-  _renderGame() {
+  #renderGame() {
     const onCellClick = (index, command) => {
-      if(!this._settings.isShowAnswers) {
-        if(!this._settings.isGameStarted) {
-          this._settings.isGameStarted = true;
-          this._components["controls"].setSaveEnabled();
-          this._startTimer();
+      if(!this.#settings.isShowAnswers) {
+        if(!this.#settings.isGameStarted) {
+          this.#settings.isGameStarted = true;
+          this.#components["controls"].setSaveEnabled();
+          this.#startTimer();
         }
-        this._setNextGameStep(index, command);
+        this.#setNextGameStep(index, command);
       }
     };
 
     const onRandomClick = () => {
-      this._sound.playSound(SOUNDS.RENDER);
-      this._resetSettings();
-      this._restartGame();
+      this.#sound.playSound(SOUNDS.RENDER);
+      this.#resetSettings();
+      this.#restartGame();
     };
 
     const onShowGalleryClick = () => {
-      this._showGallery();
+      this.#showGallery();
     }
 
-    render(this._components['main']._elements.additional.section, this._components['chose']);
-    if(this._results.length > 0) render(this._components['main']._elements.additional.section, this._components['results']);
-    render(this._components['main']._elements.table.crosswordWrap, this._components['crossword']);
-    this._components['crossword'].setCellClickHandler(onCellClick);
-    this._components['chose'].setRandomClickHandler(onRandomClick);
-    this._components['chose'].setShowGalleryClickHandler(onShowGalleryClick);
+    render(this.#components['main'].elements.additional.section, this.#components['chose']);
+    if(this.#results.length > 0) render(this.#components['main'].elements.additional.section, this.#components['results']);
+    render(this.#components['main'].elements.table.crosswordWrap, this.#components['crossword']);
+    this.#components['crossword'].setCellClickHandler(onCellClick);
+    this.#components['chose'].setRandomClickHandler(onRandomClick);
+    this.#components['chose'].setShowGalleryClickHandler(onShowGalleryClick);
   }
 
-  _setNextGameStep(index, command) {
-    this._setNewAnswer(index, command);
+  #setNextGameStep(index, command) {
+    this.#setNewAnswer(index, command);
   }
 
-  _setNewAnswer(index, command) {
+  #setNewAnswer(index, command) {
     switch(command){
       case COMMAND.FILL:
-        this._answers[index.i][index.j] = '1';
+        this.#answers[index.i][index.j] = '1';
         break;
       case COMMAND.EMPTY:
-        this._answers[index.i][index.j] = '';
+        this.#answers[index.i][index.j] = '';
         break;
       case COMMAND.CROSS:
-        this._answers[index.i][index.j] = '0';
+        this.#answers[index.i][index.j] = '0';
         break;
     }
 
-    if (this._isFinish()) {
-      this._sound.playSound(SOUNDS.WIN);
-      this._showEndGameInformation();
-    } else this._sound.playSound(command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL);
+    if (this.#isFinish()) {
+      this.#sound.playSound(SOUNDS.WIN);
+      this.#showEndGameInformation();
+    } else this.#sound.playSound(command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL);
   }
   
-  _loadGame(){
-    if (this._settings.isHaveSaveGame) {
-      this._sound.playSound(SOUNDS.RENDER);
-      this._getSaveFromStorage();
-      this._destroyGameComponents();
-      this._resetSettings();
-      this._seconds = Number(this._saveGameInf['seconds']);
-      this._currentCrossword = this._saveGameInf['crossword'];
-      this._components["controls"].updateTimerDisplay(this._seconds);
-      this._setAnswers(this._saveGameInf['answers']);
-      this._updateGameComponents();
-      this._renderGame();
-      this._components["crossword"].setAnswersCrossword(this._answers);
+  #loadGame(){
+    if (this.#settings.isHaveSaveGame) {
+      this.#sound.playSound(SOUNDS.RENDER);
+      this.#getSaveFromStorage();
+      this.#destroyGameComponents();
+      this.#resetSettings();
+      this.#seconds = Number(this.#saveGameInf['seconds']);
+      this.#currentCrossword = this.#saveGameInf['crossword'];
+      this.#components["controls"].updateTimerDisplay(this.#seconds);
+      this.#setAnswers(this.#saveGameInf['answers']);
+      this.#updateGameComponents();
+      this.#renderGame();
+      this.#components["crossword"].setAnswersCrossword(this.#answers);
     }
   }
 
 
-  _startTimer() {
-    if (!this._timer) {
-      this._timer = setInterval(() => {
-        if(!this._settings.isGameStarted) this._resetTimer();
-        this._seconds += 1;
-        this._components["controls"].updateTimerDisplay(this._seconds);
+  #startTimer() {
+    if (!this.#timer) {
+      this.#timer = setInterval(() => {
+        if(!this.#settings.isGameStarted) this.#resetTimer();
+        this.#seconds += 1;
+        this.#components["controls"].updateTimerDisplay(this.#seconds);
       }, 1000);
     }
   }
 
-  _resetTimer() {
-    if(this._timer) clearInterval(this._timer);
-    this._timer = null;
-    this._seconds = 0;
-    this._components["controls"].updateTimerDisplay(this._seconds);
+  #resetTimer() {
+    if(this.#timer) clearInterval(this.#timer);
+    this.#timer = null;
+    this.#seconds = 0;
+    this.#components["controls"].updateTimerDisplay(this.#seconds);
   }
 
-  _isFinish() {
-    return compareMatrix(this._answers, this._currentCrossword.playTable);
+  #isFinish() {
+    return compareMatrix(this.#answers, this.#currentCrossword.playTable);
   }
 
-  _getTime(seconds) {
+  #getTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return`${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   }
 
-  _showGallery() {
+  #showGallery() {
     const onCloseClick = () => {
-      this._destroyGalleryModal();
+      this.#destroyGalleryModal();
     };
     const onGameClick = (data) => {
-      this._destroyGalleryModal();
+      this.#destroyGalleryModal();
       if (data) {
-        this._sound.playSound(SOUNDS.RENDER);
-        this._destroyGameComponents();
-        this._currentCrossword = this._crossModel.getElementById(data);
-        this._setAnswers();
-        this._resetSettings();
-        this._updateGameComponents();
-        this._renderGame();
+        this.#sound.playSound(SOUNDS.RENDER);
+        this.#destroyGameComponents();
+        this.#currentCrossword = this.#crossModel.getElementById(data);
+        this.#setAnswers();
+        this.#resetSettings();
+        this.#updateGameComponents();
+        this.#renderGame();
       }
     };
-    this._components['gallery'] = new GalleryView(this._crossModel.getCrosswords());
-    render(this._gameContainer, this._components['gallery']);
-    this._components['gallery'].setCloseClickHandler(onCloseClick);
-    this._components['gallery'].setGameClickHandler(onGameClick);
+    this.#components['gallery'] = new GalleryView(this.#crossModel.getCrosswords());
+    render(this.#gameContainer, this.#components['gallery']);
+    this.#components['gallery'].setCloseClickHandler(onCloseClick);
+    this.#components['gallery'].setGameClickHandler(onGameClick);
   }
 
-  _updateResultInformation(finishTime) {
-    this._results.reverse();
-    this._results.push({time: finishTime,
-    id: this._currentCrossword.id});
-    this._results.reverse();
-    this._results = this._results.slice(0, 5);
-    this._store.saveResult(this._results);
+  #updateResultInformation(finishTime) {
+    this.#results.reverse();
+    this.#results.push({time: finishTime,
+    id: this.#currentCrossword.id});
+    this.#results.reverse();
+    this.#results = this.#results.slice(0, 5);
+    this.#store.saveResult(this.#results);
   }
 
 
-  _showEndGameInformation() {
-    const finishTime = this._getTime(this._seconds);
-    this._resetSettings();
-    this._updateResultInformation(finishTime);
+  #showEndGameInformation() {
+    const finishTime = this.#getTime(this.#seconds);
+    this.#resetSettings();
+    this.#updateResultInformation(finishTime);
     
-    this._components["endGame"] = new EndGameView(finishTime);
-    render(this._gameContainer, this._components["endGame"]);
+    this.#components["endGame"] = new EndGameView(finishTime);
+    render(this.#gameContainer, this.#components["endGame"]);
 
     const onPlayAgainClick = () => {
-      this._destroyResultModal();
-      this._restartGame();
+      this.#destroyResultModal();
+      this.#restartGame();
     };
 
-    this._components['endGame'].setPlayAgainClickHandler(onPlayAgainClick);
+    this.#components['endGame'].setPlayAgainClickHandler(onPlayAgainClick);
   }
 
-  _restartGame() {
-    this._destroyGameComponents();
-    this._getRandomCrossword();
-    this._setAnswers();
-    this._updateGameComponents();
-    this._renderGame();
+  #restartGame() {
+    this.#destroyGameComponents();
+    this.#getRandomCrossword();
+    this.#setAnswers();
+    this.#updateGameComponents();
+    this.#renderGame();
   }
 
-  _destroyGalleryModal() {
-    remove(this._components['gallery']);
+  #destroyGalleryModal() {
+    remove(this.#components['gallery']);
   }
 
-  _destroyResultModal() {
-    remove(this._components['endGame']);
+  #destroyResultModal() {
+    remove(this.#components['endGame']);
   }
 
-  _destroyGameComponents() {
-    remove(this._components['crossword']);
-    remove(this._components['chose']);
-    remove(this._components['results']);
+  #destroyGameComponents() {
+    remove(this.#components['crossword']);
+    remove(this.#components['chose']);
+    remove(this.#components['results']);
   }
 
-  _saveGame() {
-    this._settings.isHaveSaveGame = true;
-    this._components['controls'].setLoadEnable();
-    this._saveGameInf['crossword'] = this._currentCrossword;
-    this._saveGameInf['seconds'] = this._seconds;
-    this._saveGameInf['answers'] = this._answers;
+  #saveGame() {
+    this.#settings.isHaveSaveGame = true;
+    this.#components['controls'].setLoadEnable();
+    this.#saveGameInf['crossword'] = this.#currentCrossword;
+    this.#saveGameInf['seconds'] = this.#seconds;
+    this.#saveGameInf['answers'] = this.#answers;
 
-    this._store.saveGame(this._saveGameInf);
+    this.#store.saveGame(this.#saveGameInf);
   }
 
-  _getResultFromStorage() {
-    let resultsTable = this._store.getItem('result-table');
+  #getResultFromStorage() {
+    let resultsTable = this.#store.getItem('result-table');
     if (resultsTable) {
       resultsTable = resultsTable.split(',');
       resultsTable.forEach(element => {
         const result = element.split('-');
-        this._results.push({time: result[0], id: result[1]});
+        this.#results.push({time: result[0], id: result[1]});
       });
     }
   }
 
-  _getSaveFromStorage() {
+  #getSaveFromStorage() {
 
-    let saveGame = this._store.getItem('save-game');
+    let saveGame = this.#store.getItem('save-game');
 
     if (saveGame) {
       saveGame = saveGame.split(':');
       if (saveGame.length) {
         try{
-          this._settings.isHaveSaveGame = true;
-          this._saveGameInf['crossword'] = this._crossModel.getElementById(saveGame[0]);
-          this._saveGameInf['seconds'] = saveGame[1];
+          this.#settings.isHaveSaveGame = true;
+          this.#saveGameInf['crossword'] = this.#crossModel.getElementById(saveGame[0]);
+          this.#saveGameInf['seconds'] = saveGame[1];
           const answers = saveGame[2].split('-');
-          this._saveGameInf['answers'] = answers.map(row => row.split(','));
-          this._components['controls'].setLoadEnable();
+          this.#saveGameInf['answers'] = answers.map(row => row.split(','));
+          this.#components['controls'].setLoadEnable();
         } catch (e) {
           console.log("We have some problems with your save game");
         }

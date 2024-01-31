@@ -1,38 +1,40 @@
 export default class Crossword {
+  #crosswords;
+
   constructor() {
-    this._crosswords = [];
+    this.#crosswords = [];
   }
 
   setCrosswords(crosswords) {
-    this._crosswords = crosswords.slice();
+    this.#crosswords = crosswords.slice();
   }
 
   getCrosswords() {
-    return this._crosswords;
+    return this.#crosswords;
   }
 
   getElementById(id) {
     let index = 0;
-    let currentEl = this._crosswords[index];
+    let currentEl = this.#crosswords[index];
     while( currentEl.id !== id ) {
       index += 1;
-      if(index > this._crosswords.length - 1) break
-      currentEl = this._crosswords[index];
+      if(index > this.#crosswords.length - 1) break
+      currentEl = this.#crosswords[index];
     }
 
     return currentEl;
   }
 
   getRandomCrossword(current) {
-    let newCrossword = this._getNextCrossword();
+    let newCrossword = this.#getNextCrossword();
     while (current === newCrossword) {
-      newCrossword = this._getNextCrossword();
+      newCrossword = this.#getNextCrossword();
     }
     return newCrossword;
   }
 
-  _getNextCrossword() {
-    return this._crosswords[Math.floor(Math.random() * this._crosswords.length)];
+  #getNextCrossword() {
+    return this.#crosswords[Math.floor(Math.random() * this.#crosswords.length)];
   }
 
   adaptToClient(crosswords) {

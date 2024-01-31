@@ -2,26 +2,28 @@ import AbstractView from './abstract.js';
 import { createElement } from '../utils/render.js';
 
 export default class Main extends AbstractView {
+  #tagsProperties;
+
   constructor() {
     super();
-    this._tagsProperties = this.getElementProperties();
-    this._elements = this.generateNode();
-    this._structure = this.getStructure();
+    this.#tagsProperties = this.#getElementProperties();
+    this.elements = this.#generateNode();
+    this.structure = this.#getStructure();
   }
-  getStructure() {
+  #getStructure() {
     return {
-      element: this._elements.main,
+      element: this.elements.main,
       child: [
-        {element: this._elements.table.section,
+        {element: this.elements.table.section,
         child: [
-          {element: this._elements.table.h2}, 
-          {element: this._elements.table.crosswordWrap}]},
-        {element: this._elements.additional.section,
-        child: [{element: this._elements.additional.h2}]}
+          {element: this.elements.table.h2}, 
+          {element: this.elements.table.crosswordWrap}]},
+        {element: this.elements.additional.section,
+        child: [{element: this.elements.additional.h2}]}
       ]
     };
   }
-  getElementProperties() {
+  #getElementProperties() {
     return {
       main: {
         tag: 'main',
@@ -56,17 +58,17 @@ export default class Main extends AbstractView {
       }
     }
   }
-  generateNode() {
+  #generateNode() {
     return {
-      main: createElement(this._tagsProperties.main),
+      main: createElement(this.#tagsProperties.main),
       table: {
-        section: createElement(this._tagsProperties.table.section),
-        h2: createElement(this._tagsProperties.table.h2),
-        crosswordWrap: createElement(this._tagsProperties.table.crosswordWrap)
+        section: createElement(this.#tagsProperties.table.section),
+        h2: createElement(this.#tagsProperties.table.h2),
+        crosswordWrap: createElement(this.#tagsProperties.table.crosswordWrap)
       },
       additional: {
-        section: createElement(this._tagsProperties.additional.section),
-        h2: createElement(this._tagsProperties.additional.h2),
+        section: createElement(this.#tagsProperties.additional.section),
+        h2: createElement(this.#tagsProperties.additional.h2),
       }
     };
   }

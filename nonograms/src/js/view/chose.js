@@ -2,34 +2,35 @@ import AbstractView from './abstract.js';
 import { createElement } from '../utils/render.js';
 
 export default class Chose extends AbstractView {
+  #crossword;
+  #tagsProperties;
+
   constructor(crossword) {
     super();
-    this._crossword = crossword
-    this._tagsProperties = this.getElementProperties();
-    this._elements = this.generateNode();
-    this._structure = this.getStructure();
-    this._randomClickHandler = this._randomClickHandler.bind(this);
-    this._showGalleryClickHandler = this._showGalleryClickHandler.bind(this);
+    this.#crossword = crossword;
+    this.#tagsProperties = this.#getElementProperties();
+    this.elements = this.#generateNode();
+    this.structure = this.#getStructure();
   }
-  getStructure() {
+  #getStructure() {
     return {
-      element: this._elements.choseWrap,
+      element: this.elements.choseWrap,
       child: [
-        {element: this._elements.chose.wrap,
+        {element: this.elements.chose.wrap,
         child: [
-          {element: this._elements.chose.imgWrap,
-            child: [{element: this._elements.chose.img}]},
-          {element: this._elements.chose.titleWrap,
-            child: [{element: this._elements.chose.title}]},
-          {element: this._elements.chose.level.wrap,
-            child: Array.from({ length: this._crossword.level }, (el, i) => this._elements.chose.level[`star${i + 1}`])},
+          {element: this.elements.chose.imgWrap,
+            child: [{element: this.elements.chose.img}]},
+          {element: this.elements.chose.titleWrap,
+            child: [{element: this.elements.chose.title}]},
+          {element: this.elements.chose.level.wrap,
+            child: Array.from({ length: this.#crossword.level }, (el, i) => this.elements.chose.level[`star${i + 1}`])},
         ]},
-        {element: this._elements.random.a,
-          child: [{element: this._elements.random.img}]}
+        {element: this.elements.random.a,
+          child: [{element: this.elements.random.img}]}
         ]};
   }
 
-  getElementProperties() {
+  #getElementProperties() {
     return {
       choseWrap: {
         tag: 'div',
@@ -38,9 +39,9 @@ export default class Chose extends AbstractView {
       chose: {
         wrap: {tag: 'div', className: 'game__chose chose'},
         imgWrap: {tag: 'div', className: 'chose__img-wrapper'},
-        img: {tag: 'img', className: 'chose__img', src: `./img/example/${this._crossword.img}.png`, alt: 'Chose the game', width: '40', height: '40'},
+        img: {tag: 'img', className: 'chose__img', src: `./img/example/${this.#crossword.img}.png`, alt: 'Chose the game', width: '40', height: '40'},
         titleWrap: {tag: 'div', className: 'chose__title-wrapper'},
-        title: {tag: 'p', className: 'chose__title', textContent: `${this._crossword.name}`},
+        title: {tag: 'p', className: 'chose__title', textContent: `${this.#crossword.name}`},
         level: {
           wrap: {tag: 'div', className: 'chose__level-wrapper'},
           star: {tag: 'img', className: 'chose__level-img', src: './img/icons/level.png', alt: 'star level', width: '40', height: '40'}
@@ -53,48 +54,49 @@ export default class Chose extends AbstractView {
     };
   }
 
-  generateNode() {
+  #generateNode() {
     const node = {
-      choseWrap: createElement(this._tagsProperties.choseWrap),
+      choseWrap: createElement(this.#tagsProperties.choseWrap),
       chose: {
-        wrap: createElement(this._tagsProperties.chose.wrap),
-        imgWrap: createElement(this._tagsProperties.chose.imgWrap),
-        img: createElement(this._tagsProperties.chose.img),
-        titleWrap: createElement(this._tagsProperties.chose.titleWrap),
-        title: createElement(this._tagsProperties.chose.title),
+        wrap: createElement(this.#tagsProperties.chose.wrap),
+        imgWrap: createElement(this.#tagsProperties.chose.imgWrap),
+        img: createElement(this.#tagsProperties.chose.img),
+        titleWrap: createElement(this.#tagsProperties.chose.titleWrap),
+        title: createElement(this.#tagsProperties.chose.title),
         level: {
-          wrap: createElement(this._tagsProperties.chose.level.wrap),
+          wrap: createElement(this.#tagsProperties.chose.level.wrap),
         }
       },
       random: {
-        a: createElement(this._tagsProperties.random.a),
-        img: createElement(this._tagsProperties.random.img),
+        a: createElement(this.#tagsProperties.random.a),
+        img: createElement(this.#tagsProperties.random.img),
       }
     };
   
-    for(let i = 1; i <= this._crossword.level; i+=1) {
-      node.chose.level[`star${i}`] = createElement(this._tagsProperties.chose.level.star);
+    for(let i = 1; i <= this.#crossword.level; i+=1) {
+      node.chose.level[`star${i}`] = createElement(this.#tagsProperties.chose.level.star);
     }
 
     return node;
   }
-  _randomClickHandler(evt) {
+
+  #randomClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.randomClick();
+    this.callback.randomClick();
   }
 
-  _showGalleryClickHandler(evt) {
+  #showGalleryClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.showGallery();
+    this.callback.showGallery();
   }
 
   setRandomClickHandler(callback) {
-    this._callback.randomClick = callback;
-    this._elements.random.a.addEventListener(`click`, this._randomClickHandler);
+    this.callback.randomClick = callback;
+    this.elements.random.a.addEventListener(`click`, this.#randomClickHandler);
   }
 
   setShowGalleryClickHandler(callback) {
-    this._callback.showGallery = callback;
-    this._elements.chose.wrap.addEventListener(`click`, this._showGalleryClickHandler);
+    this.callback.showGallery = callback;
+    this.elements.chose.wrap.addEventListener(`click`, this.#showGalleryClickHandler);
   }
 }

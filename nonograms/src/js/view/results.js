@@ -3,29 +3,33 @@ import { createElement } from '../utils/render.js';
 import CrosswordModel from "../model/crossword.js";
 
 export default class Results extends AbstractView {
+  #results;
+  #crosswords;
+  #tagsProperties;
+  
   constructor(results, crosswords) {
     super();
-    this._results = results;
-    this._crosswords = new CrosswordModel();
-    this._crosswords.setCrosswords(crosswords);
-    this._tagsProperties = this.getElementProperties();
-    this._elements = this.generateNode();
-    this._structure = this.getStructure();
+    this.#results = results;
+    this.#crosswords = new CrosswordModel();
+    this.#crosswords.setCrosswords(crosswords);
+    this.#tagsProperties = this.#getElementProperties();
+    this.elements = this.#generateNode();
+    this.structure = this.#getStructure();
   }
-  getStructure() {
+  #getStructure() {
     const node = {
-      element: this._elements.resultsWrap,
+      element: this.elements.resultsWrap,
       child: [
-        {element: this._elements.titleWrap,
+        {element: this.elements.titleWrap,
           child: [
-            {element: this._elements.img}, 
-            {element: this._elements.titleP}
+            {element: this.elements.img}, 
+            {element: this.elements.titleP}
           ]
         },
         
       ]
     };
-    this._elements.results.forEach(elNode => {
+    this.elements.results.forEach(elNode => {
       const newNode = {
         element: elNode.wrapInf,
         child: [
@@ -40,7 +44,7 @@ export default class Results extends AbstractView {
     
     return node;
   }
-  getElementProperties() {
+  #getElementProperties() {
     const node = {
       resultsWrap: {tag: 'div', className: 'game__results results'},
       titleWrap:{tag: 'div', className: 'results__title-wrapper'},
@@ -55,30 +59,30 @@ export default class Results extends AbstractView {
     }
     return node;
   }
-  generateNode() {
+  #generateNode() {
     const node = {
-      resultsWrap: createElement(this._tagsProperties.resultsWrap),
-      titleWrap: createElement(this._tagsProperties.titleWrap),
-      img: createElement(this._tagsProperties.img),
-      titleP: createElement(this._tagsProperties.titleP),
+      resultsWrap: createElement(this.#tagsProperties.resultsWrap),
+      titleWrap: createElement(this.#tagsProperties.titleWrap),
+      img: createElement(this.#tagsProperties.img),
+      titleP: createElement(this.#tagsProperties.titleP),
       
       results: []
     };
 
-    this._results.forEach(result => {
-      const cross = this._crosswords.getElementById(result.id);
+    this.#results.forEach(result => {
+      const cross = this.#crosswords.getElementById(result.id);
       const newResultNode = {
-        wrapInf: createElement(this._tagsProperties.wrapInf),
-        resultWrap: createElement(this._tagsProperties.resultWrap),
+        wrapInf: createElement(this.#tagsProperties.wrapInf),
+        resultWrap: createElement(this.#tagsProperties.resultWrap),
         p: createElement({tag: 'p', className: 'results__information', textContent: `${result.time} - ${cross.name}`}),
         level: {
-          wrap: createElement(this._tagsProperties.level.wrap),
+          wrap: createElement(this.#tagsProperties.level.wrap),
           levelNumber: cross.level
         }
       };
 
       for(let i = 1; i <= cross.level; i+=1) {
-        newResultNode.level[`star${i}`] = createElement(this._tagsProperties.level.star);
+        newResultNode.level[`star${i}`] = createElement(this.#tagsProperties.level.star);
       }
       node.results.push(newResultNode); 
       

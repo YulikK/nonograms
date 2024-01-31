@@ -3,16 +3,18 @@ export default class Abstract {
     if (new.target === Abstract) {
       throw new Error(`Can't instantiate Abstract, only concrete one.`);
     }
-    this._structure = null;
-    this._callback = {};
+    this.structure = null;
+    this.callback = {};
+    
   }
 
   getElement() {
-    return this._structure["element"];
+    return this.structure["element"];
   }
 
   removeElement() {
-    this._structure = null;
-    this._elements = null;
+    this.structure = null;
+    this.elements = null;
   }
+
 }
