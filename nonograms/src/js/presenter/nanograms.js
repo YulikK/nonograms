@@ -1,6 +1,7 @@
 import { render, remove } from "../utils/render.js";
 import { COMMAND, STORE_NAME } from "../utils/const.js";
 import { deepCopy, getClearMatrix, compareMatrix } from "../utils/utils.js";
+import Store from "../api/store.js";
 import ControlsView from "../view/controls.js";
 import MainView from "../view/main.js";
 import ChoseView from "../view/chose.js";
@@ -21,8 +22,10 @@ export default class Nanograms {
     this._crossModel = new CrosswordModel();
     this._crossModel.setCrosswords(crosswords);
 
+    this._store = new Store(STORE_NAME, window.localStorage);
+
     this._results = [];
-    this._saveGame = {};
+    this._saveGameInf = {};
 
     this._settings = {
       isHaveSaveGame: false,
@@ -84,7 +87,7 @@ export default class Nanograms {
     };
 
     const onSaveClick = () => {
-      this._saveGameToStorage();
+      this._saveGame();
     };
     const onLoadClick = () => {
       this._loadGame();
@@ -176,10 +179,10 @@ export default class Nanograms {
       this._getSaveFromStorage();
       this._destroyGameComponents();
       this._resetSettings();
-      this._seconds = Number(this._saveGame['seconds']);
-      this._currentCrossword = this._saveGame['crossword'];
+      this._seconds = Number(this._saveGameInf['seconds']);
+      this._currentCrossword = this._saveGameInf['crossword'];
       this._components["controls"].updateTimerDisplay(this._seconds);
-      this._setAnswers(this._saveGame['answers']);
+      this._setAnswers(this._saveGameInf['answers']);
       this._updateGameComponents();
       this._renderGame();
       this._components["crossword"].setAnswersCrossword(this._answers);
@@ -241,7 +244,7 @@ export default class Nanograms {
     id: this._currentCrossword.id});
     this._results.reverse();
     this._results = this._results.slice(0, 5);
-    this._setResultToStorage();
+    this._store.saveResult(this._results);
   }
 
 
@@ -283,31 +286,18 @@ export default class Nanograms {
     remove(this._components['results']);
   }
 
-  _setResultToStorage() {
-    window.localStorage.setItem(
-      `${STORE_NAME}-result-table`,
-      this._results.map(el => `${el.time}-${el.id}`),
-    );
-  }
-
-  _saveGameToStorage() {
-    const id = this._currentCrossword.id;
-    const answers = this._answers.join('-');
-
+  _saveGame() {
     this._settings.isHaveSaveGame = true;
     this._components['controls'].setLoadEnable();
-    this._saveGame['crossword'] = this._currentCrossword;
-    this._saveGame['seconds'] = this._seconds;
-    this._saveGame['answers'] = this._answers;
+    this._saveGameInf['crossword'] = this._currentCrossword;
+    this._saveGameInf['seconds'] = this._seconds;
+    this._saveGameInf['answers'] = this._answers;
 
-    window.localStorage.setItem(
-      `${STORE_NAME}-save-game`, `${id}:${this._seconds}:${answers}`);
+    this._store.saveGame(this._saveGameInf);
   }
 
   _getResultFromStorage() {
-    let resultsTable = window.localStorage.getItem(
-      `${STORE_NAME}-result-table`,
-    );
+    let resultsTable = this._store.getItem('result-table');
     if (resultsTable) {
       resultsTable = resultsTable.split(',');
       resultsTable.forEach(element => {
@@ -319,19 +309,17 @@ export default class Nanograms {
 
   _getSaveFromStorage() {
 
-    let saveGame = window.localStorage.getItem(
-      `${STORE_NAME}-save-game`,
-    );
+    let saveGame = this._store.getItem('save-game');
 
     if (saveGame) {
       saveGame = saveGame.split(':');
       if (saveGame.length) {
         try{
           this._settings.isHaveSaveGame = true;
-          this._saveGame['crossword'] = this._crossModel.getElementById(saveGame[0]);
-          this._saveGame['seconds'] = saveGame[1];
+          this._saveGameInf['crossword'] = this._crossModel.getElementById(saveGame[0]);
+          this._saveGameInf['seconds'] = saveGame[1];
           const answers = saveGame[2].split('-');
-          this._saveGame['answers'] = answers.map(row => row.split(','));
+          this._saveGameInf['answers'] = answers.map(row => row.split(','));
           this._components['controls'].setLoadEnable();
         } catch (e) {
           console.log("We have some problems with your save game");
