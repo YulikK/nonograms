@@ -26,13 +26,12 @@ export default class Nanograms {
       isGameStarted: false,
       isShowAnswers: false,
     }
-    
+    this._getResultFromStorage();
   }
 
   startGame() {
-    
-    this._getResultFromStorage();
-    this._seInitSettings();
+
+    this._resetSettings();
     this._renderBase();
     this._getRandomCrossword();
     this._setAnswers();
@@ -40,9 +39,8 @@ export default class Nanograms {
     
   }
 
-  _seInitSettings(){
-    this._timer = undefined;
-    this._seconds = 0;
+  _resetSettings(){
+    this._resetTimer();
     this._settings.isGameStarted = false;
     this._settings.isShowAnswers = false;
     
@@ -69,19 +67,17 @@ export default class Nanograms {
     const onRefreshClick = () => {
       this._setAnswers();
       this._components['crossword'].setClearCrossword();
-      this._settings.isGameStarted = false;
-      this._settings.isShowAnswers = false;
       this._components['crossword'].startGame();
-      this._resetTimer();
+      this._resetSettings();
     };
 
     const onShowAnswersClick = () => {
       this._setAnswers();
       this._components['crossword'].setAnswersCrossword(this._currentCrossword.playTable);
-      this._settings.isGameStarted = false;
+      this._resetSettings();
       this._settings.isShowAnswers = true;
       this._components['crossword'].stopGame();
-      this._resetTimer();
+
     };
 
     const onSaveClick = () => {
@@ -120,8 +116,7 @@ export default class Nanograms {
     const onRandomClick = () => {
       const audio = new Audio(`./muz/random.mp3`);
       audio.play();
-      this._resetTimer();
-      this._seInitSettings();
+      this._resetSettings();
       this._restartGame();
     };
 
@@ -183,9 +178,7 @@ export default class Nanograms {
     if (this._settings.isHaveSaveGame) {
       this._destroyGameResult();
       this._currentCrossword = this._saveGame['crossword'];
-      this._resetTimer();
-      this._settings.isGameStarted = false;
-      this._settings.isShowAnswers = false;
+      this._resetSettings();
       this._seconds = Number(this._saveGame['seconds']);
       this._components['controls'].updateTimerDisplay(this._seconds);
       this._setAnswers(this._saveGame['answers']);
@@ -207,10 +200,10 @@ export default class Nanograms {
 
   _resetTimer() {
     
-      clearInterval(this._timer);
-      this._timer = null;
-      this._seconds = 0;
-      this._components['controls'].updateTimerDisplay(this._seconds);
+    if(this._timer) clearInterval(this._timer);
+    this._timer = null;
+    this._seconds = 0;
+    this._components['controls'].updateTimerDisplay(this._seconds);
 
     
   }
@@ -247,8 +240,7 @@ export default class Nanograms {
 
   _showEndGameInformation() {
     const finishTime = this._getTime(this._seconds);
-    this._settings.isGameStarted = false;
-    this._resetTimer();
+    this._resetSettings();
 
     
     this._results.reverse();
