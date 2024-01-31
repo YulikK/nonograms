@@ -31,6 +31,7 @@ export default class Nanograms {
     }
 
     this._getResultFromStorage();
+    this._getSaveFromStorage();
   }
 
   startGame() {
@@ -102,7 +103,7 @@ export default class Nanograms {
     this._components['controls'].setLoadClickHandler(onLoadClick);
     this._components['controls'].setThemeClickHandler(onThemeClick);
 
-    this._getSaveFromStorage();
+    
   }
 
   _renderGame() {
@@ -172,6 +173,7 @@ export default class Nanograms {
   
   _loadGame(){
     if (this._settings.isHaveSaveGame) {
+      this._getSaveFromStorage();
       this._destroyGameComponents();
       this._resetSettings();
       this._seconds = Number(this._saveGame['seconds']);
@@ -188,7 +190,7 @@ export default class Nanograms {
   _startTimer() {
     if (!this._timer) {
       this._timer = setInterval(() => {
-        if(!this._isGameStarted) this._resetTimer();
+        if(!this._settings.isGameStarted) this._resetTimer();
         this._seconds += 1;
         this._components["controls"].updateTimerDisplay(this._seconds);
       }, 1000);
@@ -222,6 +224,7 @@ export default class Nanograms {
         this._destroyGameComponents();
         this._currentCrossword = this._crossModel.getElementById(data);
         this._setAnswers();
+        this._resetSettings();
         this._updateGameComponents();
         this._renderGame();
       }
@@ -246,10 +249,9 @@ export default class Nanograms {
     const finishTime = this._getTime(this._seconds);
     this._resetSettings();
     this._updateResultInformation(finishTime);
-
-    this._components['endGame'] = new EndGameView(finishTime);
-
-    render(this._gameContainer, this._components['endGame']);
+    
+    this._components["endGame"] = new EndGameView(finishTime);
+    render(this._gameContainer, this._components["endGame"]);
 
     const onPlayAgainClick = () => {
       this._destroyResultModal();
