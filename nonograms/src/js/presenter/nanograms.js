@@ -9,11 +9,11 @@ import ChoseView from "../view/chose.js";
 import ResultsView from "../view/results.js";
 import CrosswordView from "../view/crossword.js";
 import EndGameView from "../view/end-game.js";
-import GalleryView from "../view/gallery.js";
 import CrosswordModel from "../model/crossword.js";
 
 export default class Nanograms {
   #gameContainer;
+  #gallery;
   #components;
   #crossModel;
   #currentCrossword;
@@ -26,8 +26,9 @@ export default class Nanograms {
   #settings;
   #timer;
 
-  constructor(gameContainer, crosswords) {
+  constructor(gameContainer, crosswords, gallery) {
     this.#gameContainer = gameContainer;
+    this.#gallery = gallery;
     this.#components = {
       controls: new ControlsView(),
       main: new MainView(),
@@ -230,11 +231,7 @@ export default class Nanograms {
   }
 
   #showGallery() {
-    const onCloseClick = () => {
-      this.#destroyGalleryModal();
-    };
-    const onGameClick = (data) => {
-      this.#destroyGalleryModal();
+    const callback = (data) => {
       if (data) {
         this.#sound.playSound(SOUNDS.RENDER);
         this.#destroyGameComponents();
@@ -245,10 +242,7 @@ export default class Nanograms {
         this.#renderGame();
       }
     };
-    this.#components['gallery'] = new GalleryView(this.#crossModel.getCrosswords());
-    render(this.#gameContainer, this.#components['gallery']);
-    this.#components['gallery'].setCloseClickHandler(onCloseClick);
-    this.#components['gallery'].setGameClickHandler(onGameClick);
+    this.#gallery.show(callback);
   }
 
   #updateResultInformation(finishTime) {
@@ -283,10 +277,6 @@ export default class Nanograms {
     this.#setAnswers();
     this.#updateGameComponents();
     this.#renderGame();
-  }
-
-  #destroyGalleryModal() {
-    remove(this.#components['gallery']);
   }
 
   #destroyResultModal() {

@@ -2,6 +2,7 @@ import "../scss/main.scss";
 import mockFile from "../mock/mock.json";
 import CrosswordModel from "./model/crossword.js";
 import NanogramsPresenter from "./presenter/nanograms.js";
+import GalleryPresenter from "./presenter/gallery.js";
 
 const siteBodyElement = document.body;
 
@@ -15,6 +16,8 @@ if (siteBodyElement !== null) {
 
   initData(mockFile);
 
-  const nanogramsPresenter = new NanogramsPresenter(siteBodyElement, crosswordModel.getCrosswords());
+  const galleryPresenter = new GalleryPresenter(siteBodyElement, crosswordModel.getCrosswords());
+  const nanogramsPresenter = new NanogramsPresenter(siteBodyElement, crosswordModel.getCrosswords(), galleryPresenter);
+  
   nanogramsPresenter.startGame();
 }
