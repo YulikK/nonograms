@@ -137,26 +137,24 @@ export default class Nanograms {
   }
 
   _setNextGameStep(index, command) {
-    
-      this._setNewAnswer(index, command);
-      let fileName = '';
-      switch(command) {
-        case COMMAND.FILL:
-          fileName = 'click';
-          break;
-        case COMMAND.EMPTY:
-          fileName = 'click';
-          break;
-        case COMMAND.CROSS:
-          fileName = 'click-context';
-          break;
-      }
-      const audio = new Audio(`./muz/${fileName}.mp3`);
-      audio.play();
+    this._setNewAnswer(index, command);
+    let fileName = '';
+    switch(command) {
+      case COMMAND.FILL:
+        fileName = 'click';
+        break;
+      case COMMAND.EMPTY:
+        fileName = 'click';
+        break;
+      case COMMAND.CROSS:
+        fileName = 'click-context';
+        break;
+    }
+    const audio = new Audio(`./muz/${fileName}.mp3`);
+    audio.play();
   }
 
   _setNewAnswer(index, command) {
-    
     switch(command){
       case COMMAND.FILL:
         this._answers[index.i][index.j] = '1';
@@ -174,15 +172,15 @@ export default class Nanograms {
   
   _loadGame(){
     if (this._settings.isHaveSaveGame) {
-      this._destroyGameResult();
-      this._currentCrossword = this._saveGame['crossword'];
+      this._destroyGameComponents();
       this._resetSettings();
       this._seconds = Number(this._saveGame['seconds']);
-      this._components['controls'].updateTimerDisplay(this._seconds);
+      this._currentCrossword = this._saveGame['crossword'];
+      this._components["controls"].updateTimerDisplay(this._seconds);
       this._setAnswers(this._saveGame['answers']);
       this._updateGameComponents();
       this._renderGame();
-      this._components['crossword'].setAnswersCrossword(this._answers);
+      this._components["crossword"].setAnswersCrossword(this._answers);
     }
   }
 
@@ -190,21 +188,18 @@ export default class Nanograms {
   _startTimer() {
     if (!this._timer) {
       this._timer = setInterval(() => {
-        if(!this._settings.isGameStarted) this._resetTimer();
+        if(!this._isGameStarted) this._resetTimer();
         this._seconds += 1;
-        this._components['controls'].updateTimerDisplay(this._seconds);
+        this._components["controls"].updateTimerDisplay(this._seconds);
       }, 1000);
     }
   }
 
   _resetTimer() {
-    
     if(this._timer) clearInterval(this._timer);
     this._timer = null;
     this._seconds = 0;
-    this._components['controls'].updateTimerDisplay(this._seconds);
-
-    
+    this._components["controls"].updateTimerDisplay(this._seconds);
   }
 
   _isFinish() {
@@ -224,7 +219,7 @@ export default class Nanograms {
     const onGameClick = (data) => {
       this._destroyGalleryModal();
       if (data) {
-        this._destroyGameResult();
+        this._destroyGameComponents();
         this._currentCrossword = this._crossModel.getElementById(data);
         this._setAnswers();
         this._updateGameComponents();
@@ -265,7 +260,7 @@ export default class Nanograms {
   }
 
   _restartGame() {
-    this._destroyGameResult();
+    this._destroyGameComponents();
     this._getRandomCrossword();
     this._setAnswers();
     this._updateGameComponents();
@@ -280,7 +275,7 @@ export default class Nanograms {
     remove(this._components['endGame']);
   }
 
-  _destroyGameResult() {
+  _destroyGameComponents() {
     remove(this._components['crossword']);
     remove(this._components['chose']);
     remove(this._components['results']);
