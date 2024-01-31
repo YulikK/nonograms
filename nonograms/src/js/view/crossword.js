@@ -41,40 +41,54 @@ export default class Crossword extends AbstractView {
       rows: []
     }
 
+    // let borderCounter = 0;
     for (let i = 0; i < hint.maxV; i += 1) {
       node.rows.push({
         tr: createElement({tag: 'tr', className: 'row'}),
         cells: []
       });
 
+      
       for (let j = 0; j < hint.maxH; j += 1) {
         node.rows[i].cells.push({
           td: createElement({tag: 'td', className: 'empty'})
-        })
+        });
       }
 
+      
       for (let j = 0; j < hint.vertical.length; j += 1) {
+        const borderClass = i === hint.maxV - 1 ? 'border-bottom' : '';
         node.rows[i].cells.push({
-          td: createElement({tag: 'td', className: 'cell hint', textContent: hint.vertical[j][i] ? hint.vertical[j][i] : ''})
-        })
+          td: createElement({tag: 'td', className: `cell hint ${borderClass}`, textContent: hint.vertical[j][i] ? hint.vertical[j][i] : ''})
+        });
       }
+
     }
 
+    let borderCounterRow = 1;
     for(let i = 0; i < this._crossword.length; i += 1) {
       node.rows.push({
-        tr: createElement({tag: 'tr'}),
+        tr: createElement({tag: 'tr', className: 'row'}),
         cells: []
       });
       for (let j = 0; j < hint.maxH; j += 1) {
+        const borderClass = j === hint.maxH - 1 ? 'border-right' : '';
         node.rows[i + hint.maxV].cells.push({
-          td: createElement({tag: 'td', className: 'cell hint', textContent: hint.horizontal[i][j] ? hint.horizontal[i][j] : ''})
+          td: createElement({tag: 'td', className: `cell hint ${borderClass}`, textContent: hint.horizontal[i][j] ? hint.horizontal[i][j] : ''})
         })
       }
+      let borderCounterCell = 1;
       for (let j = 0; j < this._crossword.length; j += 1) {
+        const borderClassCell = borderCounterCell === 5 || j === this._crossword.length - 1 ? 'border-right' : '';
+        const borderClassRow = borderCounterRow === 5 || i === this._crossword.length - 1 ? 'border-bottom' : '';
         node.rows[i + hint.maxV].cells.push({
-          td: createElement({tag: 'td', className: `cell`, data: `el-${i}-${j}`})
+          td: createElement({tag: 'td', className: `cell ${borderClassCell} ${borderClassRow}`, data: `el-${i}-${j}`})
         })
+        borderCounterCell += 1;
+        if (borderCounterCell === 6) borderCounterCell = 1;
       }
+      borderCounterRow += 1;
+        if (borderCounterRow === 6) borderCounterRow = 1;
     }
 
     return node;

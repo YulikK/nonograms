@@ -62,4 +62,16 @@
   transform: translateX(-50%) rotate(45deg);
 }
 
+.border-left{
+  @include border-left();
+}
+.border-top{
+  @include border-top();
+}
+.border-right{
+  @include border-right();
+}
+.border-bottom{
+  @include border-bottom();
+}
 

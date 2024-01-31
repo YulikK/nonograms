@@ -17,6 +17,7 @@
   --color-fill: #{$color-bg-light};
   --color-hint: #{darken($color-btn-light, 5%)};
   --color-cell-border: #{darken($color-btn-light, 15%)};
+  --color-cell-border-section: #{darken($color-btn-light, 40%)};
   --color-cell-hover: #{rgba(lighten($color-btn-light, 30%), 9)};
 }
 
@@ -38,6 +39,7 @@
   --color-fill: #{$color-bg-dark};
   --color-hint: #{darken($color-btn-dark, 5%)};
   --color-cell-border: #{darken($color-btn-dark, 10%)};
+  --color-cell-border-section: #{darken($color-btn-dark, 40%)};
   --color-cell-hover: #{rgba(lighten($color-btn-dark, 30%), 9)};
 }
 
@@ -155,6 +157,19 @@
 
 @mixin cell-hover() {
   box-shadow: inset 0px 0px 4px 2px var(--color-cell-hover);
+}
+
+@mixin border-left() {
+  border-left: 2px solid var(--color-cell-border-section);;
+}
+@mixin border-top() {
+  border-top: 2px solid var(--color-cell-border-section);;
+}
+@mixin border-right() {
+  border-right: 2px solid var(--color-cell-border-section);;
+}
+@mixin border-bottom() {
+  border-bottom: 2px solid var(--color-cell-border-section);;
 }
 
 @mixin modal-backdrop-style {
