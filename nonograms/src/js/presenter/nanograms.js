@@ -20,8 +20,13 @@ export default class Nanograms {
     this._crossModel = new CrosswordModel();
     this._crossModel.setCrosswords(crosswords);
     this._results = [];
-    this._isHaveSaveGame = false;
     this._saveGame = {};
+    this._settings = {
+      isHaveSaveGame: false,
+      isGameStarted: false,
+      isShowAnswers: false,
+    }
+    
   }
 
   startGame() {
@@ -38,8 +43,8 @@ export default class Nanograms {
   _seInitSettings(){
     this._timer = undefined;
     this._seconds = 0;
-    this._isGameStarted = false;
-    this._isShowAnswers = false;
+    this._settings.isGameStarted = false;
+    this._settings.isShowAnswers = false;
     
   }
 
@@ -64,8 +69,8 @@ export default class Nanograms {
     const onRefreshClick = () => {
       this._setAnswers();
       this._components['crossword'].setClearCrossword();
-      this._isGameStarted = false;
-      this._isShowAnswers = false;
+      this._settings.isGameStarted = false;
+      this._settings.isShowAnswers = false;
       this._components['crossword'].startGame();
       this._resetTimer();
     };
@@ -73,8 +78,8 @@ export default class Nanograms {
     const onShowAnswersClick = () => {
       this._setAnswers();
       this._components['crossword'].setAnswersCrossword(this._currentCrossword.playTable);
-      this._isGameStarted = false;
-      this._isShowAnswers = true;
+      this._settings.isGameStarted = false;
+      this._settings.isShowAnswers = true;
       this._components['crossword'].stopGame();
       this._resetTimer();
     };
@@ -104,8 +109,8 @@ export default class Nanograms {
 
   _renderGame() {
     const onCellClick = (index, command) => {
-      if(!this._isShowAnswers) {
-        if(!this._isGameStarted) {
+      if(!this._settings.isShowAnswers) {
+        if(!this._settings.isGameStarted) {
           this._setGameStartSettings();
         }
         this._setNextGameStep(index, command);
@@ -133,7 +138,7 @@ export default class Nanograms {
   }
 
   _setGameStartSettings() {
-    this._isGameStarted = true;
+    this._settings.isGameStarted = true;
     this._components['controls'].setSaveEnabled();
     this._startTimer();
   }
@@ -175,12 +180,12 @@ export default class Nanograms {
   }
   
   _loadGame(){
-    if (this._isHaveSaveGame) {
+    if (this._settings.isHaveSaveGame) {
       this._destroyGameResult();
       this._currentCrossword = this._saveGame['crossword'];
       this._resetTimer();
-      this._isGameStarted = false;
-      this._isShowAnswers = false;
+      this._settings.isGameStarted = false;
+      this._settings.isShowAnswers = false;
       this._seconds = Number(this._saveGame['seconds']);
       this._components['controls'].updateTimerDisplay(this._seconds);
       this._setAnswers(this._saveGame['answers']);
@@ -193,7 +198,7 @@ export default class Nanograms {
   _startTimer() {
     if (!this._timer) {
       this._timer = setInterval(() => {
-        if(!this._isGameStarted) this._resetTimer();
+        if(!this._settings.isGameStarted) this._resetTimer();
         this._seconds += 1;
         this._components['controls'].updateTimerDisplay(this._seconds);
       }, 1000);
@@ -242,7 +247,7 @@ export default class Nanograms {
 
   _showEndGameInformation() {
     const finishTime = this._getTime(this._seconds);
-    this._isGameStarted = false;
+    this._settings.isGameStarted = false;
     this._resetTimer();
 
     
@@ -298,7 +303,7 @@ export default class Nanograms {
     const id = this._currentCrossword.id;
     const answers = this._answers.join('-');
 
-    this._isHaveSaveGame = true;
+    this._settings.isHaveSaveGame = true;
     this._components['controls'].setLoadEnable();
     this._saveGame['crossword'] = this._currentCrossword;
     this._saveGame['seconds'] = this._seconds;
@@ -331,7 +336,7 @@ export default class Nanograms {
       saveGame = saveGame.split(':');
       if (saveGame.length) {
         try{
-          this._isHaveSaveGame = true;
+          this._settings.isHaveSaveGame = true;
           this._saveGame['crossword'] = this._crossModel.getElementById(saveGame[0]);
           this._saveGame['seconds'] = saveGame[1];
           const answers = saveGame[2].split('-');
