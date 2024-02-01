@@ -1,14 +1,13 @@
 import { render, remove } from "../utils/render.js";
-import { STORE_NAME, SOUNDS } from "../utils/const.js";
-import Store from "../api/store.js";
+import { SOUNDS } from "../utils/const.js";
 import Sound from "../api/sound.js";
-import ControlsView from "../view/controls.js";
 import MainView from "../view/main.js";
 import ChoseView from "../view/chose.js";
 import CrosswordModel from "../model/crossword.js";
 import ResultsPresenter from "../presenter/results.js";
 import TimerPresenter from "../presenter/timer.js";
 import CrosswordPresenter from "../presenter/crossword.js";
+import ControlsPresenter from "../presenter/controls.js";
 
 export default class Nanograms {
   #gameContainer;
@@ -16,12 +15,11 @@ export default class Nanograms {
   #win;
   #components;
   #crossModel;
-  #store;
-  #sound;
+  sound;
   #resultsPresenter;
   #timerPresenter;
   #crosswordPresenter;
-  #saveGameInf;
+  #controlsPresenter;
   #settings;
 
   constructor(gameContainer, crosswords, gallery, win) {
@@ -29,37 +27,30 @@ export default class Nanograms {
     this.#gallery = gallery;
     this.#win = win;
     this.#components = {
-      controls: new ControlsView(),
       main: new MainView(),
     }
     
     this.#crossModel = new CrosswordModel();
     this.#crossModel.setCrosswords(crosswords);
+    this.sound = new Sound();
 
     this.#resultsPresenter = new ResultsPresenter(this.#crossModel);
     this.#timerPresenter = new TimerPresenter();
-    this.#crosswordPresenter = new CrosswordPresenter();
-    
-
-    this.#store = new Store(STORE_NAME, window.localStorage);
-    this.#sound = new Sound();
-
-    this.#saveGameInf = {};
+    this.#crosswordPresenter = new CrosswordPresenter(this.sound);
+    this.#controlsPresenter = new ControlsPresenter(gameContainer, this.sound);
 
     this.#settings = {
       isHaveSaveGame: false,
       isGameStarted: false,
       isShowAnswers: false,
     }
-
-    this.#getSaveFromStorage();
   }
 
   startGame(newCrossword = undefined, isReset = true, isFirstStart = false, answers = undefined) {
     if (isReset) this.#resetSettings();
     if (isFirstStart) this.#renderBase();
     if (!isFirstStart) this.#destroyGameComponents();
-    if (!isFirstStart) this.#sound.playSound(SOUNDS.RENDER);
+    if (!isFirstStart) this.sound.playSound(SOUNDS.RENDER);
     this.#crosswordPresenter.setCrossword(this.#crossModel.getNewCrossword(newCrossword, this.#crosswordPresenter.getCrossword()))
     this.#crosswordPresenter.setAnswers(answers);
     this.#updateGameComponents();
@@ -81,56 +72,55 @@ export default class Nanograms {
     this.#resultsPresenter.updateComponent();
   }
 
+  onRefreshClick = () => {
+    this.sound.playSound(SOUNDS.REFRESH);
+    this.#crosswordPresenter.setAnswers();
+    this.#resetSettings();
+    this.#crosswordPresenter.refresh();
+  };
+
+  onShowAnswersClick = () => {
+    this.sound.playSound(SOUNDS.ANSWERS);
+    this.#crosswordPresenter.showAnswers();
+    this.#resetSettings();
+    this.#settings.isShowAnswers = true;
+    this.#crosswordPresenter.showAnswers();
+  };
+
+  onFindSave = () => {
+    this.#settings.isHaveSaveGame = true;
+  }
+
+  onLoadClick = (saveGame) => {
+    this.#loadGame(saveGame);
+  };
+
+  onSaveClick = () => {
+    this.#settings.isHaveSaveGame = true;
+    return {
+      crossword: this.#crosswordPresenter.getCrossword(),
+      seconds: this.#timerPresenter.getSeconds(),
+      answers: this.#crosswordPresenter.getAnswers()
+    }
+  };
+
   #renderBase() {
-    const onRefreshClick = () => {
-      this.#sound.playSound(SOUNDS.REFRESH);
-      this.#crosswordPresenter.setAnswers();
-      this.#resetSettings();
-      this.#crosswordPresenter.refresh();
-    };
-
-    const onShowAnswersClick = () => {
-      this.#sound.playSound(SOUNDS.ANSWERS);
-      this.#crosswordPresenter.showAnswers();
-      this.#resetSettings();
-      this.#settings.isShowAnswers = true;
-      this.#crosswordPresenter.showAnswers();
-    };
-
-    const onSaveClick = () => {
-      this.#saveGame();
-    };
-    const onLoadClick = () => {
-      this.#loadGame();
-    };
-    const onSoundOnOff = () => {
-      this.#sound.soundsToggle();
-      this.#sound.playSound(SOUNDS.SWITCH);
-    };
-    const onThemeClick = () => {
-      this.#sound.playSound(SOUNDS.SWITCH);
-      this.#gameContainer.classList.toggle('light-theme');
-      this.#gameContainer.classList.toggle('dark-theme');
-    };
-
-    render(this.#gameContainer, this.#components['controls']);
+    this.#controlsPresenter.render();
+    this.#controlsPresenter.setRefreshCallback(this.onRefreshClick);
+    this.#controlsPresenter.setShowAnswersCallback(this.onShowAnswersClick);
+    this.#controlsPresenter.setLoadCallback(this.onLoadClick);
+    this.#controlsPresenter.setSaveCallback(this.onSaveClick);
+    this.#controlsPresenter.setFindSaveCallback(this.onFindSave);
     render(this.#gameContainer, this.#components['main']);
-    this.#timerPresenter.setContainer(this.#components.controls.elements.options.wrap);
+    this.#timerPresenter.setContainer(this.#controlsPresenter.getTimeContainer());
     this.#timerPresenter.render();
-
-    this.#components['controls'].setRefreshClickHandler(onRefreshClick);
-    this.#components['controls'].setShowAnswersClickHandler(onShowAnswersClick);
-    this.#components['controls'].setSaveClickHandler(onSaveClick);
-    this.#components['controls'].setLoadClickHandler(onLoadClick);
-    this.#components['controls'].setThemeClickHandler(onThemeClick);
-    this.#components['controls'].setSoundClickHandler(onSoundOnOff);
   }
 
   onCellClick = () =>  {
     if(!this.#settings.isShowAnswers) {
       if(!this.#settings.isGameStarted) {
         this.#settings.isGameStarted = true;
-        this.#components["controls"].setSaveEnabled();
+        this.#controlsPresenter.setSaveEnabled();
         this.#timerPresenter.startGame();
         this.#timerPresenter.start();
       }
@@ -167,7 +157,7 @@ export default class Nanograms {
   }
 
   showWinModal = () => {
-    this.#sound.playSound(SOUNDS.WIN);
+    this.sound.playSound(SOUNDS.WIN);
     const finishTime = this.#timerPresenter.getTime();
     this.#resetSettings();
     this.#resultsPresenter.update(finishTime, this.#crosswordPresenter.getCrossword());
@@ -177,7 +167,6 @@ export default class Nanograms {
     };
 
     this.#win.show(finishTime, onPlayAgainClick);
-    
   }
 
   #destroyGameComponents() {
@@ -186,45 +175,11 @@ export default class Nanograms {
     this.#resultsPresenter.destroy();
   }
 
-  #saveGame() {
-    this.#settings.isHaveSaveGame = true;
-    this.#components['controls'].setLoadEnable();
-    this.#saveGameInf['crossword'] = this.#crosswordPresenter.getCrossword();
-    this.#saveGameInf['seconds'] = this.#timerPresenter.getSeconds();
-    this.#saveGameInf['answers'] = this.#crosswordPresenter.getAnswers();
-
-    this.#store.saveGame(this.#saveGameInf);
-  }
-
-  #loadGame(){
+  #loadGame(saveGame){
     if (this.#settings.isHaveSaveGame) {
-      this.#getSaveFromStorage();
-      this.startGame(this.#saveGameInf['crossword'], true, false, this.#saveGameInf['answers']);
-      this.#timerPresenter.setSeconds(Number(this.#saveGameInf['seconds']));
+      this.startGame(this.#crossModel.getElementById(saveGame['crossword']), true, false, saveGame['answers']);
+      this.#timerPresenter.setSeconds(Number(saveGame['seconds']));
       this.#crosswordPresenter.loadGame();
-    }
-  }
-
-  #getSaveFromStorage() {
-
-    let saveGame = this.#store.getItem('save-game');
-
-    if (saveGame) {
-      saveGame = saveGame.split(':');
-      if (saveGame.length) {
-        try{
-          this.#settings.isHaveSaveGame = true;
-          this.#saveGameInf['crossword'] = this.#crossModel.getElementById(saveGame[0]);
-          this.#saveGameInf['seconds'] = saveGame[1];
-          const answers = saveGame[2].split('-');
-          this.#saveGameInf['answers'] = answers.map(row => row.split(','));
-          this.#components['controls'].setLoadEnable();
-        } catch (e) {
-          console.log("We have some problems with your save game");
-        }
-        
-      }
-      
     }
   }
 }

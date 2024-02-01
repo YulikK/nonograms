@@ -1,7 +1,7 @@
 import { render, remove } from "../utils/render.js";
 import { COMMAND, SOUNDS } from "../utils/const.js";
 import { deepCopy, getClearMatrix, compareMatrix } from "../utils/utils.js";
-import Sound from "../api/sound.js";
+// import Sound from "../api/sound.js";
 import CrosswordView from "../view/crossword.js";
 
 export default class Crossword {
@@ -13,13 +13,13 @@ export default class Crossword {
   #sound;
   #settings;
 
-  constructor(crossword) {
+  constructor(sound) {
     
     this.#components = {};
     this.#callback = {};
-    this.#crossword = crossword;
+    // this.#crossword = crossword;
     this.#answers = [];
-    this.#sound = new Sound();
+    this.#sound = sound;
 
     this.#settings = {
       isGameStarted: false,
@@ -73,7 +73,6 @@ export default class Crossword {
     this.#components["crossword"].setAnswersCrossword(this.#crossword.playTable);
     this.#components["crossword"].stopGame();
   }
-  
   render() {
     const onCellClick = (index, command) => {
       if(!this.#settings.isShowAnswers) {
