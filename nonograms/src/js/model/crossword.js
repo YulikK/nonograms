@@ -25,7 +25,7 @@ export default class Crossword {
     return currentEl;
   }
 
-  getRandomCrossword(current) {
+  #getRandomCrossword(current) {
     let newCrossword = this.#getNextCrossword();
     while (current === newCrossword) {
       newCrossword = this.#getNextCrossword();
@@ -33,6 +33,21 @@ export default class Crossword {
     return newCrossword;
   }
 
+  getNewCrossword(newCrossword, currentCrossword) {
+    if(newCrossword) 
+      return newCrossword;//this.getElementById(newCrossword);
+    else return this.#getRandomCrossword(currentCrossword);
+  }
+
+  // #getRandomCrossword() {
+  //   this.#currentCrossword = this.#crossModel.getRandomCrossword(this.#currentCrossword);
+  // }
+
+  // #getNewCrossword(newCrossword) {
+  //   if(newCrossword) this.#currentCrossword = this.#crossModel.getElementById(newCrossword);
+  //   else this.#getRandomCrossword();
+  // }
+  
   #getNextCrossword() {
     return this.#crosswords[Math.floor(Math.random() * this.#crosswords.length)];
   }

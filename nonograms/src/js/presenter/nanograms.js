@@ -54,15 +54,15 @@ export default class Nanograms {
     this.#getSaveFromStorage();
   }
 
-  startGame() {
-
-    this.#resetSettings();
-    this.#renderBase();
-    this.#getRandomCrossword();
-    this.#setAnswers();
+  startGame(newCrossword = undefined, isReset = true, isFirstStart = false, answers = undefined) {
+    if (isReset) this.#resetSettings();
+    if (isFirstStart) this.#renderBase();
+    if (!isFirstStart) this.#destroyGameComponents();
+    if (!isFirstStart) this.#sound.playSound(SOUNDS.RENDER);
+    this.#currentCrossword = this.#crossModel.getNewCrossword(newCrossword, this.#currentCrossword);
+    this.#setAnswers(answers);
     this.#updateGameComponents();
     this.#renderGame();
-    
   }
 
   #resetSettings(){
@@ -70,11 +70,7 @@ export default class Nanograms {
     this.#settings.isGameStarted = false;
     this.#settings.isShowAnswers = false;
   }
-
-  #getRandomCrossword() {
-    this.#currentCrossword = this.#crossModel.getRandomCrossword(this.#currentCrossword);
-  }
-
+  
   #setAnswers(answers = undefined) {
     if (answers)  this.#answers = deepCopy(answers);
     else this.#answers = getClearMatrix(this.#currentCrossword.playTable.length);
@@ -130,8 +126,6 @@ export default class Nanograms {
     this.#components['controls'].setLoadClickHandler(onLoadClick);
     this.#components['controls'].setThemeClickHandler(onThemeClick);
     this.#components['controls'].setSoundClickHandler(onSoundOnOff);
-
-    
   }
 
   #renderGame() {
@@ -147,9 +141,7 @@ export default class Nanograms {
     };
 
     const onRandomClick = () => {
-      this.#sound.playSound(SOUNDS.RENDER);
-      this.#resetSettings();
-      this.#restartGame();
+      this.startGame(undefined, true);
     };
 
     const onShowGalleryClick = () => {
@@ -187,21 +179,7 @@ export default class Nanograms {
     } else this.#sound.playSound(command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL);
   }
   
-  #loadGame(){
-    if (this.#settings.isHaveSaveGame) {
-      this.#sound.playSound(SOUNDS.RENDER);
-      this.#getSaveFromStorage();
-      this.#destroyGameComponents();
-      this.#resetSettings();
-      this.#seconds = Number(this.#saveGameInf['seconds']);
-      this.#currentCrossword = this.#saveGameInf['crossword'];
-      this.#components["controls"].updateTimerDisplay(this.#seconds);
-      this.#setAnswers(this.#saveGameInf['answers']);
-      this.#updateGameComponents();
-      this.#renderGame();
-      this.#components["crossword"].setAnswersCrossword(this.#answers);
-    }
-  }
+  
 
 
   #startTimer() {
@@ -225,18 +203,10 @@ export default class Nanograms {
     return compareMatrix(this.#answers, this.#currentCrossword.playTable);
   }
 
-  
-
   #showGallery() {
     const callback = (data) => {
       if (data) {
-        this.#sound.playSound(SOUNDS.RENDER);
-        this.#destroyGameComponents();
-        this.#currentCrossword = this.#crossModel.getElementById(data);
-        this.#setAnswers();
-        this.#resetSettings();
-        this.#updateGameComponents();
-        this.#renderGame();
+        this.startGame(this.#crossModel.getElementById(data), true);
       }
     };
     this.#gallery.show(callback);
@@ -258,19 +228,11 @@ export default class Nanograms {
     this.#updateResultInformation(finishTime);
 
     const onPlayAgainClick = () => {
-      this.#restartGame();
+      this.startGame(undefined, true);
     };
 
     this.#win.show(finishTime, onPlayAgainClick);
     
-  }
-
-  #restartGame() {
-    this.#destroyGameComponents();
-    this.#getRandomCrossword();
-    this.#setAnswers();
-    this.#updateGameComponents();
-    this.#renderGame();
   }
 
   #destroyGameComponents() {
@@ -287,6 +249,17 @@ export default class Nanograms {
     this.#saveGameInf['answers'] = this.#answers;
 
     this.#store.saveGame(this.#saveGameInf);
+  }
+
+  #loadGame(){
+    if (this.#settings.isHaveSaveGame) {
+      this.#getSaveFromStorage();
+
+      this.startGame(this.#saveGameInf['crossword'], true, false, this.#saveGameInf['answers']);
+      this.#seconds = Number(this.#saveGameInf['seconds']);
+      this.#components["controls"].updateTimerDisplay(this.#seconds);
+      this.#components["crossword"].setAnswersCrossword(this.#answers);
+    }
   }
 
   #getResultFromStorage() {

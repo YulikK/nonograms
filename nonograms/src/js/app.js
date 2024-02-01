@@ -21,5 +21,5 @@ if (siteBodyElement !== null) {
   const galleryPresenter = new GalleryPresenter(siteBodyElement, crosswordModel.getCrosswords());
   const nanogramsPresenter = new NanogramsPresenter(siteBodyElement, crosswordModel.getCrosswords(), galleryPresenter, winPresenter);
   
-  nanogramsPresenter.startGame();
+  nanogramsPresenter.startGame(undefined, true, true);
 }
