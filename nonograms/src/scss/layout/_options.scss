@@ -6,16 +6,21 @@
   &__refresh {
     @include  block-button();
 
-    &:hover {
-      @include block-hover();
-      transform: translateY(-0.25em);
+    @media (any-hover: hover) {
+      &:hover {
+        @include block-hover();
+        transform: translateY(-0.25em);
+      }
     }
   }
   &__show-answer {
     @include  block-button();
-    &:hover {
-      @include block-hover();
-      transform: translateY(-0.10em);
+
+    @media (any-hover: hover) {
+      &:hover {
+        @include block-hover();
+        transform: translateY(-0.10em);
+      }
     }
   }
 
@@ -45,12 +50,13 @@
     box-shadow: none;
     @include block-right-wrapper();
 
-    &:not(.disable):hover {
-      @include block-hover();
-      
-      transform: translateY(-0.10em);
+    @media (any-hover: hover) {
+      &:not(.disable):hover {
+        @include block-hover();
+        
+        transform: translateY(-0.10em);
+      }
     }
-
     
   }
 
@@ -58,18 +64,23 @@
     @include  block-button();
     border-radius: 0px 20px 20px 0px;
     box-shadow: none;
-    &:hover {
-      @include block-hover();
-      transform: translateY(-0.10em);
+
+    @media (any-hover: hover) {
+      &:hover {
+        @include block-hover();
+        transform: translateY(-0.10em);
+      }
     }
   }
 
   .disable {
     @include  block-button-disable();
 
-    &:hover {
-      @include block-hover-disable();
-      transform: none;
+    @media (any-hover: hover) {
+      &:hover {
+        @include block-hover-disable();
+        transform: none;
+      }
     }
   }
 

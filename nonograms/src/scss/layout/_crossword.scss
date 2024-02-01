@@ -15,8 +15,10 @@
   position: relative;
   transition: 0.4s;
 
-  &:hover{
-    @include cell-hover();
+  @media (any-hover: hover) {
+    &:hover{
+      @include cell-hover();
+    }
   }
 
 }

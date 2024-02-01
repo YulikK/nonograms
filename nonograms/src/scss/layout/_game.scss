@@ -32,9 +32,11 @@
   &__random {
     @include block-button();
 
-    &:hover {
-      @include block-hover();
-      transform: translateY(-0.25em);
+    @media (any-hover: hover) {
+      &:hover {
+        @include block-hover();
+        transform: translateY(-0.25em);
+      }
     }
 
     &-img {

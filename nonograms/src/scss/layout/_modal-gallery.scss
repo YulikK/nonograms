@@ -74,9 +74,11 @@
     border-radius: 5px;
     box-shadow: none;
 
-    &:hover {
-      @include block-hover();
-      transform: translateY(-0.10em);
+    @media (any-hover: hover) {
+      &:hover {
+        @include block-hover();
+        transform: translateY(-0.10em);
+      }
     }
   }
 
@@ -104,20 +106,17 @@
     cursor: pointer;
     border-radius: 20px;
 
-    &:hover {
-      
-      @include block-hover();
-      transform: translateY(-0.10em);
+    @media (any-hover: hover) {
+      &:hover {
+        @include block-hover();
+        transform: translateY(-0.10em);
+      }
     }
   }
 
   &__example-name {
     flex-grow: 1;
   }
-
-  // &__level-wrapper {
-  //   align-self: flex-end;
-  // }
 
   &__level-img {
     width: adaptive-size(40, 20);

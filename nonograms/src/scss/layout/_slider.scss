@@ -35,20 +35,26 @@
       @include slider-button-on();
 
     }
-    &:hover {
-      &:before {
-        @include slider-button-hover();
-        transform: translateY(-0.25em);
+
+    @media (any-hover: hover) {
+      &:hover {
+        &:before {
+          @include slider-button-hover();
+          transform: translateY(-0.25em);
+        }
       }
     }
   }
 
   &__input:checked + &__slider {
     @include slider-slider();
-    &:hover {
-      &:before {
-        @include slider-button-hover();
-        transform: translate(32px, -0.25em) ;
+
+    @media (any-hover: hover) {
+      &:hover {
+        &:before {
+          @include slider-button-hover();
+          transform: translate(32px, -0.25em) ;
+        }
       }
     }
   }

@@ -72,9 +72,11 @@
     @include  block-button();
     border-radius: 50%;
 
-    &:hover {
-      @include block-hover();
-      transform: translateY(-0.10em);
+    @media (any-hover: hover) {
+      &:hover {
+        @include block-hover();
+        transform: translateY(-0.10em);
+      }
     }
   }
 
