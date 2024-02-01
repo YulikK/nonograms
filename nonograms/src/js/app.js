@@ -5,6 +5,7 @@ import NanogramsPresenter from "./presenter/nanograms.js";
 import GalleryPresenter from "./presenter/gallery.js";
 import WinPresenter from "./presenter/win.js";
 
+
 const siteBodyElement = document.body;
 
 if (siteBodyElement !== null) {

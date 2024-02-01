@@ -6,9 +6,9 @@ import Sound from "../api/sound.js";
 import ControlsView from "../view/controls.js";
 import MainView from "../view/main.js";
 import ChoseView from "../view/chose.js";
-import ResultsView from "../view/results.js";
 import CrosswordView from "../view/crossword.js";
 import CrosswordModel from "../model/crossword.js";
+import ResultsPresenter from "../presenter/results.js";
 
 export default class Nanograms {
   #gameContainer;
@@ -20,7 +20,7 @@ export default class Nanograms {
   #answers;
   #store;
   #sound;
-  #results;
+  #resultsPresenter;
   #seconds;
   #saveGameInf;
   #settings;
@@ -38,10 +38,11 @@ export default class Nanograms {
     this.#crossModel = new CrosswordModel();
     this.#crossModel.setCrosswords(crosswords);
 
+    this.#resultsPresenter = new ResultsPresenter(this.#crossModel);
+
     this.#store = new Store(STORE_NAME, window.localStorage);
     this.#sound = new Sound();
 
-    this.#results = [];
     this.#saveGameInf = {};
 
     this.#settings = {
@@ -50,7 +51,6 @@ export default class Nanograms {
       isShowAnswers: false,
     }
 
-    this.#getResultFromStorage();
     this.#getSaveFromStorage();
   }
 
@@ -79,7 +79,7 @@ export default class Nanograms {
   #updateGameComponents() {
     this.#components["chose"] = new ChoseView(this.#currentCrossword);
     this.#components["crossword"] = new CrosswordView(this.#currentCrossword);
-    this.#components["results"] = new ResultsView(this.#results, this.#crossModel.getCrosswords());
+    this.#resultsPresenter.updateComponent();
   }
 
   #renderBase() {
@@ -149,7 +149,8 @@ export default class Nanograms {
     }
 
     render(this.#components['main'].elements.additional.section, this.#components['chose']);
-    if(this.#results.length > 0) render(this.#components['main'].elements.additional.section, this.#components['results']);
+    this.#resultsPresenter.setContainer(this.#components['main'].elements.additional.section);
+    this.#resultsPresenter.render();
     render(this.#components['main'].elements.table.crosswordWrap, this.#components['crossword']);
     this.#components['crossword'].setCellClickHandler(onCellClick);
     this.#components['chose'].setRandomClickHandler(onRandomClick);
@@ -179,9 +180,6 @@ export default class Nanograms {
     } else this.#sound.playSound(command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL);
   }
   
-  
-
-
   #startTimer() {
     if (!this.#timer) {
       this.#timer = setInterval(() => {
@@ -212,20 +210,10 @@ export default class Nanograms {
     this.#gallery.show(callback);
   }
 
-  #updateResultInformation(finishTime) {
-    this.#results.reverse();
-    this.#results.push({time: finishTime,
-    id: this.#currentCrossword.id});
-    this.#results.reverse();
-    this.#results = this.#results.slice(0, 5);
-    this.#store.saveResult(this.#results);
-  }
-
-
   #showWinModal() {
     const finishTime = getTime(this.#seconds);
     this.#resetSettings();
-    this.#updateResultInformation(finishTime);
+    this.#resultsPresenter.update(finishTime, this.#currentCrossword);
 
     const onPlayAgainClick = () => {
       this.startGame(undefined, true);
@@ -238,7 +226,7 @@ export default class Nanograms {
   #destroyGameComponents() {
     remove(this.#components['crossword']);
     remove(this.#components['chose']);
-    remove(this.#components['results']);
+    this.#resultsPresenter.destroy();
   }
 
   #saveGame() {
@@ -259,17 +247,6 @@ export default class Nanograms {
       this.#seconds = Number(this.#saveGameInf['seconds']);
       this.#components["controls"].updateTimerDisplay(this.#seconds);
       this.#components["crossword"].setAnswersCrossword(this.#answers);
-    }
-  }
-
-  #getResultFromStorage() {
-    let resultsTable = this.#store.getItem('result-table');
-    if (resultsTable) {
-      resultsTable = resultsTable.split(',');
-      resultsTable.forEach(element => {
-        const result = element.split('-');
-        this.#results.push({time: result[0], id: result[1]});
-      });
     }
   }
 
