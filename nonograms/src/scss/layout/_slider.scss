@@ -33,7 +33,6 @@
       margin: auto 0;
       transition: 0.4s;
       @include slider-button-on();
-
     }
 
     @media (any-hover: hover) {
@@ -53,12 +52,11 @@
       &:hover {
         &:before {
           @include slider-button-hover();
-          transform: translate(32px, -0.25em) ;
+          transform: translate(32px, -0.25em);
         }
       }
     }
   }
-  
 
   &__input:checked + &__slider:before {
     transform: translateX(32px);
@@ -67,16 +65,16 @@
   }
 }
 
-.theme .theme__slider:before{
-  background-image: url('../img/icons/light-theme.png');
+.theme .theme__slider:before {
+  background-image: url("../img/icons/light-theme.png");
 }
 .theme .theme__input:checked + .theme__slider:before {
-  background-image: url('../img/icons/dark-theme.png');
+  background-image: url("../img/icons/dark-theme.png");
 }
 
-.sound .sound__slider:before{
-  background-image: url('../img/icons/sounds-on.png');
+.sound .sound__slider:before {
+  background-image: url("../img/icons/sounds-on.png");
 }
 .sound .sound__input:checked + .sound__slider:before {
-  background-image: url('../img/icons/sounds-off.png');
+  background-image: url("../img/icons/sounds-off.png");
 }

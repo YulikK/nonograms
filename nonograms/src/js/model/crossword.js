@@ -16,9 +16,9 @@ export default class Crossword {
   getElementById(id) {
     let index = 0;
     let currentEl = this.#crosswords[index];
-    while( currentEl.id !== id ) {
+    while (currentEl.id !== id) {
       index += 1;
-      if(index > this.#crosswords.length - 1) break
+      if (index > this.#crosswords.length - 1) break;
       currentEl = this.#crosswords[index];
     }
 
@@ -34,13 +34,15 @@ export default class Crossword {
   }
 
   getNewCrossword(newCrossword, currentCrossword) {
-    if(newCrossword) 
-      return newCrossword;//this.getElementById(newCrossword);
+    if (newCrossword)
+      return newCrossword; //this.getElementById(newCrossword);
     else return this.#getRandomCrossword(currentCrossword);
   }
 
   #getNextCrossword() {
-    return this.#crosswords[Math.floor(Math.random() * this.#crosswords.length)];
+    return this.#crosswords[
+      Math.floor(Math.random() * this.#crosswords.length)
+    ];
   }
 
   adaptToClient(crosswords) {
@@ -48,7 +50,7 @@ export default class Crossword {
       id: crosswords.id,
       name: crosswords.name,
       level: Number(crosswords.level),
-      playTable: crosswords.playTable
+      playTable: crosswords.playTable,
     });
     return adaptedQuestion;
   }

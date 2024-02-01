@@ -1,33 +1,31 @@
 import { render, remove } from "../utils/render.js";
 import { COMMAND, SOUNDS } from "../utils/const.js";
 import { deepCopy, getClearMatrix, compareMatrix } from "../utils/utils.js";
-// import Sound from "../api/sound.js";
+
 import CrosswordView from "../view/crossword.js";
 
 export default class Crossword {
   #gameContainer;
   #components;
   #callback;
-  #crossword; 
+  #crossword;
   #answers;
   #sound;
   #settings;
 
   constructor(sound) {
-    
     this.#components = {};
     this.#callback = {};
-    // this.#crossword = crossword;
     this.#answers = [];
     this.#sound = sound;
 
     this.#settings = {
       isGameStarted: false,
       isShowAnswers: false,
-    }
+    };
   }
 
-  setContainer(gameContainer){
+  setContainer(gameContainer) {
     this.#gameContainer = gameContainer;
   }
   setCrossword(newCrossword) {
@@ -37,7 +35,7 @@ export default class Crossword {
     return this.#crossword;
   }
   setAnswers(answers = undefined) {
-    if (answers)  this.#answers = deepCopy(answers);
+    if (answers) this.#answers = deepCopy(answers);
     else this.#answers = getClearMatrix(this.#crossword.playTable.length);
   }
   getAnswers() {
@@ -49,10 +47,10 @@ export default class Crossword {
   stopGame() {
     this.#settings.isGameStarted = false;
   }
-  showAnswers() {
+  show() {
     this.#settings.isShowAnswers = true;
   }
-  hideAnswers() {
+  hide() {
     this.#settings.isShowAnswers = false;
   }
   setStartGameCallback(callback) {
@@ -68,15 +66,17 @@ export default class Crossword {
     this.#components["crossword"].setClearCrossword();
     this.#components["crossword"].startGame();
   }
-  showAnswers(){
+  showAnswers() {
     this.setAnswers(this.#crossword.playTable);
-    this.#components["crossword"].setAnswersCrossword(this.#crossword.playTable);
+    this.#components["crossword"].setAnswersCrossword(
+      this.#crossword.playTable,
+    );
     this.#components["crossword"].stopGame();
   }
   render() {
     const onCellClick = (index, command) => {
-      if(!this.#settings.isShowAnswers) {
-        if(!this.#settings.isGameStarted) {
+      if (!this.#settings.isShowAnswers) {
+        if (!this.#settings.isGameStarted) {
           this.#settings.isGameStarted = true;
           this.#callback.startGame();
         }
@@ -84,8 +84,8 @@ export default class Crossword {
       }
     };
 
-    render(this.#gameContainer, this.#components['crossword']);
-    this.#components['crossword'].setCellClickHandler(onCellClick);
+    render(this.#gameContainer, this.#components["crossword"]);
+    this.#components["crossword"].setCellClickHandler(onCellClick);
   }
 
   #setNextGameStep(index, command) {
@@ -93,21 +93,24 @@ export default class Crossword {
   }
 
   #setNewAnswer(index, command) {
-    switch(command){
+    switch (command) {
       case COMMAND.FILL:
-        this.#answers[index.i][index.j] = '1';
+        this.#answers[index.i][index.j] = "1";
         break;
       case COMMAND.EMPTY:
-        this.#answers[index.i][index.j] = '';
+        this.#answers[index.i][index.j] = "";
         break;
       case COMMAND.CROSS:
-        this.#answers[index.i][index.j] = '0';
+        this.#answers[index.i][index.j] = "0";
         break;
     }
 
     if (this.#isWin()) {
       this.#callback.winGame();
-    } else this.#sound.playSound(command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL);
+    } else
+      this.#sound.playSound(
+        command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL,
+      );
   }
 
   #isWin() {
@@ -115,11 +118,10 @@ export default class Crossword {
   }
 
   destroy() {
-    remove(this.#components['crossword']);
+    remove(this.#components["crossword"]);
   }
 
-  loadGame(){
+  loadGame() {
     this.#components["crossword"].setAnswersCrossword(this.#answers);
   }
-
 }

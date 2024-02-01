@@ -5,7 +5,6 @@ export default class Abstract {
     }
     this.structure = null;
     this.callback = {};
-    
   }
 
   getElement() {
@@ -16,5 +15,4 @@ export default class Abstract {
     this.structure = null;
     this.elements = null;
   }
-
 }

@@ -28,8 +28,8 @@ export default class Nanograms {
     this.#win = win;
     this.#components = {
       main: new MainView(),
-    }
-    
+    };
+
     this.#crossModel = new CrosswordModel();
     this.#crossModel.setCrosswords(crosswords);
     this.sound = new Sound();
@@ -43,31 +43,43 @@ export default class Nanograms {
       isHaveSaveGame: false,
       isGameStarted: false,
       isShowAnswers: false,
-    }
+    };
   }
 
-  startGame(newCrossword = undefined, isReset = true, isFirstStart = false, answers = undefined) {
+  startGame(
+    newCrossword = undefined,
+    isReset = true,
+    isFirstStart = false,
+    answers = undefined,
+  ) {
     if (isReset) this.#resetSettings();
     if (isFirstStart) this.#renderBase();
     if (!isFirstStart) this.#destroyGameComponents();
     if (!isFirstStart) this.sound.playSound(SOUNDS.RENDER);
-    this.#crosswordPresenter.setCrossword(this.#crossModel.getNewCrossword(newCrossword, this.#crosswordPresenter.getCrossword()))
+    this.#crosswordPresenter.setCrossword(
+      this.#crossModel.getNewCrossword(
+        newCrossword,
+        this.#crosswordPresenter.getCrossword(),
+      ),
+    );
     this.#crosswordPresenter.setAnswers(answers);
     this.#updateGameComponents();
     this.#renderGame();
   }
 
-  #resetSettings(){
+  #resetSettings() {
     this.#timerPresenter.reset();
     this.#settings.isGameStarted = false;
     this.#settings.isShowAnswers = false;
     this.#timerPresenter.stopGame();
     this.#crosswordPresenter.stopGame();
-    this.#crosswordPresenter.hideAnswers();
+    this.#crosswordPresenter.hide();
   }
 
   #updateGameComponents() {
-    this.#components["chose"] = new ChoseView(this.#crosswordPresenter.getCrossword());
+    this.#components["chose"] = new ChoseView(
+      this.#crosswordPresenter.getCrossword(),
+    );
     this.#crosswordPresenter.updateComponent();
     this.#resultsPresenter.updateComponent();
   }
@@ -84,12 +96,12 @@ export default class Nanograms {
     this.#crosswordPresenter.showAnswers();
     this.#resetSettings();
     this.#settings.isShowAnswers = true;
-    this.#crosswordPresenter.showAnswers();
+    this.#crosswordPresenter.show();
   };
 
   onFindSave = () => {
     this.#settings.isHaveSaveGame = true;
-  }
+  };
 
   onLoadClick = (saveGame) => {
     this.#loadGame(saveGame);
@@ -100,8 +112,8 @@ export default class Nanograms {
     return {
       crossword: this.#crosswordPresenter.getCrossword(),
       seconds: this.#timerPresenter.getSeconds(),
-      answers: this.#crosswordPresenter.getAnswers()
-    }
+      answers: this.#crosswordPresenter.getAnswers(),
+    };
   };
 
   #renderBase() {
@@ -111,14 +123,16 @@ export default class Nanograms {
     this.#controlsPresenter.setLoadCallback(this.onLoadClick);
     this.#controlsPresenter.setSaveCallback(this.onSaveClick);
     this.#controlsPresenter.setFindSaveCallback(this.onFindSave);
-    render(this.#gameContainer, this.#components['main']);
-    this.#timerPresenter.setContainer(this.#controlsPresenter.getTimeContainer());
+    render(this.#gameContainer, this.#components["main"]);
+    this.#timerPresenter.setContainer(
+      this.#controlsPresenter.getTimeContainer(),
+    );
     this.#timerPresenter.render();
   }
 
-  onCellClick = () =>  {
-    if(!this.#settings.isShowAnswers) {
-      if(!this.#settings.isGameStarted) {
+  onCellClick = () => {
+    if (!this.#settings.isShowAnswers) {
+      if (!this.#settings.isGameStarted) {
         this.#settings.isGameStarted = true;
         this.#controlsPresenter.setSaveEnabled();
         this.#timerPresenter.startGame();
@@ -134,17 +148,24 @@ export default class Nanograms {
 
     const onShowGalleryClick = () => {
       this.#showGallery();
-    }
+    };
 
-    render(this.#components['main'].elements.additional.section, this.#components['chose']);
-    this.#resultsPresenter.setContainer(this.#components['main'].elements.additional.section);
+    render(
+      this.#components["main"].elements.additional.section,
+      this.#components["chose"],
+    );
+    this.#resultsPresenter.setContainer(
+      this.#components["main"].elements.additional.section,
+    );
     this.#resultsPresenter.render();
-    this.#crosswordPresenter.setContainer(this.#components['main'].elements.table.crosswordWrap);
+    this.#crosswordPresenter.setContainer(
+      this.#components["main"].elements.table.crosswordWrap,
+    );
     this.#crosswordPresenter.render();
     this.#crosswordPresenter.setStartGameCallback(this.onCellClick);
     this.#crosswordPresenter.setWinCallback(this.showWinModal);
-    this.#components['chose'].setRandomClickHandler(onRandomClick);
-    this.#components['chose'].setShowGalleryClickHandler(onShowGalleryClick);
+    this.#components["chose"].setRandomClickHandler(onRandomClick);
+    this.#components["chose"].setShowGalleryClickHandler(onShowGalleryClick);
   }
 
   #showGallery() {
@@ -160,25 +181,33 @@ export default class Nanograms {
     this.sound.playSound(SOUNDS.WIN);
     const finishTime = this.#timerPresenter.getTime();
     this.#resetSettings();
-    this.#resultsPresenter.update(finishTime, this.#crosswordPresenter.getCrossword());
+    this.#resultsPresenter.update(
+      finishTime,
+      this.#crosswordPresenter.getCrossword(),
+    );
 
     const onPlayAgainClick = () => {
       this.startGame(undefined, true);
     };
 
     this.#win.show(finishTime, onPlayAgainClick);
-  }
+  };
 
   #destroyGameComponents() {
-    remove(this.#components['chose']);
+    remove(this.#components["chose"]);
     this.#crosswordPresenter.destroy();
     this.#resultsPresenter.destroy();
   }
 
-  #loadGame(saveGame){
+  #loadGame(saveGame) {
     if (this.#settings.isHaveSaveGame) {
-      this.startGame(this.#crossModel.getElementById(saveGame['crossword']), true, false, saveGame['answers']);
-      this.#timerPresenter.setSeconds(Number(saveGame['seconds']));
+      this.startGame(
+        this.#crossModel.getElementById(saveGame["crossword"]),
+        true,
+        false,
+        saveGame["answers"],
+      );
+      this.#timerPresenter.setSeconds(Number(saveGame["seconds"]));
       this.#crosswordPresenter.loadGame();
     }
   }

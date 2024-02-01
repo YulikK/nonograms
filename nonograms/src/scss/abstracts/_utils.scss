@@ -9,7 +9,6 @@
   margin: -1px;
 }
 
-
 @function adaptive-size($max-size, $min-size) {
   $add-size: $max-size - $min-size;
   $max-free-width: $desktop-width-count - $mobile-width-count;
@@ -22,4 +21,3 @@
 //   $adjust: -16*$tone;
 //   @return adjust-color($color, $red: $adjust, $green: $adjust, $blue: $adjust);
 // }
-  

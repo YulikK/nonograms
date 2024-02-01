@@ -43,7 +43,7 @@
     justify-content: center;
   }
 
-  &__img{
+  &__img {
     width: 60px;
     height: 60px;
     padding: 10px;
@@ -69,21 +69,20 @@
 
   &__button {
     cursor: pointer;
-    @include  block-button();
+    @include block-button();
     border-radius: 50%;
 
     @media (any-hover: hover) {
       &:hover {
         @include block-hover();
-        transform: translateY(-0.10em);
+        transform: translateY(-0.1em);
       }
     }
   }
 
-  &__button-img{
+  &__button-img {
     width: 80px;
     height: 80px;
     padding: 0px;
-
   }
 }

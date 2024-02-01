@@ -1,8 +1,7 @@
-import { render} from "../utils/render.js";
+import { render } from "../utils/render.js";
 import { STORE_NAME, SOUNDS } from "../utils/const.js";
 import Store from "../api/store.js";
 import ControlsView from "../view/controls.js";
-
 
 export default class Controls {
   #gameContainer;
@@ -17,7 +16,7 @@ export default class Controls {
     this.#gameContainer = gameContainer;
     this.#components = {
       controls: new ControlsView(),
-    }
+    };
 
     this.#store = new Store(STORE_NAME, window.localStorage);
     this.#sound = sound;
@@ -26,18 +25,18 @@ export default class Controls {
     this.#callback = {};
     this.#settings = {
       isHaveSaveGame: false,
-    }
+    };
 
     this.#getSaveFromStorage();
   }
 
-  setRefreshCallback(callback){
+  setRefreshCallback(callback) {
     this.#callback.refresh = callback;
   }
-  setShowAnswersCallback(callback){
+  setShowAnswersCallback(callback) {
     this.#callback.showAnswers = callback;
   }
-  setLoadCallback(callback){
+  setLoadCallback(callback) {
     this.#callback.load = callback;
   }
   setSaveCallback(callback) {
@@ -45,7 +44,7 @@ export default class Controls {
   }
   setFindSaveCallback(callback) {
     this.#callback.findSave = callback;
-    if(this.#settings.isHaveSaveGame) this.#callback.findSave();
+    if (this.#settings.isHaveSaveGame) this.#callback.findSave();
   }
 
   getTimeContainer() {
@@ -72,18 +71,18 @@ export default class Controls {
     };
     const onThemeClick = () => {
       this.#sound.playSound(SOUNDS.SWITCH);
-      this.#gameContainer.classList.toggle('light-theme');
-      this.#gameContainer.classList.toggle('dark-theme');
+      this.#gameContainer.classList.toggle("light-theme");
+      this.#gameContainer.classList.toggle("dark-theme");
     };
-    
-    render(this.#gameContainer, this.#components['controls']);
 
-    this.#components['controls'].setRefreshClickHandler(onRefreshClick);
-    this.#components['controls'].setShowAnswersClickHandler(onShowAnswersClick);
-    this.#components['controls'].setSaveClickHandler(onSaveClick);
-    this.#components['controls'].setLoadClickHandler(onLoadClick);
-    this.#components['controls'].setThemeClickHandler(onThemeClick);
-    this.#components['controls'].setSoundClickHandler(onSoundOnOff);
+    render(this.#gameContainer, this.#components["controls"]);
+
+    this.#components["controls"].setRefreshClickHandler(onRefreshClick);
+    this.#components["controls"].setShowAnswersClickHandler(onShowAnswersClick);
+    this.#components["controls"].setSaveClickHandler(onSaveClick);
+    this.#components["controls"].setLoadClickHandler(onLoadClick);
+    this.#components["controls"].setThemeClickHandler(onThemeClick);
+    this.#components["controls"].setSoundClickHandler(onSoundOnOff);
   }
 
   setSaveEnabled() {
@@ -93,15 +92,15 @@ export default class Controls {
   #saveGame() {
     this.#settings.isHaveSaveGame = true;
     const data = this.#callback.save();
-    this.#components['controls'].setLoadEnable();
-    this.#saveGameInf['crossword'] = data.crossword;
-    this.#saveGameInf['seconds'] = data.seconds;
-    this.#saveGameInf['answers'] = data.answers;
+    this.#components["controls"].setLoadEnable();
+    this.#saveGameInf["crossword"] = data.crossword;
+    this.#saveGameInf["seconds"] = data.seconds;
+    this.#saveGameInf["answers"] = data.answers;
 
     this.#store.saveGame(this.#saveGameInf);
   }
 
-  #loadGame(){
+  #loadGame() {
     if (this.#settings.isHaveSaveGame) {
       this.#getSaveFromStorage();
       this.#callback.load(this.#saveGameInf);
@@ -109,25 +108,22 @@ export default class Controls {
   }
 
   #getSaveFromStorage() {
-
-    let saveGame = this.#store.getItem('save-game');
+    let saveGame = this.#store.getItem("save-game");
 
     if (saveGame) {
-      saveGame = saveGame.split(':');
+      saveGame = saveGame.split(":");
       if (saveGame.length) {
-        try{
+        try {
           this.#settings.isHaveSaveGame = true;
-          this.#saveGameInf['crossword'] = saveGame[0]
-          this.#saveGameInf['seconds'] = saveGame[1];
-          const answers = saveGame[2].split('-');
-          this.#saveGameInf['answers'] = answers.map(row => row.split(','));
-          this.#components['controls'].setLoadEnable();
+          this.#saveGameInf["crossword"] = saveGame[0];
+          this.#saveGameInf["seconds"] = saveGame[1];
+          const answers = saveGame[2].split("-");
+          this.#saveGameInf["answers"] = answers.map((row) => row.split(","));
+          this.#components["controls"].setLoadEnable();
         } catch (e) {
           console.log("We have some problems with your save game");
         }
-        
       }
-      
     }
   }
 }

@@ -3,15 +3,14 @@
   flex-direction: column;
   padding: 20px 10px;
 
-  &__title-wrapper{
+  &__title-wrapper {
     @include block-bottom-wrapper();
     display: flex;
     width: 100%;
     align-items: center;
-
   }
 
-  &__img{
+  &__img {
     width: adaptive-size(60, 40);
     height: adaptive-size(60, 40);
     padding: 10px;
@@ -40,6 +39,4 @@
     width: adaptive-size(40, 20);
     height: adaptive-size(40, 20);
   }
-
-
 }

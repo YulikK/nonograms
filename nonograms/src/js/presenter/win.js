@@ -19,11 +19,10 @@ export default class Win {
       callback();
     };
 
-    this.#components['win'].setPlayAgainClickHandler(onPlayAgainClick);
+    this.#components["win"].setPlayAgainClickHandler(onPlayAgainClick);
   }
 
   #destroyResultModal() {
-    remove(this.#components['win']);
+    remove(this.#components["win"]);
   }
-
 }

@@ -15,7 +15,6 @@ export const render = (container, child, method = RENDER_METHOD.APPEND) => {
       break;
     }
   }
-  
 
   renderChild(childEl, getChild(child, childEl));
 };

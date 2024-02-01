@@ -1,5 +1,5 @@
-import AbstractView from './abstract.js';
-import { createElement } from '../utils/render.js';
+import AbstractView from "./abstract.js";
+import { createElement } from "../utils/render.js";
 
 export default class Chose extends AbstractView {
   #crossword;
@@ -16,41 +16,80 @@ export default class Chose extends AbstractView {
     return {
       element: this.elements.choseWrap,
       child: [
-        {element: this.elements.chose.wrap,
-        child: [
-          {element: this.elements.chose.imgWrap,
-            child: [{element: this.elements.chose.img}]},
-          {element: this.elements.chose.titleWrap,
-            child: [{element: this.elements.chose.title}]},
-          {element: this.elements.chose.level.wrap,
-            child: Array.from({ length: this.#crossword.level }, (el, i) => this.elements.chose.level[`star${i + 1}`])},
-        ]},
-        {element: this.elements.random.a,
-          child: [{element: this.elements.random.img}]}
-        ]};
+        {
+          element: this.elements.chose.wrap,
+          child: [
+            {
+              element: this.elements.chose.imgWrap,
+              child: [{ element: this.elements.chose.img }],
+            },
+            {
+              element: this.elements.chose.titleWrap,
+              child: [{ element: this.elements.chose.title }],
+            },
+            {
+              element: this.elements.chose.level.wrap,
+              child: Array.from(
+                { length: this.#crossword.level },
+                (el, i) => this.elements.chose.level[`star${i + 1}`],
+              ),
+            },
+          ],
+        },
+        {
+          element: this.elements.random.a,
+          child: [{ element: this.elements.random.img }],
+        },
+      ],
+    };
   }
 
   #getElementProperties() {
     return {
       choseWrap: {
-        tag: 'div',
-        className: 'game__chose-wrapper'
+        tag: "div",
+        className: "game__chose-wrapper",
       },
       chose: {
-        wrap: {tag: 'div', className: 'game__chose chose'},
-        imgWrap: {tag: 'div', className: 'chose__img-wrapper'},
-        img: {tag: 'img', className: 'chose__img', src: `./img/example/${this.#crossword.img}.png`, alt: 'Chose the game', width: '40', height: '40'},
-        titleWrap: {tag: 'div', className: 'chose__title-wrapper'},
-        title: {tag: 'p', className: 'chose__title', textContent: `${this.#crossword.name}`},
+        wrap: { tag: "div", className: "game__chose chose" },
+        imgWrap: { tag: "div", className: "chose__img-wrapper" },
+        img: {
+          tag: "img",
+          className: "chose__img",
+          src: `./img/example/${this.#crossword.img}.png`,
+          alt: "Chose the game",
+          width: "40",
+          height: "40",
+        },
+        titleWrap: { tag: "div", className: "chose__title-wrapper" },
+        title: {
+          tag: "p",
+          className: "chose__title",
+          textContent: `${this.#crossword.name}`,
+        },
         level: {
-          wrap: {tag: 'div', className: 'chose__level-wrapper'},
-          star: {tag: 'img', className: 'chose__level-img', src: './img/icons/level.png', alt: 'star level', width: '40', height: '40'}
-        }
+          wrap: { tag: "div", className: "chose__level-wrapper" },
+          star: {
+            tag: "img",
+            className: "chose__level-img",
+            src: "./img/icons/level.png",
+            alt: "star level",
+            width: "40",
+            height: "40",
+          },
+        },
       },
       random: {
-        a: {tag: 'a', className: 'game__random', href: ''},
-        img: {tag: 'img', className: 'game__random-img', src: './img/icons/random.png', alt: 'random game', width: '40', height: '40'},
-      }
+        a: { tag: "a", className: "game__random", href: "" },
+        img: {
+          tag: "img",
+          className: "game__random-img",
+          src: "./img/icons/random.png",
+          alt: "random game",
+          width: "40",
+          height: "40",
+        },
+      },
     };
   }
 
@@ -65,16 +104,18 @@ export default class Chose extends AbstractView {
         title: createElement(this.#tagsProperties.chose.title),
         level: {
           wrap: createElement(this.#tagsProperties.chose.level.wrap),
-        }
+        },
       },
       random: {
         a: createElement(this.#tagsProperties.random.a),
         img: createElement(this.#tagsProperties.random.img),
-      }
+      },
     };
-  
-    for(let i = 1; i <= this.#crossword.level; i+=1) {
-      node.chose.level[`star${i}`] = createElement(this.#tagsProperties.chose.level.star);
+
+    for (let i = 1; i <= this.#crossword.level; i += 1) {
+      node.chose.level[`star${i}`] = createElement(
+        this.#tagsProperties.chose.level.star,
+      );
     }
 
     return node;
@@ -83,12 +124,12 @@ export default class Chose extends AbstractView {
   #randomClickHandler = (evt) => {
     evt.preventDefault();
     this.callback.randomClick();
-  }
+  };
 
   #showGalleryClickHandler = (evt) => {
     evt.preventDefault();
     this.callback.showGallery();
-  }
+  };
 
   setRandomClickHandler(callback) {
     this.callback.randomClick = callback;
@@ -97,6 +138,9 @@ export default class Chose extends AbstractView {
 
   setShowGalleryClickHandler(callback) {
     this.callback.showGallery = callback;
-    this.elements.chose.wrap.addEventListener(`click`, this.#showGalleryClickHandler);
+    this.elements.chose.wrap.addEventListener(
+      `click`,
+      this.#showGalleryClickHandler,
+    );
   }
 }

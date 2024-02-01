@@ -15,29 +15,33 @@ export default class Timer {
     this.#timer = null;
     this.#isGameStart = false;
     this.#components = {
-      timer: new TimerView()
-    }
+      timer: new TimerView(),
+    };
   }
 
-  startGame(){
+  startGame() {
     this.#isGameStart = true;
   }
   stopGame() {
     this.#isGameStart = false;
   }
 
-  setContainer(gameContainer){
+  setContainer(gameContainer) {
     this.#gameContainer = gameContainer;
   }
 
   render() {
-    render(this.#gameContainer, this.#components['timer'], RENDER_METHOD.PREPEND);
+    render(
+      this.#gameContainer,
+      this.#components["timer"],
+      RENDER_METHOD.PREPEND,
+    );
   }
 
   start() {
     if (!this.#timer) {
       this.#timer = setInterval(() => {
-        if(!this.#isGameStart) this.reset();
+        if (!this.#isGameStart) this.reset();
         this.#seconds += 1;
         this.#components["timer"].updateTimerDisplay(this.#seconds);
       }, 1000);
@@ -55,10 +59,9 @@ export default class Timer {
     return getTime(this.#seconds);
   }
   reset() {
-    if(this.#timer) clearInterval(this.#timer);
+    if (this.#timer) clearInterval(this.#timer);
     this.#timer = null;
     this.#seconds = 0;
     this.#components["timer"].updateTimerDisplay(this.#seconds);
   }
-
 }

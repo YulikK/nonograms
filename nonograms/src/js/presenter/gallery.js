@@ -10,13 +10,12 @@ export default class Gallery {
   constructor(gameContainer, crosswords) {
     this.#gameContainer = gameContainer;
     this.#components = {};
-    
+
     this.#crossModel = new CrosswordModel();
     this.#crossModel.setCrosswords(crosswords);
   }
 
   show(callback) {
-
     const onCloseClick = () => {
       this.#destroy();
     };
@@ -27,13 +26,15 @@ export default class Gallery {
         callback(data);
       }
     };
-    this.#components['gallery'] = new GalleryView(this.#crossModel.getCrosswords());
-    render(this.#gameContainer, this.#components['gallery']);
-    this.#components['gallery'].setCloseClickHandler(onCloseClick);
-    this.#components['gallery'].setGameClickHandler(onGameClick);
+    this.#components["gallery"] = new GalleryView(
+      this.#crossModel.getCrosswords(),
+    );
+    render(this.#gameContainer, this.#components["gallery"]);
+    this.#components["gallery"].setCloseClickHandler(onCloseClick);
+    this.#components["gallery"].setGameClickHandler(onGameClick);
   }
 
   #destroy() {
-    remove(this.#components['gallery']);
+    remove(this.#components["gallery"]);
   }
 }

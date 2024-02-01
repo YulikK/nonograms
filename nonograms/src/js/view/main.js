@@ -1,5 +1,5 @@
-import AbstractView from './abstract.js';
-import { createElement } from '../utils/render.js';
+import AbstractView from "./abstract.js";
+import { createElement } from "../utils/render.js";
 
 export default class Main extends AbstractView {
   #tagsProperties;
@@ -14,49 +14,53 @@ export default class Main extends AbstractView {
     return {
       element: this.elements.main,
       child: [
-        {element: this.elements.table.section,
-        child: [
-          {element: this.elements.table.h2}, 
-          {element: this.elements.table.crosswordWrap}]},
-        {element: this.elements.additional.section,
-        child: [{element: this.elements.additional.h2}]}
-      ]
+        {
+          element: this.elements.table.section,
+          child: [
+            { element: this.elements.table.h2 },
+            { element: this.elements.table.crosswordWrap },
+          ],
+        },
+        {
+          element: this.elements.additional.section,
+          child: [{ element: this.elements.additional.h2 }],
+        },
+      ],
     };
   }
   #getElementProperties() {
     return {
       main: {
-        tag: 'main',
-        className: 'game__wrapper'
+        tag: "main",
+        className: "game__wrapper",
       },
       table: {
         section: {
-          tag: 'section',
-          className: 'game__table table'
+          tag: "section",
+          className: "game__table table",
         },
         h2: {
-          tag: 'h2',
-          className: 'visually-hidden',
-          textContent: 'Game table'
+          tag: "h2",
+          className: "visually-hidden",
+          textContent: "Game table",
         },
         crosswordWrap: {
-          tag: 'div',
-          className: 'game__crossword-wrapper'
-        }
+          tag: "div",
+          className: "game__crossword-wrapper",
+        },
       },
       additional: {
         section: {
-          tag: 'section',
-          className: 'game__additional'
+          tag: "section",
+          className: "game__additional",
         },
         h2: {
-          tag: 'h2',
-          className: 'visually-hidden',
-          textContent: 'Additional information'
+          tag: "h2",
+          className: "visually-hidden",
+          textContent: "Additional information",
         },
-        
-      }
-    }
+      },
+    };
   }
   #generateNode() {
     return {
@@ -64,12 +68,12 @@ export default class Main extends AbstractView {
       table: {
         section: createElement(this.#tagsProperties.table.section),
         h2: createElement(this.#tagsProperties.table.h2),
-        crosswordWrap: createElement(this.#tagsProperties.table.crosswordWrap)
+        crosswordWrap: createElement(this.#tagsProperties.table.crosswordWrap),
       },
       additional: {
         section: createElement(this.#tagsProperties.additional.section),
         h2: createElement(this.#tagsProperties.additional.h2),
-      }
+      },
     };
   }
 }
