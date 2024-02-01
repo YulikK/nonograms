@@ -9,6 +9,7 @@ import ChoseView from "../view/chose.js";
 import CrosswordView from "../view/crossword.js";
 import CrosswordModel from "../model/crossword.js";
 import ResultsPresenter from "../presenter/results.js";
+import TimerPresenter from "../presenter/timer.js";
 
 export default class Nanograms {
   #gameContainer;
@@ -21,10 +22,9 @@ export default class Nanograms {
   #store;
   #sound;
   #resultsPresenter;
-  #seconds;
+  #timerPresenter;
   #saveGameInf;
   #settings;
-  #timer;
 
   constructor(gameContainer, crosswords, gallery, win) {
     this.#gameContainer = gameContainer;
@@ -39,6 +39,7 @@ export default class Nanograms {
     this.#crossModel.setCrosswords(crosswords);
 
     this.#resultsPresenter = new ResultsPresenter(this.#crossModel);
+    this.#timerPresenter = new TimerPresenter();
 
     this.#store = new Store(STORE_NAME, window.localStorage);
     this.#sound = new Sound();
@@ -66,9 +67,10 @@ export default class Nanograms {
   }
 
   #resetSettings(){
-    this.#resetTimer();
+    this.#timerPresenter.reset();
     this.#settings.isGameStarted = false;
     this.#settings.isShowAnswers = false;
+    this.#timerPresenter.stopGame();
   }
   
   #setAnswers(answers = undefined) {
@@ -119,6 +121,8 @@ export default class Nanograms {
 
     render(this.#gameContainer, this.#components['controls']);
     render(this.#gameContainer, this.#components['main']);
+    this.#timerPresenter.setContainer(this.#components.controls.elements.options.wrap);
+    this.#timerPresenter.render();
 
     this.#components['controls'].setRefreshClickHandler(onRefreshClick);
     this.#components['controls'].setShowAnswersClickHandler(onShowAnswersClick);
@@ -134,7 +138,8 @@ export default class Nanograms {
         if(!this.#settings.isGameStarted) {
           this.#settings.isGameStarted = true;
           this.#components["controls"].setSaveEnabled();
-          this.#startTimer();
+          this.#timerPresenter.startGame();
+          this.#timerPresenter.start();
         }
         this.#setNextGameStep(index, command);
       }
@@ -179,23 +184,6 @@ export default class Nanograms {
       this.#showWinModal();
     } else this.#sound.playSound(command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL);
   }
-  
-  #startTimer() {
-    if (!this.#timer) {
-      this.#timer = setInterval(() => {
-        if(!this.#settings.isGameStarted) this.#resetTimer();
-        this.#seconds += 1;
-        this.#components["controls"].updateTimerDisplay(this.#seconds);
-      }, 1000);
-    }
-  }
-
-  #resetTimer() {
-    if(this.#timer) clearInterval(this.#timer);
-    this.#timer = null;
-    this.#seconds = 0;
-    this.#components["controls"].updateTimerDisplay(this.#seconds);
-  }
 
   #isWin() {
     return compareMatrix(this.#answers, this.#currentCrossword.playTable);
@@ -211,7 +199,7 @@ export default class Nanograms {
   }
 
   #showWinModal() {
-    const finishTime = getTime(this.#seconds);
+    const finishTime = this.#timerPresenter.getTime();
     this.#resetSettings();
     this.#resultsPresenter.update(finishTime, this.#currentCrossword);
 
@@ -233,7 +221,7 @@ export default class Nanograms {
     this.#settings.isHaveSaveGame = true;
     this.#components['controls'].setLoadEnable();
     this.#saveGameInf['crossword'] = this.#currentCrossword;
-    this.#saveGameInf['seconds'] = this.#seconds;
+    this.#saveGameInf['seconds'] = this.#timerPresenter.getSeconds();
     this.#saveGameInf['answers'] = this.#answers;
 
     this.#store.saveGame(this.#saveGameInf);
@@ -244,8 +232,8 @@ export default class Nanograms {
       this.#getSaveFromStorage();
 
       this.startGame(this.#saveGameInf['crossword'], true, false, this.#saveGameInf['answers']);
-      this.#seconds = Number(this.#saveGameInf['seconds']);
-      this.#components["controls"].updateTimerDisplay(this.#seconds);
+      
+      this.#timerPresenter.setSeconds(Number(this.#saveGameInf['seconds']));
       this.#components["crossword"].setAnswersCrossword(this.#answers);
     }
   }

@@ -13,17 +13,6 @@ export default class Controls extends AbstractView {
         {element: this.elements.h1},
         {element: this.elements.options.wrap,
         child:[
-          {element: this.elements.options.timer.wrap,
-          child: [
-            {element: this.elements.options.timer.imgWrap,
-            child: [
-              {element: this.elements.options.timer.img}
-            ]},
-            {element: this.elements.options.timer.timeWrap,
-            child: [
-              {element: this.elements.options.timer.time}
-            ]}
-          ]},
           {element: this.elements.options.refresh.a,
           child: [
             {element: this.elements.options.refresh.img}
@@ -62,13 +51,6 @@ export default class Controls extends AbstractView {
       h1: { tag: 'h1', textContent: 'Nanograms game', className: 'visually-hidden' },
       options: {
         wrap: { tag: 'div', className: 'control__options options' },
-        timer: {
-          wrap: { tag: 'div', className: 'options__timer timer' },
-          imgWrap: { tag: 'div', className: 'timer__img-wrapper' },
-          img: { tag: 'img', className: 'timer__img', src: './img/icons/timer.png', alt: 'timer', width: '40', height: '40' },
-          timeWrap: { tag: 'div', className: 'timer__time-wrapper' },
-          time: { tag: 'p', className: 'timer__time', textContent: '0:00' }
-        },
         refresh: {
           a: { tag: 'a', className: 'options__refresh', href: '' },
           img: { tag: 'img', className: 'options__refresh-img', src: './img/icons/refresh.png', alt: 'refresh', width: '40', height: '40' }
@@ -106,13 +88,6 @@ export default class Controls extends AbstractView {
       h1: createElement(this.#tagsProperties.h1),
       options: {
         wrap: createElement(this.#tagsProperties.options.wrap),
-        timer: {
-          wrap: createElement(this.#tagsProperties.options.timer.wrap),
-          imgWrap: createElement(this.#tagsProperties.options.timer.imgWrap),
-          img: createElement(this.#tagsProperties.options.timer.img),
-          timeWrap: createElement(this.#tagsProperties.options.timer.timeWrap),
-          time: createElement(this.#tagsProperties.options.timer.time),
-        },
         refresh: {
           a: createElement(this.#tagsProperties.options.refresh.a),
           img: createElement(this.#tagsProperties.options.refresh.img),
@@ -145,26 +120,19 @@ export default class Controls extends AbstractView {
     };
   }
 
-  updateTimerDisplay(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    this.elements.options.timer.time.textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-  }
-
   setSaveEnabled(){
     this.elements.options.saveLoad.save.classList.remove('disable');
   }
+  
   setLoadEnable() {
     this.elements.options.saveLoad.load.classList.remove('disable');
   }
 
-  
   #refreshClickHandler = (evt) => {
     evt.preventDefault();
     this.callback.refreshClick();
   }
 
-  
   #showAnswersClickHandler = (evt) => {
     evt.preventDefault();
     this.callback.showAnswers();

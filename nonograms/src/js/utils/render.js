@@ -1,10 +1,21 @@
 import Abstract from "../view/abstract.js";
+import { RENDER_METHOD } from "../utils/const.js";
 
-export const render = (container, child) => {
+export const render = (container, child, method = RENDER_METHOD.APPEND) => {
   const containerEl = getElement(container);
   const childEl = getElement(child);
 
-  containerEl.append(childEl);
+  switch (method) {
+    case RENDER_METHOD.APPEND: {
+      containerEl.append(childEl);
+      break;
+    }
+    case RENDER_METHOD.PREPEND: {
+      containerEl.prepend(childEl);
+      break;
+    }
+  }
+  
 
   renderChild(childEl, getChild(child, childEl));
 };
