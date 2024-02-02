@@ -82,12 +82,13 @@ export default class Controls {
 
     render(this.#gameContainer, this.#components["controls"]);
 
-    this.#components["controls"].setRefreshClickHandler(onRefreshClick);
-    this.#components["controls"].setShowAnswersClickHandler(onShowAnswersClick);
-    this.#components["controls"].setSaveClickHandler(onSaveClick);
-    this.#components["controls"].setLoadClickHandler(onLoadClick);
-    this.#components["controls"].setThemeClickHandler(onThemeClick);
-    this.#components["controls"].setSoundClickHandler(onSoundOnOff);
+    this.#components["controls"]
+      .setRefreshClickHandler(onRefreshClick)
+      .setShowAnswersClickHandler(onShowAnswersClick)
+      .setSaveClickHandler(onSaveClick)
+      .setLoadClickHandler(onLoadClick)
+      .setThemeClickHandler(onThemeClick)
+      .setSoundClickHandler(onSoundOnOff);
   }
 
   setSaveEnabled() {

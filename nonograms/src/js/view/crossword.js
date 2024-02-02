@@ -295,9 +295,6 @@ export default class Crossword extends AbstractView {
       `contextmenu`,
       this.#cellClickContextHandler,
     );
-  }
-
-  deleteCellClickHandler() {
-    this.getElement().removeEventListener(`click`, this.#cellClickHandler);
+    return this;
   }
 }

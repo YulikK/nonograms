@@ -134,6 +134,7 @@ export default class Chose extends AbstractView {
   setRandomClickHandler(callback) {
     this.callback.randomClick = callback;
     this.elements.random.a.addEventListener(`click`, this.#randomClickHandler);
+    return this;
   }
 
   setShowGalleryClickHandler(callback) {
@@ -142,5 +143,6 @@ export default class Chose extends AbstractView {
       `click`,
       this.#showGalleryClickHandler,
     );
+    return this;
   }
 }

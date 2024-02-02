@@ -157,6 +157,7 @@ export default class Gallery extends AbstractView {
   setCloseClickHandler(callback) {
     this.callback.closeClick = callback;
     this.elements.closeBtn.addEventListener(`click`, this.#closeClickHandler);
+    return this;
   }
 
   setGameClickHandler(callback) {
@@ -164,5 +165,6 @@ export default class Gallery extends AbstractView {
     this.elements.gallery.forEach((game) => {
       game.exWrap.addEventListener(`click`, this.#gameClickHandler);
     });
+    return this;
   }
 }

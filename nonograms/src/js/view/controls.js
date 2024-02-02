@@ -226,6 +226,7 @@ export default class Controls extends AbstractView {
       `click`,
       this.#refreshClickHandler,
     );
+    return this;
   }
 
   setShowAnswersClickHandler(callback) {
@@ -234,6 +235,7 @@ export default class Controls extends AbstractView {
       `click`,
       this.#showAnswersClickHandler,
     );
+    return this;
   }
 
   setSaveClickHandler(callback) {
@@ -242,6 +244,7 @@ export default class Controls extends AbstractView {
       `click`,
       this.#saveClickHandler,
     );
+    return this;
   }
 
   setLoadClickHandler(callback) {
@@ -250,6 +253,7 @@ export default class Controls extends AbstractView {
       `click`,
       this.#loadClickHandler,
     );
+    return this;
   }
   setThemeClickHandler(callback) {
     this.callback.themeClick = callback;
@@ -257,6 +261,7 @@ export default class Controls extends AbstractView {
       `click`,
       this.#themeClickHandler,
     );
+    return this;
   }
   setSoundClickHandler(callback) {
     this.callback.soundClick = callback;
@@ -264,5 +269,6 @@ export default class Controls extends AbstractView {
       `click`,
       this.#soundClickHandler,
     );
+    return this;
   }
 }

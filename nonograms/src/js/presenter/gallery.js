@@ -26,11 +26,12 @@ export default class Gallery {
       this.#crossModel.getCrosswords(),
     );
     render(this.#gameContainer, this.#components["gallery"]);
-    this.#components["gallery"].setCloseClickHandler(this.destroy);
-    this.#components["gallery"].setGameClickHandler(onGameClick);
+    this.#components["gallery"]
+      .setCloseClickHandler(this.destroy)
+      .setGameClickHandler(onGameClick);
   }
 
   destroy = () => {
     remove(this.#components["gallery"]);
-  }
+  };
 }

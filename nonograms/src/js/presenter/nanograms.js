@@ -170,8 +170,9 @@ export default class Nanograms {
     this.#crosswordPresenter
       .setStartGameCallback(this.onCellClick)
       .setWinCallback(this.showWinModal);
-    this.#components["chose"].setRandomClickHandler(onRandomClick);
-    this.#components["chose"].setShowGalleryClickHandler(onShowGalleryClick);
+    this.#components["chose"]
+      .setRandomClickHandler(onRandomClick)
+      .setShowGalleryClickHandler(onShowGalleryClick);
   }
 
   #showGallery() {
