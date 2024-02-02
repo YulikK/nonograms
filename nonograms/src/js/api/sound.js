@@ -4,14 +4,6 @@ export default class Sound {
   #audio = new Audio();
   #soundsOnOff = true;
 
-  #soundsOn() {
-    this.#soundsOnOff = true;
-  }
-
-  #soundsOff() {
-    this.#soundsOnOff = false;
-  }
-
   soundsToggle() {
     this.#soundsOnOff = !this.#soundsOnOff;
   }
