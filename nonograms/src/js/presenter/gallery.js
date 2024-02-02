@@ -16,12 +16,8 @@ export default class Gallery {
   }
 
   show(callback) {
-    const onCloseClick = () => {
-      this.#destroy();
-    };
-
     const onGameClick = (data) => {
-      this.#destroy();
+      this.destroy();
       if (data) {
         callback(data);
       }
@@ -30,11 +26,11 @@ export default class Gallery {
       this.#crossModel.getCrosswords(),
     );
     render(this.#gameContainer, this.#components["gallery"]);
-    this.#components["gallery"].setCloseClickHandler(onCloseClick);
+    this.#components["gallery"].setCloseClickHandler(this.destroy);
     this.#components["gallery"].setGameClickHandler(onGameClick);
   }
 
-  #destroy() {
+  destroy = () => {
     remove(this.#components["gallery"]);
   }
 }
