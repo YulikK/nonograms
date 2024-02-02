@@ -8,10 +8,10 @@ export default class Sound {
     this.#soundsOnOff = !this.#soundsOnOff;
   }
 
-  async playSound(event) {
+  playSound(event) {
     if (this.#soundsOnOff) {
       this.#audio.src = `${this.#pathFolder}${event}`;
-      return this.#audio.play();
+      this.#audio.play();
     }
   }
 }
