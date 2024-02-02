@@ -55,9 +55,11 @@ export default class Nanograms {
       answers = undefined,
     } = props;
     if (isReset) this.#resetSettings();
-    if (isFirstStart) this.#renderBase();
-    if (!isFirstStart) this.#destroyGameComponents();
-    if (!isFirstStart) this.sound.playSound(SOUNDS.RENDER);
+    if (isFirstStart) this.#renderBase()
+    else{
+      this.#destroyGameComponents();
+      this.sound.playSound(SOUNDS.RENDER);
+    }
     this.#crosswordPresenter.setCrossword(
       this.#crossModel.getNewCrossword(
         newCrossword,
