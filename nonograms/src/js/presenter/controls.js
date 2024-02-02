@@ -32,19 +32,24 @@ export default class Controls {
 
   setRefreshCallback(callback) {
     this.#callback.refresh = callback;
+    return this;
   }
   setShowAnswersCallback(callback) {
     this.#callback.showAnswers = callback;
+    return this;
   }
   setLoadCallback(callback) {
     this.#callback.load = callback;
+    return this;
   }
   setSaveCallback(callback) {
     this.#callback.save = callback;
+    return this;
   }
   setFindSaveCallback(callback) {
     this.#callback.findSave = callback;
     if (this.#settings.isHaveSaveGame) this.#callback.findSave();
+    return this;
   }
 
   getTimeContainer() {

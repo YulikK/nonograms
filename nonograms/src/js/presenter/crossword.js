@@ -55,9 +55,11 @@ export default class Crossword {
   }
   setStartGameCallback(callback) {
     this.#callback.startGame = callback;
+    return this;
   }
   setWinCallback(callback) {
     this.#callback.winGame = callback;
+    return this;
   }
   updateComponent() {
     this.#components["crossword"] = new CrosswordView(this.#crossword);

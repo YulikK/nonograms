@@ -10,7 +10,7 @@ export default class Results extends AbstractView {
 
   constructor(results, crosswords) {
     super();
-    this.#results = results.slice().sort((function (a, b) {
+    this.#results = results.slice().sort(function (a, b) {
       if (a.time > b.time) {
         return 1;
       }
@@ -18,7 +18,7 @@ export default class Results extends AbstractView {
         return -1;
       }
       return 0;
-    }));
+    });
     this.#crosswords = new CrosswordModel();
     this.#crosswords.setCrosswords(crosswords);
     this.#tagsProperties = this.#getElementProperties();

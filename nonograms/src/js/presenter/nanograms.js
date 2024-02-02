@@ -47,13 +47,13 @@ export default class Nanograms {
     };
   }
 
-  startGame({
-    newCrossword = undefined,
-    isReset = true,
-    isFirstStart = false,
-    answers = undefined} = props
-    
-  ) {
+  startGame(props = {}) {
+    const {
+      newCrossword = undefined,
+      isReset = true,
+      isFirstStart = false,
+      answers = undefined,
+    } = props;
     if (isReset) this.#resetSettings();
     if (isFirstStart) this.#renderBase();
     if (!isFirstStart) this.#destroyGameComponents();
@@ -62,7 +62,7 @@ export default class Nanograms {
       this.#crossModel.getNewCrossword(
         newCrossword,
         this.#crosswordPresenter.getCrossword(),
-        isFirstStart
+        isFirstStart,
       ),
     );
     this.#crosswordPresenter.setAnswers(answers);
@@ -121,11 +121,12 @@ export default class Nanograms {
 
   #renderBase() {
     this.#controlsPresenter.render();
-    this.#controlsPresenter.setRefreshCallback(this.onRefreshClick);
-    this.#controlsPresenter.setShowAnswersCallback(this.onShowAnswersClick);
-    this.#controlsPresenter.setLoadCallback(this.onLoadClick);
-    this.#controlsPresenter.setSaveCallback(this.onSaveClick);
-    this.#controlsPresenter.setFindSaveCallback(this.onFindSave);
+    this.#controlsPresenter
+      .setRefreshCallback(this.onRefreshClick)
+      .setShowAnswersCallback(this.onShowAnswersClick)
+      .setLoadCallback(this.onLoadClick)
+      .setSaveCallback(this.onSaveClick)
+      .setFindSaveCallback(this.onFindSave);
     render(this.#gameContainer, this.#components["main"]);
     this.#timerPresenter.setContainer(
       this.#controlsPresenter.getTimeContainer(),
@@ -146,7 +147,7 @@ export default class Nanograms {
 
   #renderGame() {
     const onRandomClick = () => {
-      const props = {isReset: true};
+      const props = { isReset: true };
       this.startGame(props);
     };
 
@@ -166,8 +167,9 @@ export default class Nanograms {
       this.#components["main"].elements.table.crosswordWrap,
     );
     this.#crosswordPresenter.render();
-    this.#crosswordPresenter.setStartGameCallback(this.onCellClick);
-    this.#crosswordPresenter.setWinCallback(this.showWinModal);
+    this.#crosswordPresenter
+      .setStartGameCallback(this.onCellClick)
+      .setWinCallback(this.showWinModal);
     this.#components["chose"].setRandomClickHandler(onRandomClick);
     this.#components["chose"].setShowGalleryClickHandler(onShowGalleryClick);
   }
@@ -175,7 +177,10 @@ export default class Nanograms {
   #showGallery() {
     const callback = (data) => {
       if (data) {
-        const props = {newCrossword: this.#crossModel.getElementById(data), isReset: true};
+        const props = {
+          newCrossword: this.#crossModel.getElementById(data),
+          isReset: true,
+        };
         this.startGame(props);
       }
     };
@@ -193,7 +198,7 @@ export default class Nanograms {
     );
 
     const onPlayAgainClick = () => {
-      const props = {isReset: true};
+      const props = { isReset: true };
       this.startGame(props);
     };
 
@@ -208,8 +213,11 @@ export default class Nanograms {
 
   #loadGame(saveGame) {
     if (this.#settings.isHaveSaveGame) {
-      const props = {newCrossword: this.#crossModel.getElementById(saveGame["crossword"]), isReset: true,
-    answers: saveGame["answers"]};
+      const props = {
+        newCrossword: this.#crossModel.getElementById(saveGame["crossword"]),
+        isReset: true,
+        answers: saveGame["answers"],
+      };
       this.startGame(props);
       this.#timerPresenter.setSeconds(Number(saveGame["seconds"]));
       this.#crosswordPresenter.loadGame();

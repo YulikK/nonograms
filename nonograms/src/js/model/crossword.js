@@ -27,7 +27,10 @@ export default class Crossword {
 
   #getRandomCrossword(current, isFirstStart) {
     let newCrossword = this.#getNextCrossword();
-    while (current === newCrossword || (isFirstStart && newCrossword.level != 1)) {
+    while (
+      current === newCrossword ||
+      (isFirstStart && newCrossword.level != 1)
+    ) {
       newCrossword = this.#getNextCrossword();
     }
     return newCrossword;
