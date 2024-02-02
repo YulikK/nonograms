@@ -13,8 +13,7 @@ export default class Sound {
   }
 
   soundsToggle() {
-    if (this.#soundsOnOff) this.#soundsOff();
-    else this.#soundsOn();
+    this.#soundsOnOff = !this.#soundsOnOff;
   }
 
   async playSound(event) {

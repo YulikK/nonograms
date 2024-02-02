@@ -184,7 +184,6 @@ export default class Nanograms {
 
   showWinModal = () => {
     this.sound.playSound(SOUNDS.WIN);
-    // const finishTime = this.#timerPresenter.getTime();
     const finishSeconds = this.#timerPresenter.getSeconds();
     const finishTime = getTime(finishSeconds);
     this.#resetSettings();
