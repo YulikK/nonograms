@@ -1,9 +1,9 @@
-import "../scss/main.scss";
-import mockFile from "../mock/mock.json";
-import CrosswordModel from "./model/crossword.js";
-import NanogramsPresenter from "./presenter/nanograms.js";
-import GalleryPresenter from "./presenter/gallery.js";
-import WinPresenter from "./presenter/win.js";
+import "./scss/main.scss";
+import mockFile from "./mock/mock.json";
+import CrosswordModel from "./js/model/crossword.js";
+import NanogramsPresenter from "./js/presenter/nanograms.js";
+import GalleryPresenter from "./js/presenter/gallery.js";
+import WinPresenter from "./js/presenter/win.js";
 
 const siteBodyElement = document.body;
 
