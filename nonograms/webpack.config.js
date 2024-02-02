@@ -9,6 +9,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'distr'),
+    clean: true
   },
   module: {
     rules: [
@@ -30,6 +31,16 @@ module.exports = {
                 }
             }
         ]
+      },
+      {
+        test: /\.(png|svg)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: (name) => {
+            const path = name.filename.split('/').slice(1, -1).join('/');
+            return `${path}/[name][ext]`
+          }
+        }
       }
     ]
   },
