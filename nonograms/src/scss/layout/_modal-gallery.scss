@@ -44,9 +44,7 @@
   }
 
   &__example-img {
-    width: adaptive-size(60, 40);
-    height: adaptive-size(60, 40);
-    padding: 10px;
+    @include button-size();
   }
 
   &__title {
@@ -61,7 +59,6 @@
 
   &__example-name {
     margin: 0;
-    // text-align: center;
     margin: 20px 0;
 
     @include font-base();

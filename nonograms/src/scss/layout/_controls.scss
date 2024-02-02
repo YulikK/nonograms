@@ -1,5 +1,5 @@
 .control {
-  margin: 15px 20px;
+  margin: 15px adaptive-size(20, 5);
   display: flex;
   justify-content: space-between;
   gap: 15px;

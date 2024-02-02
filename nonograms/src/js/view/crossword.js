@@ -45,7 +45,6 @@ export default class Crossword extends AbstractView {
       rows: [],
     };
 
-    // let borderCounter = 0;
     for (let i = 0; i < hint.maxV; i += 1) {
       node.rows.push({
         tr: createElement({ tag: "tr", className: "row" }),
@@ -284,7 +283,6 @@ export default class Crossword extends AbstractView {
               cell.td.classList.add("cross");
               break;
           }
-          // if (answer[index.i][index.j] === '1') cell.td.classList.add("fill");
         }
       });
     });

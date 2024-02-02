@@ -44,9 +44,7 @@
   }
 
   &__img {
-    width: 60px;
-    height: 60px;
-    padding: 10px;
+    @include button-size();
   }
 
   &__title {
@@ -81,8 +79,8 @@
   }
 
   &__button-img {
-    width: 80px;
-    height: 80px;
+    width: adaptive-size(80, 40);
+    height: adaptive-size(80, 40);
     padding: 0px;
   }
 }

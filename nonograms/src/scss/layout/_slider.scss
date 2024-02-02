@@ -2,8 +2,8 @@
 .sound {
   position: relative;
   display: inline-block;
-  width: adaptive-size(90, 70);
-  height: adaptive-size(50, 30);
+  width: adaptive-size(90, 40);
+  height: adaptive-size(50, 20);
 
   &__input {
     opacity: 0;
@@ -24,8 +24,7 @@
     &:before {
       position: absolute;
       content: "";
-      width: adaptive-size(60, 40);
-      height: adaptive-size(60, 40);
+      @include button-size();
       left: 0px;
       bottom: 4px;
       top: 0;
@@ -52,14 +51,14 @@
       &:hover {
         &:before {
           @include slider-button-hover();
-          transform: translate(32px, -0.25em);
+          transform: translate(adaptive-size(32, 13), -0.25em);
         }
       }
     }
   }
 
   &__input:checked + &__slider:before {
-    transform: translateX(32px);
+    transform: translateX(adaptive-size(32, 13));
     background-size: adaptive-size(40, 20);
     @include slider-button-off();
   }

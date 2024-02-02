@@ -25,14 +25,10 @@
   }
 
   &__refresh-img {
-    width: adaptive-size(60, 40);
-    height: adaptive-size(60, 40);
-    padding: 10px;
+    @include button-size();
   }
   &__show-answer-img {
-    width: adaptive-size(60, 40);
-    height: adaptive-size(60, 40);
-    padding: 10px;
+    @include button-size();
   }
 
   &__save-load {
@@ -42,7 +38,6 @@
   }
 
   &__save {
-    // @include  block-button();
     @include block-button();
     border-radius: 20px 0px 0px 20px;
     box-shadow: none;
@@ -82,13 +77,9 @@
   }
 
   &__save-img {
-    width: adaptive-size(60, 40);
-    height: adaptive-size(60, 40);
-    padding: 10px;
+    @include button-size();
   }
   &__load-img {
-    width: adaptive-size(60, 40);
-    height: adaptive-size(60, 40);
-    padding: 10px;
+    @include button-size();
   }
 }

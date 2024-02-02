@@ -69,6 +69,12 @@
   transition: 0.4s;
 }
 
+@mixin button-size() {
+  width: adaptive-size(60, 30);
+  height: adaptive-size(60, 30);
+  padding: adaptive-size(10, 5);
+}
+
 @mixin block-button-disable() {
   opacity: 0.5;
   cursor: default;
@@ -87,7 +93,7 @@
 }
 
 @mixin block-box() {
-  border-radius: 40px;
+  border-radius: adaptive-size(40, 20);
   background: var(--color-block);
   border-top: 1px solid var(--color-block-border-top);
   border-left: 1px solid var(--color-block-border-top);
@@ -100,7 +106,7 @@
 }
 
 @mixin block-game() {
-  border-radius: 40px;
+  border-radius: adaptive-size(40, 3);
   background: var(--color-game-block);
   box-shadow: 0px 10px 20px 0px shadow();
   display: flex;
@@ -117,7 +123,7 @@
 }
 
 @mixin timer-box() {
-  border-radius: 20px;
+  border-radius: adaptive-size(20, 10);
   border-top: 1px solid var(--color-timer-border-top);
   border-left: 1px solid var(--color-timer-border-top);
   border-right: 1px solid var(--color-timer-border-bottom);

@@ -6,7 +6,7 @@
   @include body-background();
 
   &__wrapper {
-    margin: 15px 20px;
+    margin: 15px adaptive-size(20, 5);
     display: flex;
     justify-content: space-between;
     gap: 20px;
@@ -39,14 +39,12 @@
     }
 
     &-img {
-      width: adaptive-size(60, 40);
-      height: adaptive-size(60, 40);
-      padding: 10px;
+      @include button-size();
     }
   }
 
   &__crossword-wrapper {
     align-self: center;
-    margin: 20px;
+    margin: adaptive-size(20, 5);
   }
 }

@@ -34,8 +34,7 @@ export default class Crossword {
   }
 
   getNewCrossword(newCrossword, currentCrossword) {
-    if (newCrossword)
-      return newCrossword; //this.getElementById(newCrossword);
+    if (newCrossword) return newCrossword;
     else return this.#getRandomCrossword(currentCrossword);
   }
 
