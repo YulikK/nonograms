@@ -47,11 +47,12 @@ export default class Nanograms {
     };
   }
 
-  startGame(
+  startGame({
     newCrossword = undefined,
     isReset = true,
     isFirstStart = false,
-    answers = undefined,
+    answers = undefined} = props
+    
   ) {
     if (isReset) this.#resetSettings();
     if (isFirstStart) this.#renderBase();
@@ -145,7 +146,8 @@ export default class Nanograms {
 
   #renderGame() {
     const onRandomClick = () => {
-      this.startGame(undefined, true);
+      const props = {isReset: true};
+      this.startGame(props);
     };
 
     const onShowGalleryClick = () => {
@@ -173,7 +175,8 @@ export default class Nanograms {
   #showGallery() {
     const callback = (data) => {
       if (data) {
-        this.startGame(this.#crossModel.getElementById(data), true);
+        const props = {newCrossword: this.#crossModel.getElementById(data), isReset: true};
+        this.startGame(props);
       }
     };
     this.#gallery.show(callback);
@@ -191,7 +194,8 @@ export default class Nanograms {
     );
 
     const onPlayAgainClick = () => {
-      this.startGame(undefined, true);
+      const props = {isReset: true};
+      this.startGame(props);
     };
 
     this.#win.show(finishTime, onPlayAgainClick);
@@ -205,12 +209,9 @@ export default class Nanograms {
 
   #loadGame(saveGame) {
     if (this.#settings.isHaveSaveGame) {
-      this.startGame(
-        this.#crossModel.getElementById(saveGame["crossword"]),
-        true,
-        false,
-        saveGame["answers"],
-      );
+      const props = {newCrossword: this.#crossModel.getElementById(saveGame["crossword"]), isReset: true,
+    answers: saveGame["answers"]};
+      this.startGame(props);
       this.#timerPresenter.setSeconds(Number(saveGame["seconds"]));
       this.#crosswordPresenter.loadGame();
     }

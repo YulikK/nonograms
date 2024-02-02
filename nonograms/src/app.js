@@ -8,7 +8,7 @@ import WinPresenter from "./js/presenter/win.js";
 const siteBodyElement = document.body;
 
 if (siteBodyElement !== null) {
-  
+
   const crosswordModel = new CrosswordModel();
   const crosswords = mockFile.map(crosswordModel.adaptToClient);
   crosswordModel.setCrosswords(crosswords);
@@ -24,6 +24,7 @@ if (siteBodyElement !== null) {
     galleryPresenter,
     winPresenter,
   );
-
-  nanogramsPresenter.startGame(undefined, true, true);
+  
+  const props = { isReset: true, isFirstStart: true}
+  nanogramsPresenter.startGame(props);
 }
