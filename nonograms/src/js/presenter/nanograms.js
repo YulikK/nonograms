@@ -1,4 +1,5 @@
 import { render, remove } from "../utils/render.js";
+import { getTime } from "../utils/utils.js";
 import { SOUNDS } from "../utils/const.js";
 import Sound from "../api/sound.js";
 import MainView from "../view/main.js";
@@ -180,10 +181,12 @@ export default class Nanograms {
 
   showWinModal = () => {
     this.sound.playSound(SOUNDS.WIN);
-    const finishTime = this.#timerPresenter.getTime();
+    // const finishTime = this.#timerPresenter.getTime();
+    const finishSeconds = this.#timerPresenter.getSeconds();
+    const finishTime = getTime(finishSeconds);
     this.#resetSettings();
     this.#resultsPresenter.update(
-      finishTime,
+      finishSeconds,
       this.#crosswordPresenter.getCrossword(),
     );
 

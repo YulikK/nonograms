@@ -1,6 +1,5 @@
 import { render } from "../utils/render.js";
 import { RENDER_METHOD } from "../utils/const.js";
-import { getTime } from "../utils/utils.js";
 import TimerView from "../view/timer.js";
 
 export default class Timer {
@@ -54,9 +53,6 @@ export default class Timer {
   }
   getSeconds() {
     return this.#seconds;
-  }
-  getTime() {
-    return getTime(this.#seconds);
   }
   reset() {
     if (this.#timer) clearInterval(this.#timer);

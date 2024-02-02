@@ -53,7 +53,7 @@ export default class Results {
       resultsTable = resultsTable.split(",");
       resultsTable.forEach((element) => {
         const result = element.split("-");
-        this.#results.push({ time: result[0], id: result[1] });
+        this.#results.push({ time: Number(result[0]), id: result[1] });
       });
     }
   }

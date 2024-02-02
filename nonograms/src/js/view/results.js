@@ -1,5 +1,6 @@
 import AbstractView from "./abstract.js";
 import { createElement } from "../utils/render.js";
+import { getTime } from "../utils/utils.js";
 import CrosswordModel from "../model/crossword.js";
 
 export default class Results extends AbstractView {
@@ -9,7 +10,15 @@ export default class Results extends AbstractView {
 
   constructor(results, crosswords) {
     super();
-    this.#results = results;
+    this.#results = results.slice().sort((function (a, b) {
+      if (a.time > b.time) {
+        return 1;
+      }
+      if (a.time < b.time) {
+        return -1;
+      }
+      return 0;
+    }));
     this.#crosswords = new CrosswordModel();
     this.#crosswords.setCrosswords(crosswords);
     this.#tagsProperties = this.#getElementProperties();
@@ -96,7 +105,7 @@ export default class Results extends AbstractView {
         p: createElement({
           tag: "p",
           className: "results__information",
-          textContent: `${result.time} - ${cross.name}`,
+          textContent: `${getTime(result.time)} - ${cross.name}`,
         }),
         level: {
           wrap: createElement(this.#tagsProperties.level.wrap),
