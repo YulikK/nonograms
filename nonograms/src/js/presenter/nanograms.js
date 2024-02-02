@@ -60,6 +60,7 @@ export default class Nanograms {
       this.#crossModel.getNewCrossword(
         newCrossword,
         this.#crosswordPresenter.getCrossword(),
+        isFirstStart
       ),
     );
     this.#crosswordPresenter.setAnswers(answers);

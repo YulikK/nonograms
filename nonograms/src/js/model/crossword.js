@@ -25,17 +25,17 @@ export default class Crossword {
     return currentEl;
   }
 
-  #getRandomCrossword(current) {
+  #getRandomCrossword(current, isFirstStart) {
     let newCrossword = this.#getNextCrossword();
-    while (current === newCrossword) {
+    while (current === newCrossword || (isFirstStart && newCrossword.level != 1)) {
       newCrossword = this.#getNextCrossword();
     }
     return newCrossword;
   }
 
-  getNewCrossword(newCrossword, currentCrossword) {
+  getNewCrossword(newCrossword, currentCrossword, isFirstStart = false) {
     if (newCrossword) return newCrossword;
-    else return this.#getRandomCrossword(currentCrossword);
+    else return this.#getRandomCrossword(currentCrossword, isFirstStart);
   }
 
   #getNextCrossword() {
