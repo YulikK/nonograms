@@ -45,9 +45,12 @@ export default class Crossword extends AbstractView {
       rows: [],
     };
 
+    let borderCounterTopBottom = 1;
     for (let i = 0; i < hint.maxV; i += 1) {
+      const borderClassTop = borderCounterTopBottom === 1 ? "border-top" : "";
+      const borderClassBottom = i === hint.maxV - 1 ? "border-bottom" : "";
       node.rows.push({
-        tr: createElement({ tag: "tr", className: "row" }),
+        tr: createElement({ tag: "tr", className: `row` }),
         cells: [],
       });
 
@@ -57,30 +60,38 @@ export default class Crossword extends AbstractView {
         });
       }
 
+      let borderCounterLeftRight = 1;
       for (let j = 0; j < hint.vertical.length; j += 1) {
-        const borderClass = i === hint.maxV - 1 ? "border-bottom" : "";
+        const borderClassLeft = borderCounterLeftRight === 1 ? "border-left" : "";
+        const borderClassRight = borderCounterLeftRight === 5 || j === hint.vertical.length - 1 ? "border-right" : "";
         node.rows[i].cells.push({
           td: createElement({
             tag: "td",
-            className: `cell hint ${borderClass}`,
+            className: `cell hint ${borderClassTop} ${borderClassBottom} ${borderClassLeft} ${borderClassRight}`,
             textContent: hint.vertical[j][i] ? hint.vertical[j][i] : "",
           }),
         });
+        borderCounterLeftRight += 1;
+        if (borderCounterLeftRight === 6) borderCounterLeftRight = 1;
       }
+      borderCounterTopBottom += 1;
     }
 
     let borderCounterRow = 1;
     for (let i = 0; i < this.#crossword.length; i += 1) {
+      const borderClassTop = borderCounterRow === 1 ? "border-top" : "";
+      const borderClassBottom = borderCounterRow === 5 || i === this.#crossword.length - 1 ? "border-bottom" : "";
       node.rows.push({
         tr: createElement({ tag: "tr", className: "row" }),
         cells: [],
       });
       for (let j = 0; j < hint.maxH; j += 1) {
-        const borderClass = j === hint.maxH - 1 ? "border-right" : "";
+        const borderClassLeft = j === 0 ? "border-left" : "";
+        const borderClassRight = j === hint.maxH - 1 ? "border-right" : "";
         node.rows[i + hint.maxV].cells.push({
           td: createElement({
             tag: "td",
-            className: `cell hint ${borderClass}`,
+            className: `cell hint ${borderClassRight} ${borderClassLeft} ${borderClassTop} ${borderClassBottom}`,
             textContent: hint.horizontal[i][j] ? hint.horizontal[i][j] : "",
           }),
         });
@@ -98,7 +109,7 @@ export default class Crossword extends AbstractView {
         node.rows[i + hint.maxV].cells.push({
           td: createElement({
             tag: "td",
-            className: `cell ${borderClassCell} ${borderClassRow}`,
+            className: `cell ${borderClassCell} ${borderClassRow} ${borderClassBottom}`,
             data: `el-${i}-${j}`,
           }),
         });
