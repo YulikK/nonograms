@@ -1,6 +1,10 @@
 import { render, remove } from "../utils/render.js";
-import { COMMAND, SOUNDS } from "../utils/const.js";
-import { deepCopy, getClearMatrix, compareMatrix } from "../utils/utils.js";
+import {
+  deepCopy,
+  getClearMatrix,
+  compareMatrix,
+  setAnswer,
+} from "../utils/utils.js";
 
 import CrosswordView from "../view/crossword.js";
 
@@ -95,24 +99,10 @@ export default class Crossword {
   }
 
   #setNewAnswer(index, command) {
-    switch (command) {
-      case COMMAND.FILL:
-        this.#answers[index.i][index.j] = "1";
-        break;
-      case COMMAND.EMPTY:
-        this.#answers[index.i][index.j] = "";
-        break;
-      case COMMAND.CROSS:
-        this.#answers[index.i][index.j] = "0";
-        break;
-    }
-
+    this.#answers[index.i][index.j] = setAnswer(command);
     if (this.#isWin()) {
       this.#callback.winGame();
-    } else
-      this.#sound.playSound(
-        command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL,
-      );
+    } else this.#sound.playSoundForCommand(command);
   }
 
   #isWin() {

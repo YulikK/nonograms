@@ -62,8 +62,12 @@ export default class Crossword extends AbstractView {
 
       let borderCounterLeftRight = 1;
       for (let j = 0; j < hint.vertical.length; j += 1) {
-        const borderClassLeft = borderCounterLeftRight === 1 ? "border-left" : "";
-        const borderClassRight = borderCounterLeftRight === 5 || j === hint.vertical.length - 1 ? "border-right" : "";
+        const borderClassLeft =
+          borderCounterLeftRight === 1 ? "border-left" : "";
+        const borderClassRight =
+          borderCounterLeftRight === 5 || j === hint.vertical.length - 1
+            ? "border-right"
+            : "";
         node.rows[i].cells.push({
           td: createElement({
             tag: "td",
@@ -80,7 +84,10 @@ export default class Crossword extends AbstractView {
     let borderCounterRow = 1;
     for (let i = 0; i < this.#crossword.length; i += 1) {
       const borderClassTop = borderCounterRow === 1 ? "border-top" : "";
-      const borderClassBottom = borderCounterRow === 5 || i === this.#crossword.length - 1 ? "border-bottom" : "";
+      const borderClassBottom =
+        borderCounterRow === 5 || i === this.#crossword.length - 1
+          ? "border-bottom"
+          : "";
       node.rows.push({
         tr: createElement({ tag: "tr", className: "row" }),
         cells: [],

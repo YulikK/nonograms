@@ -1,3 +1,4 @@
+import { COMMAND } from "../utils/const.js";
 export function deepCopy(matrix) {
   return matrix.map((row) =>
     row.map((cell) => (typeof cell === "object" ? deepCopy(cell) : cell)),
@@ -24,4 +25,20 @@ export function getTime(seconds) {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+}
+
+export function setAnswer(command) {
+  let answer;
+  switch (command) {
+    case COMMAND.FILL:
+      answer = "1";
+      break;
+    case COMMAND.EMPTY:
+      answer = "";
+      break;
+    case COMMAND.CROSS:
+      answer = "0";
+      break;
+  }
+  return answer;
 }

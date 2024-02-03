@@ -1,4 +1,4 @@
-import { FOLDER_SOUND } from "../utils/const.js";
+import { FOLDER_SOUND, COMMAND, SOUNDS } from "../utils/const.js";
 export default class Sound {
   #pathFolder = FOLDER_SOUND;
   #audio = new Audio();
@@ -13,5 +13,10 @@ export default class Sound {
       this.#audio.src = `${this.#pathFolder}${event}`;
       this.#audio.play();
     }
+  }
+
+  playSoundForCommand(command) {
+    const event = command === COMMAND.CROSS ? SOUNDS.CROSS : SOUNDS.FILL;
+    this.playSound(event);
   }
 }
