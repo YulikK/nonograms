@@ -185,7 +185,7 @@ export default class Nanograms {
     const callback = (data) => {
       if (data) {
         const props = {
-          newCrossword: this.#crossModel.getElementById(data),
+          newCrossword: this.#crossModel.getCrosswordById(data),
           isReset: true,
         };
         this.startGame(props);
@@ -217,7 +217,7 @@ export default class Nanograms {
   #loadGame(saveGame) {
     if (this.#settings.isHaveSaveGame) {
       const props = {
-        newCrossword: this.#crossModel.getElementById(saveGame["crossword"]),
+        newCrossword: this.#crossModel.getCrosswordById(saveGame["crossword"]),
         isReset: true,
         answers: saveGame["answers"],
       };

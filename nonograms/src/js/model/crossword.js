@@ -13,7 +13,7 @@ export default class Crossword {
     return this.#crosswords;
   }
 
-  getElementById(id) {
+  getCrosswordById(id) {
     let index = 0;
     let currentEl = this.#crosswords[index];
     while (currentEl.id !== id) {

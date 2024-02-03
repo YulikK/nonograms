@@ -98,7 +98,7 @@ export default class Results extends AbstractView {
     };
 
     this.#results.forEach((result) => {
-      const cross = this.#crosswords.getElementById(result.id);
+      const cross = this.#crosswords.getCrosswordById(result.id);
       const newResultNode = {
         wrapInf: createElement(this.#tagsProperties.wrapInf),
         resultWrap: createElement(this.#tagsProperties.resultWrap),
