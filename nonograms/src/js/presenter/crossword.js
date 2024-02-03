@@ -93,7 +93,13 @@ export default class Crossword {
     render(this.#gameContainer, this.#components["crossword"]);
     this.#components["crossword"].setCellClickHandler(onCellClick);
   }
+  destroy() {
+    remove(this.#components["crossword"]);
+  }
 
+  loadGame() {
+    this.#components["crossword"].setAnswersCrossword(this.#answers);
+  }
   #setNextGameStep(index, command) {
     this.#setNewAnswer(index, command);
   }
@@ -107,13 +113,5 @@ export default class Crossword {
 
   #isWin() {
     return compareMatrix(this.#answers, this.#crossword.playTable);
-  }
-
-  destroy() {
-    remove(this.#components["crossword"]);
-  }
-
-  loadGame() {
-    this.#components["crossword"].setAnswersCrossword(this.#answers);
   }
 }

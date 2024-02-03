@@ -6,6 +6,60 @@ export default class Controls extends AbstractView {
   elements = this.#generateNode();
   structure = this.#getStructure();
 
+  setSaveEnabled() {
+    this.elements.options.saveLoad.save.classList.remove("disable");
+  }
+  setLoadEnable() {
+    this.elements.options.saveLoad.load.classList.remove("disable");
+  }
+  setRefreshClickHandler(callback) {
+    this.callback.refreshClick = callback;
+    this.elements.options.refresh.a.addEventListener(
+      `click`,
+      this.#refreshClickHandler,
+    );
+    return this;
+  }
+  setShowAnswersClickHandler(callback) {
+    this.callback.showAnswers = callback;
+    this.elements.options.showAnswer.a.addEventListener(
+      `click`,
+      this.#showAnswersClickHandler,
+    );
+    return this;
+  }
+  setSaveClickHandler(callback) {
+    this.callback.saveClick = callback;
+    this.elements.options.saveLoad.save.addEventListener(
+      `click`,
+      this.#saveClickHandler,
+    );
+    return this;
+  }
+  setLoadClickHandler(callback) {
+    this.callback.loveClick = callback;
+    this.elements.options.saveLoad.load.addEventListener(
+      `click`,
+      this.#loadClickHandler,
+    );
+    return this;
+  }
+  setThemeClickHandler(callback) {
+    this.callback.themeClick = callback;
+    this.elements.settings.theme.input.addEventListener(
+      `click`,
+      this.#themeClickHandler,
+    );
+    return this;
+  }
+  setSoundClickHandler(callback) {
+    this.callback.soundClick = callback;
+    this.elements.settings.sound.input.addEventListener(
+      `click`,
+      this.#soundClickHandler,
+    );
+    return this;
+  }
   #getStructure() {
     return {
       element: this.elements.header,
@@ -183,92 +237,26 @@ export default class Controls extends AbstractView {
       },
     };
   }
-
-  setSaveEnabled() {
-    this.elements.options.saveLoad.save.classList.remove("disable");
-  }
-
-  setLoadEnable() {
-    this.elements.options.saveLoad.load.classList.remove("disable");
-  }
-
   #refreshClickHandler = (evt) => {
     evt.preventDefault();
     this.callback.refreshClick();
   };
-
   #showAnswersClickHandler = (evt) => {
     evt.preventDefault();
     this.callback.showAnswers();
   };
-
   #saveClickHandler = (evt) => {
     evt.preventDefault();
     this.callback.saveClick();
   };
-
   #loadClickHandler = (evt) => {
     evt.preventDefault();
     this.callback.loveClick();
   };
-
   #themeClickHandler = () => {
     this.callback.themeClick();
   };
-
   #soundClickHandler = () => {
     this.callback.soundClick();
   };
-
-  setRefreshClickHandler(callback) {
-    this.callback.refreshClick = callback;
-    this.elements.options.refresh.a.addEventListener(
-      `click`,
-      this.#refreshClickHandler,
-    );
-    return this;
-  }
-
-  setShowAnswersClickHandler(callback) {
-    this.callback.showAnswers = callback;
-    this.elements.options.showAnswer.a.addEventListener(
-      `click`,
-      this.#showAnswersClickHandler,
-    );
-    return this;
-  }
-
-  setSaveClickHandler(callback) {
-    this.callback.saveClick = callback;
-    this.elements.options.saveLoad.save.addEventListener(
-      `click`,
-      this.#saveClickHandler,
-    );
-    return this;
-  }
-
-  setLoadClickHandler(callback) {
-    this.callback.loveClick = callback;
-    this.elements.options.saveLoad.load.addEventListener(
-      `click`,
-      this.#loadClickHandler,
-    );
-    return this;
-  }
-  setThemeClickHandler(callback) {
-    this.callback.themeClick = callback;
-    this.elements.settings.theme.input.addEventListener(
-      `click`,
-      this.#themeClickHandler,
-    );
-    return this;
-  }
-  setSoundClickHandler(callback) {
-    this.callback.soundClick = callback;
-    this.elements.settings.sound.input.addEventListener(
-      `click`,
-      this.#soundClickHandler,
-    );
-    return this;
-  }
 }

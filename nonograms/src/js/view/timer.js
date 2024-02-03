@@ -6,6 +6,12 @@ export default class Timer extends AbstractView {
   elements = this.#generateNode();
   structure = this.#getStructure();
 
+  updateTimerDisplay(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    this.elements.time.textContent = `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  }
+
   #getStructure() {
     return {
       element: this.elements.wrap,
@@ -47,11 +53,5 @@ export default class Timer extends AbstractView {
       timeWrap: createElement(this.#tagsProperties.timeWrap),
       time: createElement(this.#tagsProperties.time),
     };
-  }
-
-  updateTimerDisplay(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    this.elements.time.textContent = `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   }
 }

@@ -25,26 +25,9 @@ export default class Crossword {
     return currentEl;
   }
 
-  #getRandomCrossword(current, isFirstStart) {
-    let newCrossword = this.#getNextCrossword();
-    while (
-      current === newCrossword ||
-      (isFirstStart && newCrossword.level != 1)
-    ) {
-      newCrossword = this.#getNextCrossword();
-    }
-    return newCrossword;
-  }
-
   getNewCrossword(newCrossword, currentCrossword, isFirstStart = false) {
     if (newCrossword) return newCrossword;
     else return this.#getRandomCrossword(currentCrossword, isFirstStart);
-  }
-
-  #getNextCrossword() {
-    return this.#crosswords[
-      Math.floor(Math.random() * this.#crosswords.length)
-    ];
   }
 
   adaptToClient(crosswords) {
@@ -55,5 +38,22 @@ export default class Crossword {
       playTable: crosswords.playTable,
     });
     return adaptedQuestion;
+  }
+
+  #getNextCrossword() {
+    return this.#crosswords[
+      Math.floor(Math.random() * this.#crosswords.length)
+    ];
+  }
+
+  #getRandomCrossword(current, isFirstStart) {
+    let newCrossword = this.#getNextCrossword();
+    while (
+      current === newCrossword ||
+      (isFirstStart && newCrossword.level != 1)
+    ) {
+      newCrossword = this.#getNextCrossword();
+    }
+    return newCrossword;
   }
 }

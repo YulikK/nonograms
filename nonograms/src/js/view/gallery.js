@@ -13,6 +13,19 @@ export default class Gallery extends AbstractView {
     this.structure = this.#getStructure();
   }
 
+  setCloseClickHandler(callback) {
+    this.callback.closeClick = callback;
+    this.elements.closeBtn.addEventListener(`click`, this.#closeClickHandler);
+    return this;
+  }
+
+  setGameClickHandler(callback) {
+    this.callback.gameClick = callback;
+    this.elements.gallery.forEach((game) => {
+      game.exWrap.addEventListener(`click`, this.#gameClickHandler);
+    });
+    return this;
+  }
   #getStructure() {
     const nodeList = [];
     this.elements.gallery.forEach((elNode) => {
@@ -153,18 +166,4 @@ export default class Gallery extends AbstractView {
     evt.preventDefault();
     this.callback.gameClick(evt.currentTarget.data);
   };
-
-  setCloseClickHandler(callback) {
-    this.callback.closeClick = callback;
-    this.elements.closeBtn.addEventListener(`click`, this.#closeClickHandler);
-    return this;
-  }
-
-  setGameClickHandler(callback) {
-    this.callback.gameClick = callback;
-    this.elements.gallery.forEach((game) => {
-      game.exWrap.addEventListener(`click`, this.#gameClickHandler);
-    });
-    return this;
-  }
 }

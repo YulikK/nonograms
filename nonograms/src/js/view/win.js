@@ -12,7 +12,13 @@ export default class EndWin extends AbstractView {
     this.elements = this.#generateNode();
     this.structure = this.#getStructure();
   }
-
+  setPlayAgainClickHandler(callback) {
+    this.callback.playAgainClick = callback;
+    this.elements.closeBtn.addEventListener(
+      `click`,
+      this.#playAgainClickHandler,
+    );
+  }
   #getStructure() {
     return {
       element: this.elements.aside,
@@ -95,12 +101,4 @@ export default class EndWin extends AbstractView {
     evt.preventDefault();
     this.callback.playAgainClick();
   };
-
-  setPlayAgainClickHandler(callback) {
-    this.callback.playAgainClick = callback;
-    this.elements.closeBtn.addEventListener(
-      `click`,
-      this.#playAgainClickHandler,
-    );
-  }
 }

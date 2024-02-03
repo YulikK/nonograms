@@ -13,6 +13,60 @@ export default class Crossword extends AbstractView {
     this.elements = this.#generateNode();
     this.structure = this.#getStructure();
   }
+
+
+  stopGame() {
+    this.#isGameStop = true;
+  }
+  startGame() {
+    this.#isGameStop = false;
+  }
+
+  loadGame(crossword, answers) {
+    this.#crossword = crossword.playTable;
+    this.setAnswersCrossword(answers);
+  }
+  setClearCrossword() {
+    this.elements.rows.forEach((row) => {
+      row.cells.forEach((cell) => {
+        cell.td.classList.remove("fill", "cross", "hint--off");
+      });
+    });
+  }
+
+  setAnswersCrossword(answer) {
+    this.elements.rows.forEach((row) => {
+      row.cells.forEach((cell) => {
+        cell.td.classList.remove("fill", "cross", "hint--off");
+        if (
+          !(
+            cell.td.classList.contains("empty") ||
+            cell.td.classList.contains("hint")
+          )
+        ) {
+          const index = this.#getIndex(cell.td.data);
+          switch (answer[index.i][index.j]) {
+            case "1":
+              cell.td.classList.add("fill");
+              break;
+            case "0":
+              cell.td.classList.add("cross");
+              break;
+          }
+        }
+      });
+    });
+  }
+
+  setCellClickHandler(callback) {
+    this.callback.cellClick = callback;
+    this.getElement().addEventListener(`click`, this.#cellClickHandler);
+    this.getElement().addEventListener(
+      `contextmenu`,
+      this.#cellClickContextHandler,
+    );
+    return this;
+  }
   #getStructure() {
     const node = {
       element: this.elements.table,
@@ -263,56 +317,4 @@ export default class Crossword extends AbstractView {
     return index;
   }
 
-  stopGame() {
-    this.#isGameStop = true;
-  }
-  startGame() {
-    this.#isGameStop = false;
-  }
-
-  loadGame(crossword, answers) {
-    this.#crossword = crossword.playTable;
-    this.setAnswersCrossword(answers);
-  }
-  setClearCrossword() {
-    this.elements.rows.forEach((row) => {
-      row.cells.forEach((cell) => {
-        cell.td.classList.remove("fill", "cross", "hint--off");
-      });
-    });
-  }
-
-  setAnswersCrossword(answer) {
-    this.elements.rows.forEach((row) => {
-      row.cells.forEach((cell) => {
-        cell.td.classList.remove("fill", "cross", "hint--off");
-        if (
-          !(
-            cell.td.classList.contains("empty") ||
-            cell.td.classList.contains("hint")
-          )
-        ) {
-          const index = this.#getIndex(cell.td.data);
-          switch (answer[index.i][index.j]) {
-            case "1":
-              cell.td.classList.add("fill");
-              break;
-            case "0":
-              cell.td.classList.add("cross");
-              break;
-          }
-        }
-      });
-    });
-  }
-
-  setCellClickHandler(callback) {
-    this.callback.cellClick = callback;
-    this.getElement().addEventListener(`click`, this.#cellClickHandler);
-    this.getElement().addEventListener(
-      `contextmenu`,
-      this.#cellClickContextHandler,
-    );
-    return this;
-  }
 }

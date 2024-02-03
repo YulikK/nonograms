@@ -18,12 +18,12 @@ export default class Nanograms {
   #winPresenter;
   #components;
   #crossModel;
-  sound;
   #resultsPresenter;
   #timerPresenter;
   #crosswordPresenter;
   #controlsPresenter;
   #settings;
+  sound;
 
   constructor(gameContainer, crosswords) {
     this.#gameContainer = gameContainer;
@@ -75,24 +75,6 @@ export default class Nanograms {
     this.#updateGameComponents();
     this.#renderGame();
   }
-
-  #resetSettings() {
-    this.#timerPresenter.reset();
-    this.#settings.isGameStarted = false;
-    this.#settings.isShowAnswers = false;
-    this.#timerPresenter.stopGame();
-    this.#crosswordPresenter.stopGame();
-    this.#crosswordPresenter.hide();
-  }
-
-  #updateGameComponents() {
-    this.#components["chose"] = new ChoseView(
-      this.#crosswordPresenter.getCrossword(),
-    );
-    this.#crosswordPresenter.updateComponent();
-    this.#resultsPresenter.updateComponent();
-  }
-
   onRefreshClick = () => {
     this.sound.playSound(SOUNDS.REFRESH);
     this.#crosswordPresenter.setAnswers();
@@ -145,6 +127,24 @@ export default class Nanograms {
     this.#showGallery();
   };
 
+  showWinModal = () => {
+    this.sound.playSound(SOUNDS.WIN);
+    const finishSeconds = this.#timerPresenter.getSeconds();
+    const finishTime = getTime(finishSeconds);
+    this.#resetSettings();
+    this.#resultsPresenter.update(
+      finishSeconds,
+      this.#crosswordPresenter.getCrossword(),
+    );
+
+    const onPlayAgainClick = () => {
+      const props = { isReset: true };
+      this.startGame(props);
+    };
+
+    this.#winPresenter.show(finishTime, onPlayAgainClick);
+  };
+
   #renderBase() {
     this.#controlsPresenter.render();
     this.#controlsPresenter
@@ -193,25 +193,21 @@ export default class Nanograms {
     };
     this.#galleryPresenter.show(callback);
   }
-
-  showWinModal = () => {
-    this.sound.playSound(SOUNDS.WIN);
-    const finishSeconds = this.#timerPresenter.getSeconds();
-    const finishTime = getTime(finishSeconds);
-    this.#resetSettings();
-    this.#resultsPresenter.update(
-      finishSeconds,
+  #resetSettings() {
+    this.#timerPresenter.reset();
+    this.#settings.isGameStarted = false;
+    this.#settings.isShowAnswers = false;
+    this.#timerPresenter.stopGame();
+    this.#crosswordPresenter.stopGame();
+    this.#crosswordPresenter.hide();
+  }
+  #updateGameComponents() {
+    this.#components["chose"] = new ChoseView(
       this.#crosswordPresenter.getCrossword(),
     );
-
-    const onPlayAgainClick = () => {
-      const props = { isReset: true };
-      this.startGame(props);
-    };
-
-    this.#winPresenter.show(finishTime, onPlayAgainClick);
-  };
-
+    this.#crosswordPresenter.updateComponent();
+    this.#resultsPresenter.updateComponent();
+  }
   #destroyGameComponents() {
     remove(this.#components["chose"]);
     this.#crosswordPresenter.destroy();

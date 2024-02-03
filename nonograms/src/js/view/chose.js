@@ -12,6 +12,22 @@ export default class Chose extends AbstractView {
     this.elements = this.#generateNode();
     this.structure = this.#getStructure();
   }
+
+  setRandomClickHandler(callback) {
+    this.callback.randomClick = callback;
+    this.elements.random.a.addEventListener(`click`, this.#randomClickHandler);
+    return this;
+  }
+
+  setShowGalleryClickHandler(callback) {
+    this.callback.showGallery = callback;
+    this.elements.chose.wrap.addEventListener(
+      `click`,
+      this.#showGalleryClickHandler,
+    );
+    return this;
+  }
+
   #getStructure() {
     return {
       element: this.elements.choseWrap,
@@ -130,19 +146,4 @@ export default class Chose extends AbstractView {
     evt.preventDefault();
     this.callback.showGallery();
   };
-
-  setRandomClickHandler(callback) {
-    this.callback.randomClick = callback;
-    this.elements.random.a.addEventListener(`click`, this.#randomClickHandler);
-    return this;
-  }
-
-  setShowGalleryClickHandler(callback) {
-    this.callback.showGallery = callback;
-    this.elements.chose.wrap.addEventListener(
-      `click`,
-      this.#showGalleryClickHandler,
-    );
-    return this;
-  }
 }

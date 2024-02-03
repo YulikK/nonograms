@@ -26,7 +26,7 @@ export default class Store {
     try {
       return this.#storage.getItem(`${this.#storeKey}-${additionalKey}`);
     } catch (err) {
-      return {};
+      return null;
     }
   }
 }
