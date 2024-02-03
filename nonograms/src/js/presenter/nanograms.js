@@ -9,11 +9,13 @@ import ResultsPresenter from "../presenter/results.js";
 import TimerPresenter from "../presenter/timer.js";
 import CrosswordPresenter from "../presenter/crossword.js";
 import ControlsPresenter from "../presenter/controls.js";
+import GalleryPresenter from "../presenter/gallery.js";
+import WinPresenter from "../presenter/win.js";
 
 export default class Nanograms {
   #gameContainer;
-  #gallery;
-  #win;
+  #galleryPresenter;
+  #winPresenter;
   #components;
   #crossModel;
   sound;
@@ -23,10 +25,9 @@ export default class Nanograms {
   #controlsPresenter;
   #settings;
 
-  constructor(gameContainer, crosswords, gallery, win) {
+  constructor(gameContainer, crosswords) {
     this.#gameContainer = gameContainer;
-    this.#gallery = gallery;
-    this.#win = win;
+
     this.#components = {
       main: new MainView(),
     };
@@ -39,6 +40,9 @@ export default class Nanograms {
     this.#timerPresenter = new TimerPresenter();
     this.#crosswordPresenter = new CrosswordPresenter(this.sound);
     this.#controlsPresenter = new ControlsPresenter(gameContainer, this.sound);
+
+    this.#winPresenter = new WinPresenter(gameContainer);
+    this.#galleryPresenter = new GalleryPresenter(gameContainer, crosswords);
 
     this.#settings = {
       isHaveSaveGame: false,
@@ -187,7 +191,7 @@ export default class Nanograms {
         this.startGame(props);
       }
     };
-    this.#gallery.show(callback);
+    this.#galleryPresenter.show(callback);
   }
 
   showWinModal = () => {
@@ -205,7 +209,7 @@ export default class Nanograms {
       this.startGame(props);
     };
 
-    this.#win.show(finishTime, onPlayAgainClick);
+    this.#winPresenter.show(finishTime, onPlayAgainClick);
   };
 
   #destroyGameComponents() {
