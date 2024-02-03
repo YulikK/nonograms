@@ -125,6 +125,26 @@ export default class Nanograms {
     };
   };
 
+  onCellClick = () => {
+    if (!this.#settings.isShowAnswers) {
+      if (!this.#settings.isGameStarted) {
+        this.#settings.isGameStarted = true;
+        this.#controlsPresenter.setSaveEnabled();
+        this.#timerPresenter.startGame();
+        this.#timerPresenter.start();
+      }
+    }
+  };
+
+  onRandomClick = () => {
+    const props = { isReset: true };
+    this.startGame(props);
+  };
+
+  onShowGalleryClick = () => {
+    this.#showGallery();
+  };
+
   #renderBase() {
     this.#controlsPresenter.render();
     this.#controlsPresenter
@@ -140,27 +160,7 @@ export default class Nanograms {
     this.#timerPresenter.render();
   }
 
-  onCellClick = () => {
-    if (!this.#settings.isShowAnswers) {
-      if (!this.#settings.isGameStarted) {
-        this.#settings.isGameStarted = true;
-        this.#controlsPresenter.setSaveEnabled();
-        this.#timerPresenter.startGame();
-        this.#timerPresenter.start();
-      }
-    }
-  };
-
   #renderGame() {
-    const onRandomClick = () => {
-      const props = { isReset: true };
-      this.startGame(props);
-    };
-
-    const onShowGalleryClick = () => {
-      this.#showGallery();
-    };
-
     render(
       this.#components["main"].elements.additional.section,
       this.#components["chose"],
@@ -177,8 +177,8 @@ export default class Nanograms {
       .setStartGameCallback(this.onCellClick)
       .setWinCallback(this.showWinModal);
     this.#components["chose"]
-      .setRandomClickHandler(onRandomClick)
-      .setShowGalleryClickHandler(onShowGalleryClick);
+      .setRandomClickHandler(this.onRandomClick)
+      .setShowGalleryClickHandler(this.onShowGalleryClick);
   }
 
   #showGallery() {
