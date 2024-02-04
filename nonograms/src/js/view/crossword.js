@@ -14,7 +14,6 @@ export default class Crossword extends AbstractView {
     this.structure = this.#getStructure();
   }
 
-
   stopGame() {
     this.#isGameStop = true;
   }
@@ -316,5 +315,4 @@ export default class Crossword extends AbstractView {
     };
     return index;
   }
-
 }

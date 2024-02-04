@@ -1,5 +1,5 @@
 import { render, remove } from "../utils/render.js";
-import { STORE_NAME } from "../utils/const.js";
+import { STORE_NAME, STORE_RESULTS } from "../utils/const.js";
 import Store from "../api/store.js";
 import ResultsView from "../view/results.js";
 
@@ -48,13 +48,9 @@ export default class Results {
   }
 
   #getResultFromStorage() {
-    let resultsTable = this.#store.getItem("result-table");
-    if (resultsTable) {
-      resultsTable = resultsTable.split(",");
-      resultsTable.forEach((element) => {
-        const result = element.split("-");
-        this.#results.push({ time: Number(result[0]), id: result[1] });
-      });
+    const storageData = this.#store.getItem(STORE_RESULTS);
+    if (storageData) {
+      this.#results = storageData;
     }
   }
 }

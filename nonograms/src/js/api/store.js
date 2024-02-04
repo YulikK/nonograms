@@ -1,3 +1,4 @@
+import { STORE_SAVE, STORE_RESULTS } from "../utils/const";
 export default class Store {
   #storage;
   #storeKey;
@@ -9,22 +10,35 @@ export default class Store {
 
   saveResult(results) {
     this.#storage.setItem(
-      `${this.#storeKey}-result-table`,
-      results.map((el) => `${el.time}-${el.id}`),
+      `${this.#storeKey}-${STORE_RESULTS}`,
+      JSON.stringify(results),
     );
   }
 
   saveGame(saveGame) {
-    const answers = saveGame.answers.join("-");
     this.#storage.setItem(
-      `${this.#storeKey}-save-game`,
-      `${saveGame.crossword.id}:${saveGame.seconds}:${answers}`,
+      `${this.#storeKey}-${STORE_SAVE}`,
+      JSON.stringify(saveGame),
     );
   }
 
-  getItem(additionalKey) {
+  getResult() {
+    return this.#getItem(STORE_RESULTS);
+  }
+
+  getSave() {
+    return this.#getItem(STORE_SAVE);
+  }
+
+  #getItem(additionalKey) {
     try {
-      return this.#storage.getItem(`${this.#storeKey}-${additionalKey}`);
+      const storedDataString = this.#storage.getItem(
+        `${this.#storeKey}-${additionalKey}`,
+      );
+      if (storedDataString) {
+        const resultsData = JSON.parse(storedDataString);
+        return resultsData;
+      } else return null;
     } catch (err) {
       return null;
     }

@@ -114,22 +114,12 @@ export default class Controls {
   }
 
   #getSaveFromStorage() {
-    let saveGame = this.#store.getItem("save-game");
+    const saveGame = this.#store.getSave();
 
     if (saveGame) {
-      saveGame = saveGame.split(":");
-      if (saveGame.length) {
-        try {
-          this.#settings.isHaveSaveGame = true;
-          this.#saveGameInf["crossword"] = saveGame[0];
-          this.#saveGameInf["seconds"] = saveGame[1];
-          const answers = saveGame[2].split("-");
-          this.#saveGameInf["answers"] = answers.map((row) => row.split(","));
-          this.#components["controls"].setLoadEnable();
-        } catch (e) {
-          console.log("We have some problems with your save game");
-        }
-      }
+      this.#saveGameInf = saveGame;
+      this.#settings.isHaveSaveGame = true;
+      this.#components["controls"].setLoadEnable();
     }
   }
 }

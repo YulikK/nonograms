@@ -217,7 +217,7 @@ export default class Nanograms {
   #loadGame(saveGame) {
     if (this.#settings.isHaveSaveGame) {
       const props = {
-        newCrossword: this.#crossModel.getCrosswordById(saveGame["crossword"]),
+        newCrossword: saveGame["crossword"],
         isReset: true,
         answers: saveGame["answers"],
       };

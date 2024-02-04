@@ -5,6 +5,8 @@ export const COMMAND = {
 };
 const STORE_PREFIX = `nanograms`;
 const STORE_VER = `v1`;
+export const STORE_RESULTS = `result-table`;
+export const STORE_SAVE = `save-game`;
 export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 export const RENDER_METHOD = {
