@@ -18,6 +18,7 @@
     justify-content: flex-start;
     align-items: center;
     min-width: 80px;
+    margin: 0px 18px;
   }
 
   &__time {
@@ -25,5 +26,6 @@
     @include adaptive-font-timer();
     margin: 0px 5px;
     margin-top: 4px;
+    width: 2em;
   }
 }
