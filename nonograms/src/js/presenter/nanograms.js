@@ -197,6 +197,7 @@ export default class Nanograms {
     this.#timerPresenter.reset();
     this.#settings.isGameStarted = false;
     this.#settings.isShowAnswers = false;
+    this.#controlsPresenter.setSaveDisabled();
     this.#timerPresenter.stopGame();
     this.#crosswordPresenter.stopGame();
     this.#crosswordPresenter.hide();

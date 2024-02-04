@@ -95,6 +95,10 @@ export default class Controls {
     this.#components["controls"].setSaveEnabled();
   }
 
+  setSaveDisabled() {
+    this.#components["controls"].setSaveDisabled();
+  }
+
   #saveGame() {
     this.#settings.isHaveSaveGame = true;
     const data = this.#callback.save();

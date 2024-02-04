@@ -9,6 +9,9 @@ export default class Controls extends AbstractView {
   setSaveEnabled() {
     this.elements.options.saveLoad.save.classList.remove("disable");
   }
+  setSaveDisabled() {
+    this.elements.options.saveLoad.save.classList.add("disable");
+  }
   setLoadEnable() {
     this.elements.options.saveLoad.load.classList.remove("disable");
   }
