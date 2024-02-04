@@ -48,7 +48,7 @@ export default class Results {
   }
 
   #getResultFromStorage() {
-    const storageData = this.#store.getItem(STORE_RESULTS);
+    const storageData = this.#store.getResult(STORE_RESULTS);
     if (storageData) {
       this.#results = storageData;
     }
