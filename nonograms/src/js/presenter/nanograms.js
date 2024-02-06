@@ -130,7 +130,6 @@ export default class Nanograms {
   showWinModal = () => {
     this.sound.playSound(SOUNDS.WIN);
     const finishSeconds = this.#timerPresenter.getSeconds();
-    const finishTime = getTime(finishSeconds);
     this.#resetSettings();
     this.#resultsPresenter.update(
       finishSeconds,
@@ -142,7 +141,7 @@ export default class Nanograms {
       this.startGame(props);
     };
 
-    this.#winPresenter.show(finishTime, onPlayAgainClick);
+    this.#winPresenter.show(finishSeconds, onPlayAgainClick);
   };
 
   #renderBase() {
